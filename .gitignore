@@ -1,0 +1,25 @@
+# Variables d'environnement et secrets
+.env
+.env.*
+!.env.example
+
+# Environnements Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Django
+db.sqlite3
+media/
+
+# Fichiers générés
+staticfiles/
+
+# Outils de développement
+.vscode/
+.idea/
+
+# Système d'exploitation
+.DS_Store
+Thumbs.db
