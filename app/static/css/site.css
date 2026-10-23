@@ -3,26 +3,6 @@
 	width: auto;
 }
 
-.logo-partner-mauro {
-	height: 60px;
-	width: auto;
-}
-
-.logo-partner-meaux {
-	height: 50px;
-	width: auto;
-}
-
-.logo-partner-allcyles {
-	height: 45px;
-	width: auto;
-}
-
-.logo-partner-hyundai {
-	height: 35px;
-	width: auto;
-}
-
 .network {
 	height: 35px;
 	width: 35px;
@@ -36,18 +16,5 @@ hr {
     width: 100%;
 }
 
-.home-bg {
-    flex-grow: 1;
-    min-height: 0;
-    background-image: url("../img/home/home-desktop.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-}
 
-@media (max-width: 992px) {
-    .home-bg {
-        background-image: url("../img/home/home-mobile.jpg");
-    }
-}
 
