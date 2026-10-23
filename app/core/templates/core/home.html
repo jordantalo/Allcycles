@@ -6,30 +6,27 @@
     {% include 'core/components/header.html' %}
 
     <main class="d-flex flex-column flex-grow-1">
+      <div class="position-relative w-100 overflow-hidden">
+        <!-- 1. Tes images (Desktop + Mobile) -->
+        <img src="{% static 'img/home/home-desktop2.png' %}" class="d-none d-sm-block w-100 h-auto" alt="Team AllCycles Meaux" />
+        <img src="{% static 'img/home/home-mobile.jpg' %}" class="d-block d-sm-none w-100 h-auto" alt="Team AllCycles Meaux" />
 
-  <div class="position-relative w-100 overflow-hidden">
+        <!-- 2. Voile sombre (Overlay) -->
+        <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-25"></div>
 
-    <!-- 1. Tes images (Desktop + Mobile) -->
-    <img src="{% static 'img/home/home-desktop2.png' %}" class="d-none d-sm-block w-100 h-auto" alt="Team AllCycles Meaux">
-    <img src="{% static 'img/home/home-mobile.jpg' %}" class="d-block d-sm-none w-100 h-auto" alt="Team AllCycles Meaux">
+        <!-- 3. Contenu superposé dans le container -->
+        <div class="position-absolute top-0 start-0 w-100 h-100">
+          <div class="container h-100 d-flex flex-column justify-content-end align-items-start text-start pb-4 pb-md-5 text-white">
+            <span class="badge text-bg-secondary mb-2"><i>Saison 2027</i></span>
 
-    <!-- 2. Voile sombre (Overlay) : gradué ou simple pour la lisibilité -->
-    <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-25"></div>
-
-    <!-- 3. Contenu superposé : Bas-Gauche (justify-content-end align-items-start text-start) -->
-    <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-end align-items-start text-start p-4 p-lg-5 text-white">
-
-      <span class="badge text-bg-secondary"><i>Saison 2027</i></span>
-
-      <h1 class="display-4 fw-bold mb-3 text-shadow">
-        Bienvenue au <br> TEAM ALLCYLES MEAUX
-      </h1>
-
-    </div>
-
-  </div>
-
-</main>
+            <h1 class="display-4 fw-bold mb-0 text-shadow">
+              Bienvenue au <br />
+              TEAM ALLCYCLES MEAUX
+            </h1>
+          </div>
+        </div>
+      </div>
+    </main>
 
     {% include 'core/components/footer.html' %}
   </div>

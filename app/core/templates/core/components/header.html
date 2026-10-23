@@ -2,21 +2,36 @@
 
 <header>
   <nav class="navbar navbar-expand-md bg-body-tertiary">
-    <div class="container p-1 p-md-3">
+    <div class="container p-1 p-md-2">
       <a class="navbar-brand" href="#"><img class="logo" src="{% static 'img/logos/tam77-light.png' %}" alt="TAM77 — Team AllCycles Meaux" /></a>
 
       <button class="navbar-toggler border-0 bg-body-secondary rounded-circle p-2 shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"><i class="fa-solid fa-bars fs-5 text-dark"></i></button>
 
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav ms-auto fw-semibold">
-          <a class="nav-link" aria-current="page" href="#"><small>DN3</small></a>
+        <div class="navbar-nav ms-auto fw-semibold align-items-md-center">
 
-          <a class="nav-link" href="#"><small>CLUB</small></a>
+          <!-- Dropdown formaté comme un nav-link -->
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <small>NOS EQUIPES</small>
+            </a>
+
+            <ul class="dropdown-menu border-0 shadow-sm">
+              <li>
+                <a class="dropdown-item" href="#"><small>DN2 Femmes</small></a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#"><small>DN3 Hommes</small></a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#"><small>JEUNES</small></a>
+              </li>
+            </ul>
+          </div>
 
           <a class="nav-link" href="#"><small>PARTENAIRES</small></a>
 
-          <a class="nav-link" href="#"><small>ORGANISATIONS</small></a>
-
+          <a class="nav-link" href="#"><small>NOS ORGANISATIONS</small></a>
         </div>
       </div>
     </div>
