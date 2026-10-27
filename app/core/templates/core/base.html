@@ -1,1 +1,14 @@
+{% extends 'core/components/root.html' %}
+{% load static %}
 
+{% block body_content %}
+  <div class="d-flex flex-column min-vh-100">
+    {% include 'core/components/header.html' %}
+
+    <main class="d-flex flex-column flex-grow-1">
+      {% block content %}{% endblock content %}
+    </main>
+
+    {% include 'core/components/footer.html' %}
+  </div>
+{% endblock %}

@@ -1,37 +1,31 @@
 {% load static %}
 
-<header>
+<header class="sticky-top border-bottom">
   <nav class="navbar navbar-expand-md bg-body-tertiary">
-    <div class="container p-1 p-md-2">
-      <a class="navbar-brand" href="#"><img class="logo" src="{% static 'img/logos/tam77-light.png' %}" alt="TAM77 — Team AllCycles Meaux" /></a>
+    <div class="container py-1 py-md-2">
+      <a class="navbar-brand" href="{% url 'home' %}">
+        <!-- Logo affiché en mode CLAIR -->
+        <img class="logo-light" src="{% static 'img/logos/tam77-light.png' %}" alt="TAM77 — Team AllCycles Meaux" />
 
+        <!-- Logo affiché en mode SOMBRE (à adapter si ton fichier s'appelle autrement) -->
+        <img class="logo-dark" src="{% static 'img/logos/tam77-dark.png' %}" alt="TAM77 — Team AllCycles Meaux" />
+      </a>
       <button class="navbar-toggler border-0 bg-body-secondary rounded-circle p-2 shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"><i class="fa-solid fa-bars fs-5 text-dark"></i></button>
 
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav ms-auto fw-semibold align-items-md-center">
+        <!-- 1. Liens de navigation principaux -->
+        <div class="navbar-nav ms-auto align-items-md-center gap-md-2">
+          <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'dn3' %}active{% endif %}" href="{% url 'dn3' %}">DN3</a>
+          <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'young' %}active{% endif %}" href="{% url 'young' %}">JEUNES</a>
+          <a class="nav-link fs-5" href="#">PARTENAIRES</a>
+          <a class="nav-link fs-5" href="#">ORGANISATIONS</a>
+        </div>
 
-          <!-- Dropdown formaté comme un nav-link -->
-          <div class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <small>NOS EQUIPES</small>
-            </a>
-
-            <ul class="dropdown-menu border-0 shadow-sm">
-              <li>
-                <a class="dropdown-item" href="#"><small>DN2 Femmes</small></a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#"><small>DN3 Hommes</small></a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="#"><small>JEUNES</small></a>
-              </li>
-            </ul>
-          </div>
-
-          <a class="nav-link" href="#"><small>PARTENAIRES</small></a>
-
-          <a class="nav-link" href="#"><small>NOS ORGANISATIONS</small></a>
+        <!-- 2. Bloc Réseaux Sociaux (Séparé du navbar-nav) -->
+        <div class="nav-socials d-flex align-items-center gap-2 ms-md-5 mt-3 mt-md-0 pt-3 pt-md-0">
+          <a href="https://www.facebook.com/team.allcycles.meaux" class="social-link" href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f fs-5"></i></a>
+          <a href="https://www.instagram.com/teamallcyclesmeaux/" class="social-link" href="#" aria-label="Instagram"><i class="fa-brands fa-instagram fs-5"></i></a>
+          <a class="social-link" href="#" aria-label="YouTube"><i class="fa-brands fa-youtube fs-5"></i></a>
         </div>
       </div>
     </div>

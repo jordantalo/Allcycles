@@ -1,33 +1,108 @@
-{% extends 'core/components/root.html' %}
+{% extends 'core/base.html' %}
 {% load static %}
 
-{% block body_content %}
-  <div class="d-flex flex-column min-vh-100">
-    {% include 'core/components/header.html' %}
+{% block content %}
+  <div class="position-relative w-100 overflow-hidden">
+    <!-- 1. Tes images (Desktop + Mobile) -->
+    <img src="{% static 'img/home/home-desktop.png' %}" class="d-none d-sm-block w-100 h-auto" alt="Team AllCycles Meaux" />
+    <img src="{% static 'img/home/home-mobile.jpg' %}" class="d-block d-sm-none w-100 h-auto" alt="Team AllCycles Meaux" />
 
-    <main class="d-flex flex-column flex-grow-1">
-      <div class="position-relative w-100 overflow-hidden">
-        <!-- 1. Tes images (Desktop + Mobile) -->
-        <img src="{% static 'img/home/home-desktop2.png' %}" class="d-none d-sm-block w-100 h-auto" alt="Team AllCycles Meaux" />
-        <img src="{% static 'img/home/home-mobile.jpg' %}" class="d-block d-sm-none w-100 h-auto" alt="Team AllCycles Meaux" />
+    <!-- 2. Voile sombre (Overlay) -->
+    <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-25"></div>
 
-        <!-- 2. Voile sombre (Overlay) -->
-        <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-25"></div>
+    <!-- 3. Contenu superposé dans le container -->
+    <div class="position-absolute top-0 start-0 w-100 h-100">
+      <div class="container h-100 d-flex flex-column justify-content-end align-items-start text-start pb-4 pb-md-5 text-white">
+        <span class="badge bg-danger mb-2">Saison 2027</span>
 
-        <!-- 3. Contenu superposé dans le container -->
-        <div class="position-absolute top-0 start-0 w-100 h-100">
-          <div class="container h-100 d-flex flex-column justify-content-end align-items-start text-start pb-4 pb-md-5 text-white">
-            <span class="badge text-bg-secondary mb-2"><i>Saison 2027</i></span>
+        <h1 class="display-4 mb-0 text-shadow fw-bold" style="letter-spacing: 1px;">
+          Bienvenue au <br />
+          TEAM ALLCYCLES MEAUX
+        </h1>
+      </div>
+    </div>
+  </div>
 
-            <h1 class="display-4 fw-bold mb-0 text-shadow">
-              Bienvenue au <br />
-              TEAM ALLCYCLES MEAUX
-            </h1>
-          </div>
+  <section class="py-5 bg-body-tertiary">
+    <div class="container">
+      <div class="row align-items-stretch g-4">
+        <div class="col-12 col-md-6 d-flex flex-column">
+          <h2>Saison 2027</h2>
+          <h3 class="h1">DU VIVIER MELDOIS À LA DN3 NATIONALE</h3>
+          <p class="">Club formateur et organisateur historique de Seine-et-Marne, le Team AllCycles Meaux propulse ses coureurs vers l'élite. Avec notre structure DN3 créée sur les bases du vivier local, nous affirmons nos ambitions au sommet du classement national.</p>
+          <img src="{% static 'img/home/race-start.jpg' %}" alt="Monthyon départ" class="img-fluid rounded-3 mt-auto" />
+        </div>
+        <div class="d-none d-md-flex col-md-6 flex-column">
+          <img src="{% static 'img/home/tactic.png' %}" alt="Tactique de course" class="img-fluid rounded-3 mt-auto" />
         </div>
       </div>
-    </main>
+    </div>
+  </section>
 
-    {% include 'core/components/footer.html' %}
-  </div>
+  <section class="py-5 border-top border-bottom bg-body-secondary">
+    <div class="container my-4">
+      <!-- En-tête de section -->
+      <div class="row mb-5">
+        <div class="col-12 text-center">
+          <h2 class="h1 text-uppercase fw-bold" style="letter-spacing: 1px;">Nous Rejoindre</h2>
+          <p class="lead mx-auto" style="max-width: 700px;">Partenaires, coureurs ou dirigeants : envie de porter les couleurs du Team AllCycles Meaux ou de soutenir notre projet DN3 ? Écrivez-nous ou remplissez le formulaire ci-dessous.</p>
+        </div>
+      </div>
+
+      <!-- Le Formulaire avec une vraie carte contrastée -->
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-7">
+          <form method="POST" class="p-4 p-md-5 bg-body rounded-4 shadow-lg">
+            <!-- {% csrf_token %} -->
+
+            <div class="mb-3">
+              <label for="nom" class="form-label fw-semibold">Nom / Prénom</label>
+              <input type="text" class="form-control py-2" id="nom" name="nom" placeholder="Ex: Eddy Merckx" required />
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label fw-semibold">Adresse Email</label>
+              <input type="email" class="form-control py-2" id="email" name="email" placeholder="nom@exemple.com" required />
+            </div>
+
+            <div class="mb-3">
+              <label for="profil" class="form-label fw-semibold">Vous êtes...</label>
+              <select class="form-select py-2" id="profil" name="profil">
+                <option selected>Sélectionnez votre profil</option>
+                <option value="coureur">Coureur (Rejoindre l'équipe / DN3 / Open)</option>
+                <option value="partenaire">Partenaire / Entreprise</option>
+                <option value="dirigeant">Dirigeant / Bénévole</option>
+                <option value="autre">Autre demande</option>
+              </select>
+            </div>
+
+            <div class="mb-4">
+              <label for="message" class="form-label fw-semibold">Votre message</label>
+              <textarea class="form-control" id="message" name="message" rows="4" placeholder="Présentez-nous votre projet ou vos motivations..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-light w-100 py-2 text-uppercase fw-bold shadow-sm" style="letter-spacing: 0.05em;">Envoyer le message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-dark border-bottom">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-12 text-center">
+          <h2 class="h1 text-uppercase text-light fw-bold" style="letter-spacing: 1px;">DERNIÈRES ACTUALITÉS</h2>
+          <p class="text-secondary">Retrouvez les résultats et la vie du club en direct</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+            <div class="sk-ww-facebook-page-posts" data-embed-id="25725069"></div>
+            <script src="https://widgets.sociablekit.com/facebook-page-posts/widget.js" defer></script>
+		</div>
+      </div>
+    </div>
+  </section>
 {% endblock %}

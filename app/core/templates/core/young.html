@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="position-relative w-100 overflow-hidden">
+    <!-- 1. Tes images (Desktop + Mobile) -->
+    <img src="{% static 'img/young/jeunes.jpg' %}" class="d-none d-sm-block w-100 h-auto" alt="Team AllCycles Meaux" />
+    <img src="{% static 'img/home/home-mobile.jpg' %}" class="d-block d-sm-none w-100 h-auto" alt="Team AllCycles Meaux" />
+
+    <!-- 2. Voile sombre (Overlay) -->
+    <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-25"></div>
+
+    <!-- 3. Contenu superposé dans le container -->
+    <div class="position-absolute top-0 start-0 w-100 h-100">
+      <div class="container h-100 d-flex flex-column justify-content-end align-items-start text-start pb-4 pb-md-5 text-white">
+        <h1 class="display-4 mb-0 text-shadow fw-bold" style="letter-spacing: 1px;">Notre école de vélo</h1>
+        <p class="fs-6 fs-md-5 fw-normal text-light mb-0 p-2 p-md-3 rounded-3 bg-dark bg-opacity-75 border border-white border-opacity-25 shadow-sm">Former les champions de demain, cultiver la passion du cyclisme dès le plus jeune âge.</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="py-5 bg-body-secondary border-top border-bottom">
+    <div class="container">
+      <!-- 1. align-items-stretch force les colonnes à faire exactement la même hauteur -->
+      <div class="row align-items-stretch g-4 g-lg-5">
+        <!-- Photo illustrative -->
+        <div class="col-lg-6 d-flex">
+          <!-- object-fit: cover garantit que l'image remplit la colonne sans se déformer -->
+          <img src="{% static 'img/young/jeunes-action.png' %}" class="img-fluid rounded-4 shadow-sm w-100 object-fit-cover" alt="Les jeunes du Team AllCycles Meaux à l'entraînement" />
+        </div>
+
+        <!-- Bloc de contenu + Statistique avec contour -->
+        <div class="col-lg-6">
+          <!-- p-4 ou p-md-5 pour un padding interne généreux, d-flex flex-column pour répartir le contenu -->
+          <div class="p-4 p-md-5 bg-body rounded-4 border border-secondary-subtle shadow-sm h-100 d-flex flex-column justify-content-between">
+            <div>
+              <span class="badge bg-primary-subtle text-primary mb-3 px-3 py-2 fs-6 rounded-3">Formation & Avenir</span>
+
+              <h2 class="display-6 fw-bold mb-3">Transmettre la passion du vélo dès le plus jeune âge</h2>
+
+              <p class="text-secondary mb-3">L'école de vélo du Team AllCycles Meaux accueille les filles et garçons désireux de découvrir le cyclisme dans un cadre structuré, sécurisé et bienveillant. Notre pédagogie repose sur le plaisir de rouler ensemble et l'apprentissage de la maîtrise du vélo.</p>
+
+              <p class="text-secondary mb-4">De l'initiation aux premiers coups de pédale jusqu'à la découverte des premières compétitions pour ceux qui le souhaitent, nos éducateurs accompagnent chaque enfant à son rythme à travers des ateliers ludiques, du maniement et des sorties en extérieur.</p>
+            </div>
+
+            <!-- La carte statistique calée proprement en bas -->
+            <div class="p-3 bg-body-tertiary rounded-3 border border-secondary-subtle d-flex align-items-center gap-3 shadow-sm">
+              <span class="display-4 fw-bold text-danger mb-0">+30</span>
+              <div>
+                <h3 class="h6 fw-bold mb-1">Jeunes passionnés</h3>
+                <p class="small text-secondary mb-0">Encadrés par nos éducateurs diplômés FFC</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

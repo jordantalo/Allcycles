@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+  <section class="py-5 bg-body">
+    <div class="container">
+      <div class="row mb-5 g-4">
+        <div class="col-12 text-center mb-3">
+          <h2 class="text-danger">Effectif 2027</h2>
+          <h1 class="text-uppercase fw-bold" style="letter-spacing: 1px;">Notre équipe division nationale 3</h1>
+        </div>
+
+        {% for member in team_members %}
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card w-100 h-100">
+              <img src="{% static member.image %}" class="card-img-top team-img" alt="..." />
+              <div class="card-body bg-body-tertiary p-3">
+                <h3 class="mb-0">{{ member.name }}</h3>
+                <span class="small text-secondary">{{ member.role }}</span>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  <section class="bg-body-secondary py-5 border-top border-bottom">
+    <div class="container">
+      <div class="row mb-5 g-4">
+        <div class="col-12 text-center mb-3">
+          <h1 class="text-uppercase fw-bold" style="letter-spacing: 1px;">Notre staff</h1>
+        </div>
+        {% for staff in team_staff %}
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card w-100 h-100">
+              <img src="{% static staff.image %}" class="card-img-top team-img" alt="..." />
+              <div class="card-body bg-body-tertiary p-3">
+                <h3 class="mb-0">{{ staff.name }}</h3>
+                <span class="small text-secondary">{{ staff.role }}</span>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endblock %}
