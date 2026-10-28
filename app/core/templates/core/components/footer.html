@@ -1,7 +1,7 @@
 {% load static %}
 
 <footer class="d-flex flex-column">
-  <section class="bg-body-tertiary">
+  <section class="bg-body-tertiary {% if request.resolver_match.url_name == 'partner' %}d-none{% endif %}">
     <div class="container py-5">
       <div class="text-center mb-5">
         <h2 class="text-uppercase text-muted">Ils nous soutiennent</h2>
@@ -13,9 +13,9 @@
         <!-- Partenaire 1 (Ville de Meaux) -->
         <div class="col-6 col-md-4 col-lg-3">
           <div class="partner-card p-3">
-            <a class="partner d-inline-block" href="">
-              <img src="{% static 'img/partners/meaux.png' %}" alt="Logo Ville de Meaux" class="img-fluid partner-logo-dark" />
-              <img src="{% static 'img/partners/meaux.png' %}" alt="Logo Ville de Meaux" class="img-fluid partner-logo-light" />
+            <a class="partner d-inline-block" href="https://www.ville-meaux.fr/">
+              <img src="{% static 'img/partners/logos/meaux.png' %}" alt="Logo Ville de Meaux" class="img-fluid partner-logo-dark" />
+              <img src="{% static 'img/partners/logos/meaux.png' %}" alt="Logo Ville de Meaux" class="img-fluid partner-logo-light" />
             </a>
           </div>
         </div>
@@ -23,9 +23,9 @@
         <!-- Partenaire 2 (AllCycles) -->
         <div class="col-6 col-md-4 col-lg-3">
           <div class="partner-card p-3">
-            <a class="partner d-inline-block" href="">
-              <img src="{% static 'img/partners/allcyles.png' %}" alt="Logo AllCycles" class="img-fluid partner-logo-dark" />
-              <img src="{% static 'img/partners/allcyles.png' %}" alt="Logo AllCycles" class="img-fluid partner-logo-light" />
+            <a class="partner d-inline-block" href="https://allcycles.fr/">
+              <img src="{% static 'img/partners/logos/allcyles.png' %}" alt="Logo AllCycles" class="img-fluid partner-logo-dark" />
+              <img src="{% static 'img/partners/logos/allcyles.png' %}" alt="Logo AllCycles" class="img-fluid partner-logo-light" />
             </a>
           </div>
         </div>
@@ -33,9 +33,9 @@
         <!-- Partenaire 3 (Leclerc) -->
         <div class="col-6 col-md-4 col-lg-3">
           <div class="partner-card p-3">
-            <a class="partner d-inline-block" href="">
-              <img src="{% static 'img/partners/leclerc.png' %}" alt="Logo Leclerc Meaux" class="img-fluid partner-logo-dark" />
-              <img src="{% static 'img/partners/leclerc.png' %}" alt="Logo Leclerc Meaux" class="img-fluid partner-logo-light" />
+            <a class="partner d-inline-block" href="https://www.e.leclerc/mag/e-leclerc-meaux?srsltid=AYCX9vJJkshrQrZR424jM52bR8SYAryqjK9bAwp1JWRuRGrlJgtpmvum">
+              <img src="{% static 'img/partners/logos/leclerc.png' %}" alt="Logo Leclerc Meaux" class="img-fluid partner-logo-dark" />
+              <img src="{% static 'img/partners/logos/leclerc.png' %}" alt="Logo Leclerc Meaux" class="img-fluid partner-logo-light" />
             </a>
           </div>
         </div>
@@ -43,9 +43,9 @@
         <!-- Partenaire 4 (Hyundai) -->
         <div class="col-6 col-md-4 col-lg-3">
           <div class="partner-card p-3">
-            <a class="partner d-inline-block" href="">
-              <img src="{% static 'img/partners/hyundai.png' %}" alt="Logo Hyundai Meaux" class="img-fluid partner-logo-dark" />
-              <img src="{% static 'img/partners/hyundai.png' %}" alt="Logo Hyundai Meaux" class="img-fluid partner-logo-light" />
+            <a class="partner d-inline-block" href="https://www.riester.fr/concession/hyundai%20meaux">
+              <img src="{% static 'img/partners/logos/hyundai.png' %}" alt="Logo Hyundai Meaux" class="img-fluid partner-logo-dark" />
+              <img src="{% static 'img/partners/logos/hyundai.png' %}" alt="Logo Hyundai Meaux" class="img-fluid partner-logo-light" />
             </a>
           </div>
         </div>
@@ -53,9 +53,9 @@
         <!-- Partenaire 5 (Sena) -->
         <div class="col-6 col-md-4 col-lg-3">
           <div class="partner-card p-3">
-            <a class="partner d-inline-block" href="">
-              <img src="{% static 'img/partners/sena.png' %}" alt="Logo Sena" class="img-fluid partner-logo-dark" />
-              <img src="{% static 'img/partners/sena.png' %}" alt="Logo Sena" class="img-fluid partner-logo-light" />
+            <a class="partner d-inline-block" href="https://www.sena.com/fr/product/cycling/">
+              <img src="{% static 'img/partners/logos/sena.png' %}" alt="Logo Sena" class="img-fluid partner-logo-dark" />
+              <img src="{% static 'img/partners/logos/sena.png' %}" alt="Logo Sena" class="img-fluid partner-logo-light" />
             </a>
           </div>
         </div>
@@ -63,9 +63,9 @@
         <!-- Partenaire 6 (Mauro Ribeiro) -->
         <div class="col-6 col-md-4 col-lg-3">
           <div class="partner-card p-3">
-            <a class="partner d-inline-block" href="">
-              <img src="{% static 'img/partners/mauro-ribeiro.png' %}" alt="Logo Mauro Ribeiro" class="img-fluid partner-logo-dark" />
-              <img src="{% static 'img/partners/mauro-ribeiro.png' %}" alt="Logo Mauro Ribeiro" class="img-fluid partner-logo-light" />
+            <a class="partner d-inline-block" href="https://mauroribeirosports.com.br/">
+              <img src="{% static 'img/partners/logos/mauro-ribeiro.png' %}" alt="Logo Mauro Ribeiro" class="img-fluid partner-logo-dark" />
+              <img src="{% static 'img/partners/logos/mauro-ribeiro.png' %}" alt="Logo Mauro Ribeiro" class="img-fluid partner-logo-light" />
             </a>
           </div>
         </div>
@@ -112,11 +112,11 @@
           <div class="d-flex flex-grow-1 flex-column justify-content-between">
             <a class="d-block text-decoration-none footer-link" href="{% url 'dn3' %}">DN3</a>
 
-            <a class="d-block text-decoration-none footer-link" href="">Club</a>
+            <a class="d-block text-decoration-none footer-link" href="{% url 'club' %}">Club</a>
 
-            <a class="d-block text-decoration-none footer-link" href="">Partenaires</a>
+            <a class="d-block text-decoration-none footer-link" href="{% url 'partner' %}">Partenaires</a>
 
-            <a class="d-block text-decoration-none footer-link" href="">Organisations</a>
+            <a class="d-block text-decoration-none footer-link" href="{% url 'events' %}">Organisations</a>
           </div>
         </div>
 

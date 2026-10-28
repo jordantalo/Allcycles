@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .data import RIDERS_DN3, STAFF_DN3
+from .data import RIDERS_DN3, STAFF_DN3, CLUB_BOARD
 
 # Create your views here.
 def home(request):
@@ -14,3 +14,15 @@ def dn3(request):
 
 def young(request):
 	return render(request, "core/young.html")
+
+def events(request):
+	return render(request, "core/events.html")
+
+def club(request):
+	context = {
+		'club_board': CLUB_BOARD,
+	}
+	return render(request, "core/club.html", context)
+
+def partner(request):
+	return render(request, "core/partner.html")

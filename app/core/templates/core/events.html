@@ -1,0 +1,109 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="bg-body-secondary py-5">
+    <div class="container">
+      <div class="text-center">
+        <span class="badge bg-danger-subtle text-danger mb-3 px-3 py-2 fs-6 rounded-3">Saison 2027</span>
+        <h1 class="text-uppercase fw-bold mb-3" style="letter-spacing: 1px;">Nos organisations</h1>
+        <p class="mb-5" style="text-align: justify; text-justify: inter-word;">Acteur incontournable du cyclisme en pays meldois, le Team AllCycles Meaux s’investit tout au long de l’année pour faire vibrer notre territoire à travers des événements et des compétitions taillés pour toutes les catégories — des plus jeunes de l'école de vélo jusqu'aux coureurs Élite, en passant par les filières Open, Access et UFOLEP.</p>
+      </div>
+      <div class="mb-4 d-none d-md-block">
+        <ul class="nav nav-tabs" id="orgTabs" role="tablist">
+          <!-- Onglet 1 (Actif par défaut) -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active d-flex align-items-center gap-2" id="haute-maison-tab" data-bs-toggle="tab" data-bs-target="#haute-maison" type="button" role="tab" aria-controls="haute-maison" aria-selected="true">La Haute-Maison</button>
+          </li>
+
+          <!-- Onglet 2 -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link d-flex align-items-center gap-2" id="monthyon-tab" data-bs-toggle="tab" data-bs-target="#monthyon" type="button" role="tab" aria-controls="monthyon" aria-selected="false">Monthyon</button>
+          </li>
+
+          <!-- Onglet 3 -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link d-flex align-items-center gap-2" id="villeneuve-tab" data-bs-toggle="tab" data-bs-target="#villeneuve" type="button" role="tab" aria-controls="villeneuve" aria-selected="false">Villeneuve Saint Denis</button>
+          </li>
+
+          <!-- Onglet 4 -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link d-flex align-items-center gap-2" id="meaux-tab" data-bs-toggle="tab" data-bs-target="#meaux" type="button" role="tab" aria-controls="meaux" aria-selected="false">Meaux</button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="d-md-none mb-4">
+        <select class="form-select" id="mobileTabSelect" aria-label="Sélectionner une course">
+          <option value="#haute-maison" selected>La Haute-Maison</option>
+          <option value="#monthyon">Monthyon</option>
+          <option value="#villeneuve">Villeneuve</option>
+          <option value="#meaux">Meaux</option>
+        </select>
+      </div>
+
+      <div class="tab-content" id="orgaTabsContent">
+        <div class="tab-pane fade show active" id="haute-maison" role="tabpanel" aria-labelledby="haute-maison-tab" tabindex="0">
+          {% include 'core/components/event_card.html' with title='La Haute-Maison' image_url='img/events/haute-maison.png' category_badge='Ufolep' discipline_badge='Route' month_badge='MARS' description="Étape incontournable du calendrier UFOLEP, la course de La Haute-Maison cultive l'authentique esprit du cyclisme amateur. Chaque année, plus de 100 coureurs se massent sur la grille de départ, où de valeureux routiers et figures de la discipline aiment à croiser le fer. Déployé sur un circuit sélectif de 5,4 km, le tracé emprunte de petites routes sinueuses et exposées au vent, particulièrement propices aux redoutables bordures et aux tactiques d'équipe." strava_id='3550478600562764654' map_hash='13.01/48.89038/2.99077' strava_token='lE75VN9Z8X77pv76ZGZw9X4xYe4NZ6omOkxgUw_hmfk' %}
+        </div>
+
+        <div class="tab-pane fade" id="monthyon" role="tabpanel" aria-labelledby="monthyon-tab" tabindex="0">
+          {% include 'core/components/event_card.html' with title='Monthyon' image_url='img/events/monthyon.png' category_badge='Open 1,2,3 - Access 1,2,3,4' discipline_badge='Route' month_badge='AVRIL' description="Haut lieu historique du cyclisme en Seine-et-Marne, l'épreuve de Monthyon rassemble chaque saison plus de 200 coureurs. Articulé autour d'un circuit urbain technique et exigeant de près de 3 km, le tracé met les organismes à rude épreuve. Un parcours nerveux et sélectif, taillé sur mesure pour les puncheurs et les grimpeurs, qui garantit des relances incessantes et une explication finale de haut vol !" strava_id='3550475133260571810' map_hash='13.62/49.008/2.83118' strava_token='pfkK7-7sNbE2l78zbF6Yh37QqOAX8LSK5dwDzk6oT1w' %}
+        </div>
+
+        <div class="tab-pane fade" id="villeneuve" role="tabpanel" aria-labelledby="villeneuve-tab" tabindex="0">
+          {% include 'core/components/event_card.html' with title='Villeneuve' image_url='img/events/villeneuve.png' category_badge='Open 2,3 - Access 1,2,3,4' discipline_badge='Route' month_badge='MAI' description="Véritable institution du cyclisme en Île-de-France, la course de Villeneuve-Saint-Denis réunit chaque saison pas moins de 200 compétiteurs. Des catégories Access jusqu'aux Open 2, répartis sur quatre épreuves, les coureurs viennent se mesurer à un tracé nerveux de 9 km. Un parcours particulièrement roulant qui offre un terrain de jeu idéal pour les rouleurs puissants et une explication finale spectaculaire entre sprinteurs !" strava_id='3550442090617593224' map_hash='12.17/48.81788/2.77291' strava_token='o64tFsus2yN76ZpccqaQFVNJZpcRgrOZJS3CYrpm-Qc' %}
+        </div>
+
+        <div class="tab-pane fade" id="meaux" role="tabpanel" aria-labelledby="meaux-tab" tabindex="0">
+          {% include 'core/components/event_card.html' with title='Nocturne de Meaux' image_url='img/events/meaux.png' category_badge='Elite - Ecole de cyclisme' discipline_badge='Route' month_badge='JUIN' description='Disputée au cœur de la ville, la Nocturne de Meaux offre un terrain d’expression idéal aux meilleurs amateurs régionaux. Sur une boucle de 2 km, les coureurs doivent conjuguer puissance, explosivité et maîtrise tactique pour faire la différence. Entre accélérations brutales, offensives répétées et lutte permanente pour le placement, cette épreuve promet une course intense et indécise, où les puncheurs et les rouleurs auront de belles cartes à jouer.' strava_id='3550508341375156386' map_hash='13.45/48.96033/2.91127' strava_token='vBvfcdMuIGW4n6rE_CCKRUY-GzOVipIdtQ-WBM-NM30' %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const mobileSelect = document.getElementById('mobileTabSelect')
+    
+      if (mobileSelect) {
+        mobileSelect.addEventListener('change', function (event) {
+          const targetTabId = event.target.value // ex: "#monthyon"
+    
+          // On cherche le bouton d'onglet desktop correspondant ou on active l'onglet Bootstrap directement
+          const tabTrigger = document.querySelector(`[data-bs-target="${targetTabId}"]`)
+    
+          if (tabTrigger) {
+            // Utilise l'API native de Bootstrap pour basculer l'onglet
+            const tab = bootstrap.Tab.getOrCreateInstance(tabTrigger)
+            tab.show()
+          }
+        })
+      }
+    })
+  </script>
+
+  <script src="https://strava-embeds.com/embed.js"></script>
+
+  <!-- Correctif de rechargement à l'activation d'un onglet -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const tabElList = document.querySelectorAll('button[data-bs-toggle="tab"], select#mobileTabSelect')
+    
+      // Dès qu'un onglet (desktop ou mobile) est affiché
+      document.querySelectorAll('button[data-bs-toggle="tab"]').forEach(function (tabEl) {
+        tabEl.addEventListener('shown.bs.tab', function (event) {
+          // Redémarre l'initialisation des embeds Strava devenus visibles
+          if (window.StravaEmbeds) {
+            window.StravaEmbeds.init()
+          } else {
+            // Alternative : force un redimensionnement pour déclencher le calcul de hauteur
+            window.dispatchEvent(new Event('resize'))
+          }
+        })
+      })
+    })
+  </script>
+{% endblock %}

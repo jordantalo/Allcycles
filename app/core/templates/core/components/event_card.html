@@ -1,0 +1,51 @@
+{% load static %}
+<div class="row align-items-stretch g-3">
+  
+  <!-- COLONNE GAUCHE : Carte d'information -->
+  <div class="col-lg-6">
+    <div class="card h-100 shadow-sm border-secondary-subtle">
+      {% if image_url %}
+        <img src="{% static image_url %}" class="card-img-top" alt="{{ title }}" />
+      {% endif %}
+      <div class="card-body d-flex flex-column justify-content-between">
+        <div>
+          <!-- Badges dynamiques -->
+          <div class="d-flex align-items-center justify-content-start gap-2 flex-wrap mb-3">
+            {% if category_badge %}
+              <span class="badge bg-danger-subtle text-danger py-1 px-2 rounded-2">{{ category_badge }}</span>
+            {% endif %}
+            {% if discipline_badge %}
+              <span class="badge bg-primary-subtle text-primary py-1 px-2 rounded-2">{{ discipline_badge }}</span>
+            {% endif %}
+            {% if month_badge %}
+              <span class="badge bg-success-subtle text-success py-1 px-2 rounded-2">{{ month_badge }}</span>
+            {% endif %}
+          </div>
+
+          <!-- Description -->
+          <p class="card-text text-secondary small" style="text-align: justify; text-justify: inter-word;">
+            {{ description }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLONNE DROITE : Strava Embed (Transformé en .card pour conserver le h-100) -->
+  <div class="col-lg-6">
+    <div class="card h-100 shadow-sm border-secondary-subtle bg-body-tertiary overflow-hidden">
+      <div class="card-body p-0 d-flex flex-column h-100">
+        <div class="strava-embed-placeholder" 
+             data-embed-type="route" 
+             data-embed-id="{{ strava_id }}" 
+             data-full-width="true" 
+             data-style="dark" 
+             {% if map_hash %}data-map-hash="{{ map_hash }}"{% endif %}
+             data-from-embed="{{ from_embed|default:'false' }}" 
+             data-token="{{ strava_token }}">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

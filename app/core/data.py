@@ -88,3 +88,31 @@ STAFF_DN3 = [
         'image': 'img/staff/jeremy-cordier.jpg',
     },
 ]
+
+CLUB_BOARD = [
+	{
+        'name': 'Fabien Rousselin',
+        'role': 'Président',
+        'image': 'img/club/fabien-rousselin.png',
+    },
+	{
+        'name': 'Fabien Rousselin',
+        'role': 'Président',
+        'image': 'img/club/fabien-rousselin.png',
+    },
+	{
+        'name': 'Fabien Rousselin',
+        'role': 'Président',
+        'image': 'img/club/fabien-rousselin.png',
+    },
+	{
+        'name': 'Fabien Rousselin',
+        'role': 'Président',
+        'image': 'img/club/fabien-rousselin.png',
+    },
+	{
+        'name': 'Fabien Rousselin',
+        'role': 'Président',
+        'image': 'img/club/fabien-rousselin.png',
+    },
+]

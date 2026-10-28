@@ -17,8 +17,9 @@
         <div class="navbar-nav ms-auto align-items-md-center gap-md-2">
           <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'dn3' %}active{% endif %}" href="{% url 'dn3' %}">DN3</a>
           <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'young' %}active{% endif %}" href="{% url 'young' %}">JEUNES</a>
-          <a class="nav-link fs-5" href="#">PARTENAIRES</a>
-          <a class="nav-link fs-5" href="#">ORGANISATIONS</a>
+          <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'club' %}active{% endif %}" href="{% url 'club' %}">CLUB</a>
+		  <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'partner' %}active{% endif %}" href="{% url 'partner' %}">PARTENAIRES</a>
+          <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'events' %}active{% endif %}" href="{% url 'events' %}">ORGANISATIONS</a>
         </div>
 
         <!-- 2. Bloc Réseaux Sociaux (Séparé du navbar-nav) -->

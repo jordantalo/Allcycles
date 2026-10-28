@@ -1,7 +1,24 @@
+
+/* Par défaut, on cache tous les badges à l'intérieur des onglets inactifs */
+.nav-tabs .nav-link:not(.active) .badge {
+  display: none !important;
+}
+
+/* Optionnel : pour que la transition d'affichage soit douce */
+.nav-tabs .nav-link .badge {
+  transition: all 0.2s ease-in-out;
+}
+
 .team-img {
     height: 500px;
     object-fit: cover;
     object-position: top;
+}
+
+.partner-img {
+    height: 300px;
+    object-fit: cover;
+    object-position: center;
 }
 
 .partner-logo-dark {
