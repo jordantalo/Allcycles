@@ -1,5 +1,11 @@
 
 /* Par défaut, on cache tous les badges à l'intérieur des onglets inactifs */
+
+.justify {
+    text-align: justify !important;
+    text-justify: inter-word !important;
+}
+
 .nav-tabs .nav-link:not(.active) .badge {
   display: none !important;
 }

@@ -1,11 +1,13 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
+{% block title %}Nos Organisations - Team AllCyclesMeaux{% endblock title %}
+
 {% block content %}
   <div class="bg-body-secondary py-5">
     <div class="container">
       <div class="text-center">
-        <span class="badge bg-danger-subtle text-danger mb-3 px-3 py-2 fs-6 rounded-3">Saison 2027</span>
+        <span class="badge bg-danger-subtle text-danger mb-3 px-3 py-2 fs-6 rounded-3">Saison&nbsp;{% now 'Y' %}</span>
         <h1 class="text-uppercase fw-bold mb-3" style="letter-spacing: 1px;">Nos organisations</h1>
         <p class="mb-5" style="text-align: justify; text-justify: inter-word;">Acteur incontournable du cyclisme en pays meldois, le Team AllCycles Meaux s’investit tout au long de l’année pour faire vibrer notre territoire à travers des événements et des compétitions taillés pour toutes les catégories — des plus jeunes de l'école de vélo jusqu'aux coureurs Élite, en passant par les filières Open, Access et UFOLEP.</p>
       </div>

@@ -1,9 +1,13 @@
 from django.shortcuts import render
+from django.conf import settings
 from .data import RIDERS_DN3, STAFF_DN3, CLUB_BOARD
 
 # Create your views here.
 def home(request):
-	return render(request, "core/home.html")
+	context = {
+		'club_email': settings.CLUB_CONTACT_EMAIL
+	}
+	return render(request, "core/home.html", context)
 
 def dn3(request):
 	context = {
@@ -20,9 +24,15 @@ def events(request):
 
 def club(request):
 	context = {
-		'club_board': CLUB_BOARD,
+		'board_members': CLUB_BOARD,
 	}
 	return render(request, "core/club.html", context)
 
 def partner(request):
 	return render(request, "core/partner.html")
+
+def legal(request):
+	context = {
+		'club_email': settings.CLUB_CONTACT_EMAIL
+	}
+	return render(request, "core/legal.html", context)

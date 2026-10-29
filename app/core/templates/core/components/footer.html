@@ -10,65 +10,16 @@
 
       <!-- Grille Bootstrap centrée -->
       <div class="row justify-content-center align-items-center g-4 g-lg-5 text-center">
-        <!-- Partenaire 1 (Ville de Meaux) -->
-        <div class="col-6 col-md-4 col-lg-3">
-          <div class="partner-card p-3">
-            <a class="partner d-inline-block" href="https://www.ville-meaux.fr/">
-              <img src="{% static 'img/partners/logos/meaux.png' %}" alt="Logo Ville de Meaux" class="img-fluid partner-logo-dark" />
-              <img src="{% static 'img/partners/logos/meaux.png' %}" alt="Logo Ville de Meaux" class="img-fluid partner-logo-light" />
-            </a>
+        {% for partner in FOOTER_PARTNERS %}
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="partner-card p-3">
+              <a class="partner d-inline-block" href="{{ partner.url }}">
+                <img src="{% static partner.logo %}" alt="{{ partner.name }}" class="img-fluid partner-logo-dark" />
+                <img src="{% static partner.logo %}" alt="{{ partner.name }}" class="img-fluid partner-logo-light" />
+              </a>
+            </div>
           </div>
-        </div>
-
-        <!-- Partenaire 2 (AllCycles) -->
-        <div class="col-6 col-md-4 col-lg-3">
-          <div class="partner-card p-3">
-            <a class="partner d-inline-block" href="https://allcycles.fr/">
-              <img src="{% static 'img/partners/logos/allcyles.png' %}" alt="Logo AllCycles" class="img-fluid partner-logo-dark" />
-              <img src="{% static 'img/partners/logos/allcyles.png' %}" alt="Logo AllCycles" class="img-fluid partner-logo-light" />
-            </a>
-          </div>
-        </div>
-
-        <!-- Partenaire 3 (Leclerc) -->
-        <div class="col-6 col-md-4 col-lg-3">
-          <div class="partner-card p-3">
-            <a class="partner d-inline-block" href="https://www.e.leclerc/mag/e-leclerc-meaux?srsltid=AYCX9vJJkshrQrZR424jM52bR8SYAryqjK9bAwp1JWRuRGrlJgtpmvum">
-              <img src="{% static 'img/partners/logos/leclerc.png' %}" alt="Logo Leclerc Meaux" class="img-fluid partner-logo-dark" />
-              <img src="{% static 'img/partners/logos/leclerc.png' %}" alt="Logo Leclerc Meaux" class="img-fluid partner-logo-light" />
-            </a>
-          </div>
-        </div>
-
-        <!-- Partenaire 4 (Hyundai) -->
-        <div class="col-6 col-md-4 col-lg-3">
-          <div class="partner-card p-3">
-            <a class="partner d-inline-block" href="https://www.riester.fr/concession/hyundai%20meaux">
-              <img src="{% static 'img/partners/logos/hyundai.png' %}" alt="Logo Hyundai Meaux" class="img-fluid partner-logo-dark" />
-              <img src="{% static 'img/partners/logos/hyundai.png' %}" alt="Logo Hyundai Meaux" class="img-fluid partner-logo-light" />
-            </a>
-          </div>
-        </div>
-
-        <!-- Partenaire 5 (Sena) -->
-        <div class="col-6 col-md-4 col-lg-3">
-          <div class="partner-card p-3">
-            <a class="partner d-inline-block" href="https://www.sena.com/fr/product/cycling/">
-              <img src="{% static 'img/partners/logos/sena.png' %}" alt="Logo Sena" class="img-fluid partner-logo-dark" />
-              <img src="{% static 'img/partners/logos/sena.png' %}" alt="Logo Sena" class="img-fluid partner-logo-light" />
-            </a>
-          </div>
-        </div>
-
-        <!-- Partenaire 6 (Mauro Ribeiro) -->
-        <div class="col-6 col-md-4 col-lg-3">
-          <div class="partner-card p-3">
-            <a class="partner d-inline-block" href="https://mauroribeirosports.com.br/">
-              <img src="{% static 'img/partners/logos/mauro-ribeiro.png' %}" alt="Logo Mauro Ribeiro" class="img-fluid partner-logo-dark" />
-              <img src="{% static 'img/partners/logos/mauro-ribeiro.png' %}" alt="Logo Mauro Ribeiro" class="img-fluid partner-logo-light" />
-            </a>
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </div>
   </section>
@@ -100,7 +51,7 @@
               14 Avenue Georges Clémenceau<br />77100 Meaux
             </p>
 
-            <a class="text-decoration-none footer-link" href="">Mentions légales</a>
+            <a class="text-decoration-none footer-link" href="{% url 'legal' %}">Mentions légales</a>
           </div>
         </div>
 

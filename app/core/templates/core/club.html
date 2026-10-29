@@ -1,6 +1,8 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
+{% block title %}Le club - Team AllCyclesMeaux{% endblock title %}
+
 {% block content %}
   <div class="bg-body-secondary py-5">
     <div class="container">
@@ -12,7 +14,7 @@
           <div class="d-flex flex-column justify-content-between h-100">
             <div>
               <h1 class="text-uppercase fw-bold mb-3" style="letter-spacing: 1px;">Team AllCycles Meaux</h1>
-              <p class="small" style="text-align: justify; text-justify: inter-word;">Née en 1992 du rapprochement de l’Étoile Cycliste et du CS Meaux Cyclisme, l’Entente Sportive Cycliste de Meaux s’est progressivement imposée comme un acteur majeur du cyclisme seine-et-marnais, portée notamment par son engagement dans la compétition et la formation. Récemment, une nouvelle fusion a marqué une étape importante dans son histoire, donnant naissance au Team Allcycles Meaux et à son équipe de Division Nationale 3. Véritable vitrine sportive et locomotive de la structure, cette formation ambitionne de porter haut les couleurs meldoises sur les épreuves nationales. Autour de ce collectif de haut niveau, le club s’appuie sur un effectif Open, une solide base de coureurs Access FFC et UFOLEP, ainsi qu’une école de vélo tournée vers la formation des plus jeunes. Un projet qui associe ambition, développement et convivialité, avec la volonté de faire vivre le cyclisme à tous les niveaux et de poursuivre le rayonnement de Meaux sur la scène régionale et nationale.</p>
+              <p class="small justify">Née en 1992 du rapprochement de l’Étoile Cycliste et du CS Meaux Cyclisme, l’Entente Sportive Cycliste de Meaux s’est progressivement imposée comme un acteur majeur du cyclisme seine-et-marnais, portée notamment par son engagement dans la compétition et la formation. Récemment, une nouvelle fusion a marqué une étape importante dans son histoire, donnant naissance au Team Allcycles Meaux et à son équipe de Division Nationale 3. Véritable vitrine sportive et locomotive de la structure, cette formation ambitionne de porter haut les couleurs meldoises sur les épreuves nationales. Autour de ce collectif de haut niveau, le club s’appuie sur un effectif Open, une solide base de coureurs Access FFC et UFOLEP, ainsi qu’une école de vélo tournée vers la formation des plus jeunes. Un projet qui associe ambition, développement et convivialité, avec la volonté de faire vivre le cyclisme à tous les niveaux et de poursuivre le rayonnement de Meaux sur la scène régionale et nationale.</p>
             </div>
             <img class="img-fluid w-100 rounded-3" src="{% static 'img/club/club-1.jpg' %}" alt="Victoire David Rémond" />
           </div>
@@ -28,7 +30,7 @@
           <div class="d-flex flex-column justify-content-between h-100">
             <div>
               <h1 class="text-uppercase fw-bold mb-3" style="letter-spacing: 1px;">Un club pour tous</h1>
-              <p class="small" style="text-align: justify; text-justify: inter-word;">Au cœur du Team AllCycles Meaux, la passion du vélo se vit sans exclusive. Porté par une volonté d’ouverture et de rassemblement, le club se structure pour être une véritable maison commune, réunissant hommes et femmes, des plus jeunes de l'école de vélo jusqu'aux catégories Master, en passant par les coureurs Open et l'élite. Cette grande mixité des profils et des ambitions fait toute la richesse de notre structure. Pour autant, ce grand élan collectif trouve sa formidable locomotive dans le haut niveau. Véritable vitrine sportive du club, l'équipe d'élite insuffle une dynamique unique, tire le groupe vers l'excellence et inspire chaque jour nos jeunes pousses. De la découverte sur les routes aux exigences de la compétition, le Team AllCycles Meaux cultive ainsi un parfait équilibre entre performance d'exception et sport pour tous, où chaque licencié contribue à faire vibrer les couleurs meldoises.</p>
+              <p class="small justify">Au cœur du Team AllCycles Meaux, la passion du vélo se vit sans exclusive. Porté par une volonté d’ouverture et de rassemblement, le club se structure pour être une véritable maison commune, réunissant hommes et femmes, des plus jeunes de l'école de vélo jusqu'aux catégories Master, en passant par les coureurs Open et Elite. Cette grande mixité des profils et des ambitions fait toute la richesse de notre structure. Pour autant, ce grand élan collectif trouve sa formidable locomotive dans le haut niveau. Véritable vitrine sportive du club, l'équipe d'élite insuffle une dynamique unique, tire le groupe vers l'excellence et inspire chaque jour nos jeunes pousses. De la découverte sur les routes aux exigences de la compétition, le Team AllCycles Meaux cultive ainsi un parfait équilibre entre performance d'exception et sport pour tous, où chaque licencié contribue à faire vibrer les couleurs meldoises.</p>
             </div>
             <div class="row gy-2">
               <div class="col-12 col-sm-6">
@@ -47,22 +49,57 @@
     </div>
   </div>
 
-  <div class="bg-body py-5">
-    <div class="container">
-      <h1 class="text-uppercase text-center fw-bold mb-5" style="letter-spacing: 1px;">Le bureau</h1>
-      <div class="row g-2 g-md-4 justify-content-center">
-        {% for board_member in club_board %}
-          <div class="col-6 col-md-4 col-lg-2">
-            <div class="card">
-              <img src="{% static board_member.image %}" class="card-img-top" alt="..." />
-              <div class="card-body bg-body-tertiary p-3">
-                <h3 class="mb-0">{{ board_member.name }}</h3>
-                <span class="small text-secondary">{{ board_member.role }}</span>
+ <div class="py-5"> <!-- On enlève le fond forcé pour laisser le body gérer son mode (clair ou dark) -->
+  <div class="container">
+    <h1 class="text-uppercase text-center fw-bold mb-3" style="letter-spacing: 1px;">Notre bureau</h1>
+    <p class="small justify mb-4">
+      Dans l’ombre du peloton, l’engagement sans faille de notre bureau — Président, Secrétaire, Trésorier, ainsi que les responsables des pôles Jeunes, École de vélo, UFOLEP et Access — est le véritable moteur du Team AllCycles Meaux. Sans leur dévouement quotidien pour orchestrer la vie du club et encadrer toutes les catégories, rien de cette belle aventure humaine et sportive ne serait possible.
+    </p>
+
+    <div class="row g-4 align-items-stretch">
+      <!-- COLONNE GAUCHE : Le Président -->
+      <div class="col-lg-6">
+        <!-- bg-body-tertiary s'adapte automatiquement : gris très clair en light, gris foncé élégant en dark -->
+        <div class="card border-0 shadow bg-body-tertiary overflow-hidden h-100">
+          <div class="row g-0 h-100">
+            <!-- Colonne Image (à gauche) -->
+            <div class="col-md-4">
+              <img src="{% static 'img/club/president.png' %}" class="img-fluid rounded-start w-100 h-100 object-fit-cover" style="min-height: 220px;" alt="Président" />
+            </div>
+
+            <!-- Colonne Texte (à droite) -->
+            <div class="col-md-8">
+              <div class="card-body p-4 h-100 d-flex flex-column justify-content-center">
+                <div>
+                  <span class="badge bg-primary-subtle text-primary mb-2">Président</span>
+                  <h3 class="card-title h4 fw-bold mb-1 text-body">Fabien Rousselin</h3>
+                </div>
+
+                <p class="card-text text-muted fst-italic my-2 small">"Piloter le Team AllCycles Meaux, c'est porter haut les valeurs du sport, de la formation et de la convivialité."</p>
+                <p class="card-text text-secondary small mb-0">En charge de la direction stratégique du club et du développement des partenariats.</p>
               </div>
             </div>
           </div>
-        {% endfor %}
+        </div>
+      </div>
+
+      <!-- COLONNE DROITE : Le Bureau (Liste moderne) -->
+      <div class="col-lg-6">
+        <div class="card border-0 shadow bg-body-tertiary h-100 p-4">
+          <h4 class="h5 mb-3 border-bottom pb-2 text-body fw-bold">L'Équipe Dirigeante</h4>
+
+          <ul class="list-unstyled mb-0 d-flex flex-column justify-content-around h-100 py-1">
+            {% for member in board_members %}
+              <!-- border-secondary-subtle ou border-opacity pour que la ligne soit discrète dans les deux modes -->
+              <li class="d-flex justify-content-between align-items-center py-2 border-bottom border-secondary border-opacity-10">
+                <span class="small fw-semibold text-secondary">{{ member.role }}</span>
+                <span class="small fw-medium text-body">{{ member.name }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
       </div>
     </div>
   </div>
+</div>
 {% endblock %}

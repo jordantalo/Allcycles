@@ -1,12 +1,14 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
+{% block title %}Notre DN3 - Team AllCyclesMeaux{% endblock title %}
+
 {% block content %}
   <section class="py-5 bg-body">
     <div class="container">
       <div class="row mb-5 g-4">
         <div class="col-12 text-center mb-3">
-          <span class="badge bg-danger-subtle text-danger mb-3 px-3 py-2 fs-6 rounded-3">Effectif 2027</span>
+          <span class="badge bg-danger-subtle text-danger mb-3 px-3 py-2 fs-6 rounded-3">Effectif&nbsp;{% now 'Y' %}</span>
           <h1 class="text-uppercase fw-bold" style="letter-spacing: 1px;">Notre équipe division nationale 3</h1>
         </div>
 
@@ -29,6 +31,7 @@
       <div class="row mb-5 g-4">
         <div class="col-12 text-center mb-3">
           <h1 class="text-uppercase fw-bold" style="letter-spacing: 1px;">Notre staff</h1>
+		  <p class="small justify">Dans l’ombre des victoires, le dévouement sans faille de notre staff — mécaniciens, assistants et directeurs sportifs — est le véritable catalyseur de la performance du Team AllCycles Meaux. Grâce à leur expertise, leur rigueur et leur présence constante sur le terrain, nos coureurs de Division Nationale 3 peuvent aborder chaque épreuve dans les conditions idéales, faisant de chaque course une aventure collective d'excellence.</p>
         </div>
         {% for staff in team_staff %}
           <div class="col-12 col-md-6 col-lg-4">

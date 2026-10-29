@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Mentions légales - Team AllCyclesMeaux{% endblock title %}
+
+{% block content %}
+  <div class="bg-body py-5">
+    <div class="container">
+      <h1 class="text-center mb-5">Mentions légales</h1>
+
+      <div class="d-flex flex-column gap-5">
+        <div>
+          <h2>Editeur du site</h2>
+          <p>
+            Le présent site internet, accessible à l’adresse www.tam77.com (ci-après le « Site »), est édité par : <br /><br /> L'association Team AllCycles Meaux <br /><br />Association loi 1901<br />Siège social : 14 Avenue Georges Clémenceau - 77100 Meaux - France <br />Numéro de SIRET : <br />Email : {{club_email}} <br />Directeur de la publication : Jordan TALOBRE
+          </p>
+        </div>
+        <div>
+          <h2>Hébergement</h2>
+          <p>
+            Le site est hébergé par : <br />Adresse : <br />
+          </p>
+        </div>
+        <div>
+          <h2>Propriété intellectuelle</h2>
+          <p>Le contenu du site (textes, images, graphismes, logos, icônes, vidéos, etc.) est la propriété exclusive du Team AllCyles Meaux, sauf mention contraire explicite. Toute reproduction, représentation, modification, publication ou adaptation totale ou partielle des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable du Team AllCycles Meaux. Toute exploitation non autorisée du site ou de l’un quelconque des éléments qu’il contient sera considérée comme constitutive d’une contrefaçon et poursuivie conformément aux dispositions des articles L.335-2 et suivants du Code de la propriété intellectuelle</p>
+        </div>
+        <div>
+          <h2>Données personnelles</h2>
+          <p>Conformément à la loi Informatique et Libertés du 6 janvier 1978 modifiée et au Règlement général sur la protection des données (RGPD), vous disposez d’un droit d’accès, de rectification, de suppression et d’opposition au traitement des données personnelles vous concernant. Ces droits peuvent être exercés en nous contactant à l’adresse suivante : {{ club_email }}. <br><br>Le Team AllCycles Meaux s’engage à ne collecter que les données strictement nécessaires pour la gestion des demandes de ses clients et à respecter la confidentialité de ces données.</p>
+        </div>
+		<div>
+          <h2>Limitation de responsabilité</h2>
+          <p>Le Team AllCyles Meaux ne pourra être tenue responsable des dommages directs ou indirects causés au matériel de l’utilisateur lors de l’accès au site, résultant soit de l’utilisation d’un matériel ne répondant pas aux spécifications techniques requises, soit de l’apparition d’un bug ou d’une incompatibilité. Le Team AllCycles Meaux décline également toute responsabilité concernant l’utilisation des informations fournies sur le site, lesquelles sont données à titre purement indicatif.</p>
+        </div>
+		<div>
+          <h2>Liens hypertextes</h2>
+          <p>Le site peut contenir des liens hypertextes vers d’autres sites internet. L’Association n’exerce aucun contrôle sur le contenu de ces sites et décline toute responsabilité quant à leur contenu ou leur utilisation.</p>
+        </div>
+		<div>
+          <h2>Droit applicable et juridiction compétente</h2>
+          <p>Les présentes mentions légales sont régies par le droit français. En cas de litige relatif à l’utilisation du site, compétence exclusive est attribuée aux tribunaux compétents du Team AllCyles Meaux.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

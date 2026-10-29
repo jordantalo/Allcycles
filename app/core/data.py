@@ -63,6 +63,11 @@ RIDERS_DN3 = [
 
 STAFF_DN3 = [
 	{
+        'name': 'Bruno LEGEAY',
+        'role': 'Directeur Général',
+        'image': 'img/staff/bruno-legeay.jpg',
+    },
+	{
         'name': 'Claude MULLOIS',
         'role': 'Directeur sportif',
         'image': 'img/staff/claude-mullois.jpg',
@@ -77,11 +82,6 @@ STAFF_DN3 = [
         'role': 'Directeur sportif',
         'image': 'img/staff/stephane-cruveiller.jpg',
     },
-	{
-        'name': 'Bruno LEGEAY',
-        'role': 'Assisant / Mécano',
-        'image': 'img/staff/bruno-legeay.jpg',
-    },
     {
         'name': 'Jérémy CORDIER',
         'role': 'Assistant',
@@ -91,28 +91,31 @@ STAFF_DN3 = [
 
 CLUB_BOARD = [
 	{
-        'name': 'Fabien Rousselin',
-        'role': 'Président',
-        'image': 'img/club/fabien-rousselin.png',
+        'name': 'Laurent Maunoir',
+        'role': 'Secrétaire',
     },
 	{
-        'name': 'Fabien Rousselin',
-        'role': 'Président',
-        'image': 'img/club/fabien-rousselin.png',
+        'name': 'Chantal Notheaux',
+        'role': 'Trésorière',
     },
 	{
-        'name': 'Fabien Rousselin',
-        'role': 'Président',
-        'image': 'img/club/fabien-rousselin.png',
+        'name': 'Michel Marteaux',
+        'role': 'Responsable Ufolep',
     },
 	{
-        'name': 'Fabien Rousselin',
-        'role': 'Président',
-        'image': 'img/club/fabien-rousselin.png',
+        'name': 'Laurent Meister',
+        'role': 'Responsable Ufolep',
     },
 	{
-        'name': 'Fabien Rousselin',
-        'role': 'Président',
-        'image': 'img/club/fabien-rousselin.png',
+        'name': 'Florence Joris-Meunier',
+        'role': 'Responsable Ecole de Vélo',
+    },
+	{
+        'name': 'Romuald Rodriguez',
+        'role': 'Responsable Ecole de Vélo',
+    },
+	{
+        'name': 'José Civalero',
+        'role': 'Responsable Jeunes',
     },
 ]

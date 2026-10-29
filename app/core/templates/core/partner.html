@@ -1,6 +1,8 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
+{% block title %}Nos partenaires - Team AllCyclesMeaux{% endblock title %}
+
 {% block content %}
   <div class="bg-body-tertiary py-5">
     <div class="container">
@@ -9,35 +11,22 @@
         <h3 class="h1 text-uppercase fw-bold" style="letter-spacing: 1px;">Nos Partenaires & Sponsors</h3>
       </div>
       <div class="row g-3">
+		{% for partner in FOOTER_PARTNERS %}
         <div class="col-12 col-md-6">
           <div class="card h-100">
-            <img src="{% static 'img/partners/stores/meaux.jpg' %}" class="card-img-top partner-img" alt="..." />
+            <img src="{% static partner.image %}" class="card-img-top partner-img" alt="..." />
             <div class="card-body">
-              <div class="d-flex flex-column justify-content-between gap-3 h-100">
-                <div>
-                  <h5 class="card-title">Ville de Meaux</h5>
-                  <p class="card-text small" style="text-align: justify; text-justify: inter-word;">Ancrée dans l’histoire sportive locale, la Ville de Meaux apporte un soutien institutionnel et logistique indispensable au développement du club. En accompagnant notre équipe de Division Nationale 3 et l'ensemble de notre école de formation, la municipalité contribue activement au dynamisme du territoire et au rayonnement de nos couleurs bien au-delà de la Seine-et-Marne. Un partenariat fort, fondé sur des valeurs communes d'effort, de cohésion et d'ambition pour tous les sportifs meldois.</p>
-                </div>
-
-                <a href="#" class="btn btn-primary align-self-start">Visiter le site</a>
+              <div class="d-flex flex-column justify-content-start gap-3 h-100">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="card-title text-body mb-0">{{ partner.name }}</h5>
+                    <a href={{ partner.url }} class="text-primary text-decoration-none small fw-semibold d-inline-flex align-items-center gap-1 link-underline-hover">Découvrir <span style="font-size: 0.85em;">↗</span></a>
+                  </div>
+                  <p class="card-text small" style="text-align: justify; text-justify: inter-word;">{{ partner.description }}</p>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-12 col-md-6">
-          <div class="card h-100">
-            <img src="{% static 'img/partners/stores/allcycles.jpeg' %}" class="card-img-top partner-img" alt="..." />
-            <div class="card-body">
-              <div class="d-flex flex-column justify-content-between gap-3 h-100">
-                <div>
-                  <h5 class="card-title">ALLCYCLES</h5>
-                  <p class="card-text small" style="text-align: justify; text-justify: inter-word;">Partenaire historique et technique de notre structure, le magasin ALLCYCLES est bien plus qu’un soutien : c’est un véritable repère pour les passionnés de vélo à Meaux. Grâce à une sélection rigoureuse de matériels de pointe, un atelier de précision et des conseils d'experts adaptés à toutes les pratiques – de la route au haut niveau –, ALLCYCLES accompagne au quotidien nos coureurs de la Division Nationale 3 jusqu'à l'école de vélo. Cette collaboration étroite garantit à nos athlètes de disposer du meilleur équipement pour exprimer tout leur potentiel sur les routes de France.</p>
-                </div>
-                <a href="#" class="btn btn-primary align-self-start">Visiter le site</a>
-              </div>
-            </div>
-          </div>
-        </div>
+		{% endfor %}
       </div>
     </div>
   </div>

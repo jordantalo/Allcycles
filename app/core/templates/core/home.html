@@ -13,7 +13,7 @@
     <!-- 3. Contenu superposé dans le container -->
     <div class="position-absolute top-0 start-0 w-100 h-100">
       <div class="container h-100 d-flex flex-column justify-content-end align-items-start text-start pb-4 pb-md-5 text-white">
-        <span class="badge bg-danger mb-2">Saison 2027</span>
+        <span class="badge bg-danger mb-2">Saison&nbsp;{% now 'Y' %}</span>
 
         <h1 class="display-4 mb-0 text-shadow fw-bold" style="letter-spacing: 1px;">
           Bienvenue au <br />
@@ -27,7 +27,7 @@
     <div class="container">
       <div class="row align-items-stretch g-4">
         <div class="col-12 col-md-6 d-flex flex-column">
-          <h2>Saison 2027</h2>
+          <h2>Saison&nbsp;{% now 'Y' %}</h2>
           <h3 class="h1">DU VIVIER MELDOIS À LA DN3 NATIONALE</h3>
           <p style="text-align: justify; text-justify: inter-word;">Club formateur et organisateur historique de Seine-et-Marne, le Team AllCycles Meaux propulse ses coureurs vers l'élite. Avec notre structure DN3 créée sur les bases du vivier local, nous affirmons nos ambitions au sommet du classement national.</p>
           <img src="{% static 'img/home/race-start.jpg' %}" alt="Monthyon départ" class="img-fluid rounded-3 mt-auto" />
@@ -45,7 +45,7 @@
       <div class="row mb-5">
         <div class="col-12 text-center">
           <h2 class="h1 text-uppercase fw-bold" style="letter-spacing: 1px;">Nous Rejoindre</h2>
-          <p class="lead mx-auto" style="max-width: 700px;">Partenaires, coureurs ou dirigeants : envie de porter les couleurs du Team AllCycles Meaux ou de soutenir notre projet DN3 ? Écrivez-nous ou remplissez le formulaire ci-dessous.</p>
+          <p class="lead mx-auto" style="max-width: 700px;">Partenaires, coureurs ou dirigeants : envie de porter les couleurs du Team AllCycles Meaux ou de soutenir notre projet DN3 ? Écrivez-nous à l'adresse {{ club_email }} ou remplissez le formulaire ci-dessous.</p>
         </div>
       </div>
 
