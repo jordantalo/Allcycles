@@ -14,7 +14,7 @@
 
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <!-- 1. Liens de navigation principaux -->
-        <div class="navbar-nav ms-auto align-items-md-center gap-md-2">
+        <div class="navbar-nav ms-auto align-items-md-center gap-md-2 mt-2">
           <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'dn3' %}active{% endif %}" href="{% url 'dn3' %}">DN3</a>
           <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'young' %}active{% endif %}" href="{% url 'young' %}">JEUNES</a>
           <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'club' %}active{% endif %}" href="{% url 'club' %}">CLUB</a>

@@ -1,7 +1,7 @@
 <div class="row g-3 align-items-stretch">
   {% for race in races %}
     <!-- Card including a footer presence for riders (presence footer only for mobile) -->
-    <div class="{% if user.rider %}col-12 col-lg-10{% else %}col-12{% endif %}">
+    <div class="{% if user.rider %}col-12 col-lg-9 col-xl-10{% else %}col-12{% endif %}">
       <div class="card shadow_sm">
         {% include "members/partials/race_card_header.html" with race=race%}
         {% include "members/partials/race_card_body.html" with race=race%}
@@ -13,7 +13,7 @@
     </div>
 
     <!-- A unique card presence for riders views - only for screen larger than lg -->
-    <div class="{% if user.rider in race.riders.all %}d-none d-lg-block col-lg-2{% else %}d-none{% endif %}">
+    <div class="{% if user.rider in race.riders.all %}d-none d-lg-block col-lg-3 col-xl-2{% else %}d-none{% endif %}">
       {% include "members/components/presence_card.html" with race=race%}
     </div>
   {% endfor %}
