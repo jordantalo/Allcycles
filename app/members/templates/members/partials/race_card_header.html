@@ -6,7 +6,7 @@
     </div>
 
     <div class="col-1 d-md-none d-flex justify-content-end align-items-center">
-    {% if request.user.is_staff %}
+    {% if request.user.is_staff or request.user.staff.is_active %}
       <a href="{% url 'members:edit_race' race.id %}" class="text-muted text-decoration-none" title="Modifier la course"><i class="bi bi-pencil-square"></i></a>
     {% endif %}
     </div>
@@ -15,7 +15,7 @@
       <span class="badge bg-success-subtle text-success d-inline-flex align-items-center">{{ race.date|date:"d M Y" }}</span>
       <span class="badge bg-primary-subtle text-primary d-inline-flex align-items-center">{{ race.get_category_type_display }}</span>
       <span class="badge bg-danger-subtle text-danger d-inline-flex align-items-center">{% if race.is_dn_race %}DN{% else %}HORS-DN{% endif %}</span>
-      {% if request.user.is_staff %}
+      {% if request.user.is_staff or request.user.staff.is_active %}
         <div class="d-none d-md-flex">
           <a href="{% url 'members:edit_race' race.id %}" class="text-muted text-decoration-none ms-3" title="Modifier la course"><i class="bi bi-pencil-square"></i></a>
         </div>

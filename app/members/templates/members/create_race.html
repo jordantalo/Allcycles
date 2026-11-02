@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="bg-body-secondary py-5">
+  <div class="bg-body-secondary py-5 flex-grow-1">
     <div class="container">
       <h1 class="text-center mb-4">Ajouter une course</h1>
       <div class="row justify-content-center">
@@ -23,12 +23,12 @@
     document.addEventListener('DOMContentLoaded', function () {
       const dnCheckbox = document.getElementById('id_dn_race')
       const riderCheckboxes = document.querySelectorAll('.rider-checkbox')
-    
+
       if (dnCheckbox) {
         dnCheckbox.addEventListener('change', function () {
           // On regarde si la case DN est cochée ou non
           const isChecked = this.checked
-    
+
           // On applique le même état (true ou false) à toutes les cases des coureurs
           riderCheckboxes.forEach(function (checkbox) {
             checkbox.checked = isChecked

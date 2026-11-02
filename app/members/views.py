@@ -13,7 +13,7 @@ def calendar(request):
 
      # Courses à venir (aujourd'hui ou dans le futur), triées de la plus proche à la plus lointaine
     next_races = list(Race.objects.filter(date__gte=today).order_by("date"))
-            
+
     # Courses passées (avant aujourd'hui), triées de la plus récente à la plus ancienne
     past_races = list(Race.objects.filter(date__lt=today).order_by("-date"))
 
@@ -26,7 +26,7 @@ def calendar(request):
 
         if curr_rider:
             race.curr_rider_presence = curr_rider_presences.get(race.id)
-        
+
         for rider in race.riders.all():
             presence_obj = rider_presences.get(rider.id)
             race.rider_statuses.append((rider, presence_obj))
@@ -42,9 +42,9 @@ def calendar(request):
 @login_required
 def home_redirect(request):
 
-    if (request.user.rider):
+    if hasattr(request.user, 'rider') and request.user.rider:
         return redirect("members:rider_dashboard")
-    
+
     return redirect("members:staff_dashboard")
 
 @login_required
@@ -61,13 +61,19 @@ def rider_dashboard(request):
 
         for presence in presences:
             current_year = presence.race.date.year
-            
+
             if (current_year != prev_year):
                 res_by_season.append((prev_year, season_res))
-                
+
                 stats_info.append((prev_year, {
                     'race_days': len(season_res),
+                    'finisher': count_status(season_res, 'finisher'),
+                    'dns': count_status(season_res, 'DNS'),
+                    'dnf': count_status(season_res, 'DNF'),
                     'podium': count_top(season_res, 3),
+                    'first': count_position(season_res, 1),
+                    'second': count_position(season_res, 2),
+                    'third': count_position(season_res, 3),
                     'top_5': count_top(season_res, 5),
                     'top_10': count_top(season_res, 10),
                     'top_20': count_top(season_res, 20),
@@ -76,13 +82,19 @@ def rider_dashboard(request):
                 season_res = []
                 seasons.append(prev_year)
                 prev_year = current_year
-            
+
             season_res.append(presence)
 
         res_by_season.append((current_year, season_res))
         stats_info.append((current_year, {
             'race_days': len(season_res),
+            'finisher': count_status(season_res, 'finisher'),
+            'dns': count_status(season_res, 'DNS'),
+            'dnf': count_status(season_res, 'DNF'),
             'podium': count_top(season_res, 3),
+            'first': count_position(season_res, 1),
+            'second': count_position(season_res, 2),
+            'third': count_position(season_res, 3),
             'top_5': count_top(season_res, 5),
             'top_10': count_top(season_res, 10),
             'top_20': count_top(season_res, 20),
@@ -97,11 +109,11 @@ def rider_dashboard(request):
         riders=request.user.rider,
         date__gte=today,
     ).order_by('date').first()
-    
+
     presence = None
 
-    if next_race:
-        presence = next_race.presences.get(rider=request.user.rider)
+    if next_race and next_race.presences:
+        presence = next_race.presences.filter(rider=request.user.rider).first()
         next_race.curr_rider_presence = presence
 
     context = {
@@ -113,6 +125,13 @@ def rider_dashboard(request):
 
     return render(request, 'members/rider_dashboard.html', context)
 
+def count_status(season: list[RacePresence], status: str):
+    count_status = 0
+    for presence in season:
+        if (presence.finisher_status == status):
+            count_status += 1
+    return (count_status)
+
 def count_top(season: list[RacePresence], top: int):
     podium = 0
     for presence in season:
@@ -120,6 +139,14 @@ def count_top(season: list[RacePresence], top: int):
             if (presence.position > 0 and presence.position <= top):
                 podium += 1
     return (podium)
+
+def count_position(season: list[RacePresence], target: int):
+    position = 0
+    for presence in season:
+        if (presence.finisher_status == 'finisher' and presence.position is not None):
+            if (presence.position == target):
+                position += 1
+    return (position)
 
 @login_required
 def staff_dashboard(request):
@@ -228,10 +255,10 @@ def edit_race(request, race_id):
 @staff_member_required
 def delete_race(request, race_id):
     race = get_object_or_404(Race, id=race_id)
-    
+
     if (request.method == 'POST'):
         race.delete()
-    
+
     return (redirect('members:calendar'))
 
 @login_required
@@ -241,10 +268,10 @@ def update_presence(request, race_id):
         race = get_object_or_404(Race, id=race_id)
         rider = request.user.rider
         status = request.POST.get('status')
-        
+
         if (not rider):
             return (redirect('members:calendar'))
-        
+
         RacePresence.objects.update_or_create(
             race=race,
             rider=rider,
@@ -252,5 +279,5 @@ def update_presence(request, race_id):
                 'status': status
             }
         )
-        
+
     return (redirect('members:calendar'))

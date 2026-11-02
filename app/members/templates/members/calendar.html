@@ -22,7 +22,7 @@
       </div>
     </div>
   </div>
-  <div class="bg-body-secondary pt-4 pb-5">
+  <div class="bg-body-secondary pt-4 pb-5 flex-grow-1">
     <div class="container">
 
       <div class="d-md-none mb-4">
@@ -63,14 +63,14 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
       const mobileSelect = document.getElementById('mobileRaceSelect')
-    
+
       if (mobileSelect) {
         mobileSelect.addEventListener('change', function (event) {
           const targetTabId = event.target.value // ex: "#monthyon"
-    
+
           // On cherche le bouton d'onglet desktop correspondant ou on active l'onglet Bootstrap directement
           const tabTrigger = document.querySelector(`[data-bs-target="${targetTabId}"]`)
-    
+
           if (tabTrigger) {
             // Utilise l'API native de Bootstrap pour basculer l'onglet
             const tab = bootstrap.Tab.getOrCreateInstance(tabTrigger)
