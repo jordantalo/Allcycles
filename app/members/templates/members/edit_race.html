@@ -1,0 +1,48 @@
+{% extends 'members/base.html' %}
+{% load static %}
+{% block title %}
+  Editer course - TAM77
+{% endblock %}
+
+{% block content %}
+  <div class="bg-body-secondary py-5">
+    <div class="container">
+      <h1 class="text-center mb-4">Editer une course</h1>
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-6">
+          {% include 'members/components/race_form.html' with riders=riders race=race %}
+        </div>
+      </div>
+      <div class="mt-5">
+        <div class="row justify-content-center">
+          <div class="col-12 col-lg-6">
+            <div class="bg-danger-subtle rounded-2 p-3">
+              <h3 class="h5 text-danger text-center">Supprimer la course</h3>
+              <div class="text-center">
+                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">Supprimer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-danger-subtle">
+        <div class="modal-header border-danger border-bottom">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Êtes-vous sûr de supprimer {{ race.title }} ?</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Annuler</button>
+          <form action="{% url 'members:delete_race' race.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Oui, supprimer</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'members/base.html' %}
+{% load static %}
+{% block title %}
+  Saisir les résultats - TAM77
+{% endblock %}
+
+{% block content %}
+  <div class="bg-body-secondary py-5">
+    <div class="container">
+      <h1 class="text-center mb-4">{% if race.results_entered %}Modifier{% else %}Saisir{% endif %} les résultat de {{ race.title }}</h1>
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-6">
+          {% include 'members/components/result_form.html' with race=race %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

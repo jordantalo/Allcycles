@@ -1,0 +1,42 @@
+<div class="card-body">
+  
+  <div class="row gx-4 gy-3">
+
+    <!-- Section Coureurs -->
+    <div class="col-12 col-md-8 col-xl-9">
+      <span class="small fw-semibold text-muted d-block mb-1">Coureurs</span>
+      <div class="d-flex flex-wrap gap-1">
+        {% for rider, presence in race.rider_statuses %}
+        <div class="badge border bg-body-secondary text-body fw-normal d-inline-flex align-items-center gap-1 px-2 py-1" style="height:25px;">
+          <span class="text-truncate">{{ rider.user.first_name|slice:":1" }}. {{ rider.user.last_name }}</span>
+          {% if presence.status == 'yes' %}
+          <span class="badge rounded-3 bg-success text-white px-1 py-1"><i class="bi bi-check2-circle"></i></span>
+          {% elif presence.status == 'no' %}
+          <span class="badge rounded-3 bg-danger text-white px-1 py-1"><i class="bi bi-x-lg"></i></span>
+          {% else %}
+          <span class="badge rounded-3 bg-warning text-dark px-1 py-1"><i class="bi bi-hourglass-split"></i></span>
+          {% endif %}
+        </div>
+        {% empty %}
+        <span class="text-muted small">Aucun coureur.</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Section Staff -->
+    <div class="col-12 col-md-4 col-xl-3">
+      <span class="small fw-semibold text-muted d-block mb-1">Staff</span>
+      <div class="d-flex flex-wrap gap-1">
+        {% for staff_member in race.staff_members.all %}
+        <span class="badge border bg-body-secondary text-body fw-normal px-2 py-1 d-inline-flex align-items-center" style="height:25px;">
+        {{ staff_member.user.first_name|slice:":1" }}. {{ staff_member.user.last_name }}
+        </span>
+        {% empty %}
+        <span class="text-muted small">Aucun staff.</span>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+
+</div>

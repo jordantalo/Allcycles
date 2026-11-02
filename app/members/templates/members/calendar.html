@@ -1,0 +1,83 @@
+{% extends 'members/base.html' %}
+{% load static %}
+
+{% block title %}
+  Tableau de bord - TAM77
+{% endblock %}
+
+{% block content %}
+  <div class="bg-body-secondary py-4">
+    <div class="container">
+      <!-- En-tête de la page -->
+      <div class="row justify-content-between align-items-center g-4">
+        <div class="col-md-6">
+          <h1 class="h3 mb-1 fw-bold">Calendrier des courses</h1>
+          <p class="text-muted small mb-0">Retrouvez les épreuves à venir et l'historique de la saison.</p>
+        </div>
+        {% if request.user.is_staff %}
+          <div class="col-md-6 d-flex justify-content-start justify-content-md-end">
+            <a href="{% url 'members:create_race' %}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Nouvelle course</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="bg-body-secondary pt-4 pb-5">
+    <div class="container">
+
+      <div class="d-md-none mb-4">
+        <select class="form-select" id="mobileRaceSelect" aria-label="Selectionner le calendrier">
+          <option value="#next-races" selected>Courses à venir</option>
+          <option value="#previous-races">Courses passées</option>
+        </select>
+      </div>
+
+      <div class="mb-4 d-none d-md-block">
+        <ul class="nav nav-tabs" id="orgTabs" role="tablist">
+          <!-- Onglet 1 (Actif par défaut) -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active d-flex align-items-center gap-2" id="next-races-tab" data-bs-toggle="tab" data-bs-target="#next-races" type="button" role="tab" aria-controls="next-races" aria-selected="true">Courses à venir</button>
+          </li>
+
+          <!-- Onglet 2 -->
+          <li class="nav-item" role="presentation">
+            <button class="nav-link d-flex align-items-center gap-2" id="previous-races-tab" data-bs-toggle="tab" data-bs-target="#previous-races" type="button" role="tab" aria-controls="previous-races" aria-selected="false">Courses passées</button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="tab-content" id="orgTabsContent">
+        <div class="tab-pane fade show active" id="next-races" role="tabpanel" aria-labelledby="next-races-tab">
+          {% include 'members/components/next_race_list.html' with races=next_races user=user %}
+        </div>
+        <div class="tab-pane fade" id="previous-races" role="tabpanel" aria-labelledby="previous-races-tab">
+          {% include 'members/components/past_race_list.html' with races=past_races user=user %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const mobileSelect = document.getElementById('mobileRaceSelect')
+    
+      if (mobileSelect) {
+        mobileSelect.addEventListener('change', function (event) {
+          const targetTabId = event.target.value // ex: "#monthyon"
+    
+          // On cherche le bouton d'onglet desktop correspondant ou on active l'onglet Bootstrap directement
+          const tabTrigger = document.querySelector(`[data-bs-target="${targetTabId}"]`)
+    
+          if (tabTrigger) {
+            // Utilise l'API native de Bootstrap pour basculer l'onglet
+            const tab = bootstrap.Tab.getOrCreateInstance(tabTrigger)
+            tab.show()
+          }
+        })
+      }
+    })
+</script>
+{% endblock extra_js %}

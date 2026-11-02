@@ -1,0 +1,5 @@
+{% if race.results_entered == False %}
+  <a href="{% url "members:save_results" race.id %}" class="btn btn-sm btn-outline-primary w-100"><span class="fw-semibold">Saisir</span></a>
+{% elif race.results_entered == True %}
+  <a href="{% url "members:save_results" race.id %}" class="btn btn-sm btn-outline-info w-100"><span class="fw-semibold">Modifier</span></a>
+{% endif %}

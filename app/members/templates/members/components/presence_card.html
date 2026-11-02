@@ -1,0 +1,8 @@
+<div class="card shadow-sm h-100">
+	<div class="card-header">
+		<h3 class="h5 m-0">Présence</h3>
+	</div>
+	<div class="card-body d-flex flex-column justify-content-center align-items-center">
+  {% include "members/components/presence_form.html" with status=race.curr_rider_presence race_id=race.id%}
+	</div>
+</div>

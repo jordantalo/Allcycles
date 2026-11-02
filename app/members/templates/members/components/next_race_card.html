@@ -1,0 +1,34 @@
+<div class="col-12 {% if next_race %}col-lg-10{% endif %}">
+        <div class="card h-100 shadow-sm">
+
+          <div class="card-header">
+            <h2 class="h5 m-0">Prochaine course</h2>
+          </div>
+
+          <div class="card-body">
+            {% if not next_race %}
+            <span>Pas de prochaine course programmée pour le moment.</span>
+            {% else %}
+            <div class="d-flex justify-content-start justify-content-between gap-1">
+              <span>{{ next_race.title }}</span>
+              <div>
+                <span class="badge bg-success-subtle text-success d-inline-flex align-items-center">{{ next_race.date|date:"d M Y" }}</span>
+                <span class="badge bg-primary-subtle text-primary d-inline-flex align-items-center">{{ next_race.get_category_type_display }}</span>
+                <span class="badge bg-danger-subtle text-danger d-inline-flex align-items-center">{% if next_race.is_dn_race %}DN{% else %}HORS-DN{% endif %}</span>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+
+          {% if next_race %}
+          {% include "members/partials/race_card_presence_footer.html" with race=next_race%}
+          {% endif %}
+
+        </div>
+      </div>
+
+      {% if next_race %}
+      <div class="d-none d-lg-block col-lg-2">
+        {% include "members/components/presence_card.html" with race=next_race%}
+      </div>
+      {% endif %}

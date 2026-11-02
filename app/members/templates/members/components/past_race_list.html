@@ -1,0 +1,20 @@
+<div class="row g-3 align-items-stretch">
+  {% for race in races %}
+    <!-- Card including a footer presence for riders (presence footer only for mobile) -->
+    <div class="{% if user.is_staff or user.staff %}col-12 col-lg-9 col-xl-10{% else %}col-12{% endif %}">
+      <div class="card shadow-sm">
+        {% include "members/partials/race_card_header.html" with race=race%}
+        {% include "members/partials/race_card_body.html" with race=race%}
+        
+        {% if user.is_staff or user.staff %}
+          {% include "members/partials/race_card_result_footer.html" with race=race%}
+		    {% endif %}
+      </div>
+    </div>
+
+    <!-- A unique card presence for riders views - only for screen larger than lg -->
+    <div class="{% if user.is_staff or user.staff %}d-none d-lg-block col-lg-3 col-xl-2{% else %}d-none{% endif %}">
+      {% include "members/components/result_card.html" with race=race%}
+    </div>
+  {% endfor %}
+</div>
