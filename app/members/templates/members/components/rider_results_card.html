@@ -1,0 +1,73 @@
+<div class="card shadow-sm flex-grow-1 d-flex flex-column">
+  
+  <!-- Header -->
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h2 class="h5 mb-0">Mes résultats</h2>
+    <div class="m-0">
+      <select class="form-select form-select-sm py-0 ps-3" id="mobile-season-select" aria-label="Saison">
+        {% for season in seasons %}
+        <option value="season_{{season}}">{{season}}</option>
+        {% empty %}
+        <option value="season-no-data">Pas de données</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <!-- Body section -->
+  <div class="card-body flex-grow-1 overflow-y-auto" style="min-height: 300px">
+    <div class="tab-content" id="resTabsContent">
+      {% for year, results in res_by_season %}
+      <div class="tab-pane fade rider_season_res {% if year == seasons.0 %}show active{% endif %}" id="season_{{ year }}" role="tabpanel" aria-labelledby="res-season-{{ year }}-tab">
+        {% for res in results %}
+        <div class="d-flex align-items-center gap-3 border-bottom py-2">
+                    
+          <!-- Date -->
+          <span class="badge bg-success-subtle text-success text-center" style="width:55px;">{{ res.race.date|date:"d / m" }}</span>
+          
+          <!-- Position / Statut -->
+          <span class="small fw-bold" style="width:30px">
+            {% if res.finisher_status == 'finisher' %}
+              {{ res.position }}
+            {% else %}
+              {{ res.finisher_status }}
+            {% endif %}
+          </span>
+  
+          <!-- Titre de la course (flex-grow-1 permet de lui laisser prendre la place dispo) -->
+          <span class="d-sm-none small text-truncate flex-grow-1 text-end">{{ res.race.title }}</span>
+          <span class="d-none d-sm-flex small text-truncate flex-grow-1">{{ res.race.title }}</span>
+  
+          <!-- Catégorie -->
+          <span class="badge d-none bg-primary-subtle text-primary d-sm-flex d-inline-flex align-items-center">{{ res.race.get_category_type_display }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% empty %}
+      <span class="small">Pas de résultats enregistrés.</span>
+      {% endfor %}
+    </div>
+  </div>
+  
+</div>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const mobileSelect = document.getElementById('mobile-season-select')
+    
+      if (mobileSelect) {
+        mobileSelect.addEventListener('change', function (event) {
+          const targetTabId = event.target.value // ex: "#season_2026"
+          
+          const tabPane = document.getElementById(targetTabId)
+    
+          if (tabPane) {
+              document.querySelectorAll('.rider_season_res').forEach(el => el.classList.remove('show', 'active'))
+              tabPane.classList.add('show', 'active')
+          }
+        })
+      }
+    })
+</script>
+{% endblock extra_js %}

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Staff(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    is_active = models.BooleanField("Encadrant actif", default=True)
 
     def __str__(self):
         return (f'Staff member: {self.user.first_name} {self.user.last_name}')
@@ -30,15 +31,16 @@ class Rider(models.Model):
     )
 
     belong_to_dn = models.BooleanField("Coureur DN", default=False)
+    is_active = models.BooleanField("Coureur actif", default=True)
 
     def __str__(self):
-        if self.belong_to_dn:
-            DN = "DN"
+        if self.is_active:
+            active = "Actif"
         else:
-            DN = "Hors DN"
+            active = "Archivé"
 
         return (
-            f"[{self.user.first_name} {self.user.last_name}] {self.category_ffc} ({DN})"
+            f"[{self.user.first_name} {self.user.last_name}] {self.category_ffc} ({active})"
         )
 
 
@@ -70,6 +72,11 @@ class Race(models.Model):
 
     def __str__(self):
         return f"[{self.category_type}] {self.title} ({self.date})"
+
+    @property
+    def active_riders(self):
+        """Renvoie directement la liste des coureurs actifs pour cette course"""
+        return Rider.objects.filter(is_active=True)
 
 
 class RacePresence(models.Model):
