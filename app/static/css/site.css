@@ -1,5 +1,11 @@
 
-/* Par défaut, on cache tous les badges à l'intérieur des onglets inactifs */
+@media (max-width: 991.98px) {
+  .results-scroll {
+    position: static !important;
+    height: auto !important;
+    overflow-y: visible !important;
+  }
+}
 
 .justify {
     text-align: justify !important;
