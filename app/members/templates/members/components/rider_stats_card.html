@@ -1,0 +1,59 @@
+<div class="card shadow-sm d-flex flex-column">
+
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h2 class="h5 m-0">Mes Stats</h2>
+
+    <div class="m-0">
+      <select class="form-select form-select-sm py-0 ps-3" id="mobile-stats-season-select" aria-label="Saison">
+        {% for season in seasons %}
+          <option value="season_stats_{{ season }}">{{ season }}</option>
+        {% empty %}
+          <option value="season-no-data">Pas de données</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div class="card-body d-flex flex-column" style="min-height: 300px;">
+    <div class="tab-content" id="statTabsContent">
+      {% for year, stats in stats_info %}
+        <div class="tab-pane fade rider_stats_tab {% if year == seasons.0 %}show active{% endif %}" id="season_stats_{{ year }}" role="tabpanel" aria-labelledby="res-season-stats-{{ year }}-tab">
+          <div class="d-flex flex-column gap-3">
+            <!-- 1. Bloc principal : Jours de courses + Détails Finies / DNS / DNF -->
+            {% include 'members/partials/rider_stats_race_days_card.html' with stats=stats %}
+
+            <!-- 2. Bloc Podium de la saison -->
+            {% include 'members/partials/rider_stats_podium_card.html' with stats=stats %}
+
+            <!-- Section top performances -->
+            {% include 'members/partials/rider_stats_top_perf_card.html' with stats=stats %}
+          </div>
+        </div>
+      {% empty %}
+        <div>
+          <span class="small">Pas de stats disponibles pour le moment.</span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% block extra_js %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const mobileSelect = document.getElementById('mobile-stats-season-select')
+
+      if (mobileSelect) {
+        mobileSelect.addEventListener('change', function (event) {
+          const targetTabId = event.target.value
+          const tabPane = document.getElementById(targetTabId)
+
+          if (tabPane) {
+            document.querySelectorAll('.rider_stats_tab').forEach((el) => el.classList.remove('show', 'active'))
+            tabPane.classList.add('show', 'active')
+          }
+        })
+      }
+    })
+  </script>
+{% endblock %}

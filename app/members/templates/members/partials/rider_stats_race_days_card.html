@@ -1,0 +1,25 @@
+<div class="card border bg-body-tertiary rounded-3 p-3">
+  <div class="d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center fw-bold text-body">
+      <span class="badge bg-primary-subtle text-primary me-2 p-2 rounded-3 fs-6"><i class="fa-solid fa-flag-checkered"></i></span>
+      <span>Jours de course</span>
+    </div>
+    <div class="fs-2 fw-bold text-primary">{{ stats.race_days }}</div>
+  </div>
+
+  <!-- Sous-détails (Finies, DNS, DNF) -->
+  <div class="d-flex gap-2 mt-3 pt-2 border-top border-secondary-subtle text-center">
+    <div class="flex-fill bg-body rounded-2 p-2 border">
+      <span class="d-block small text-muted">Finies</span>
+      <span class="fw-bold text-success">{{ stats.finisher|default:'0' }}</span>
+    </div>
+    <div class="flex-fill bg-body rounded-2 p-2 border">
+      <span class="d-block small text-muted">DNS</span>
+      <span class="fw-bold text-warning">{{ stats.dns|default:'0' }}</span>
+    </div>
+    <div class="flex-fill bg-body rounded-2 p-2 border">
+      <span class="d-block small text-muted">DNF</span>
+      <span class="fw-bold text-danger">{{ stats.dnf|default:'0' }}</span>
+    </div>
+  </div>
+</div>
