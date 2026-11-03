@@ -1,0 +1,16 @@
+<div class="col-12 {% if last_race %}col-lg-9 col-xl-10{% endif %}">
+  <div class="card h-100 shadow-sm">
+
+    {% include 'members/partials/dashboard/single_race_body_card.html' with race=last_race card_title="dernière course" %}
+
+    {% if last_race %}
+      {% include 'members/partials/race_card/result_footer.html' with race=last_race %}
+    {% endif %}
+  </div>
+</div>
+
+{% if last_race %}
+  <div class="d-none d-lg-block col-lg-3 col-xl-2">
+    {% include 'members/components/result_card.html' with race=last_race %}
+  </div>
+{% endif %}

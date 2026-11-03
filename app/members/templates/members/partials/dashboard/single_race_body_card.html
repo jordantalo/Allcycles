@@ -1,0 +1,27 @@
+<div class="card-header">
+  <h2 class="h5 m-0">{{ card_title }}</h2>
+</div>
+
+<div class="card-body">
+  {% if not race %}
+    <span class="small">Pas de {{ card_title }} disponible pour le moment.</span>
+  {% else %}
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 py-2">
+      <!-- Titre de la course -->
+      <span class="fw-bold">{{ race.title }}</span>
+
+      <!-- Groupe de badges -->
+      <div class="d-flex flex-wrap gap-1 align-items-center">
+        <span class="badge bg-success-subtle text-success">{{ race.date|date:'d M Y' }}</span>
+        <span class="badge bg-primary-subtle text-primary">{{ race.get_category_type_display }}</span>
+        <span class="badge bg-danger-subtle text-danger">
+          {% if race.is_dn_race %}
+            DN
+          {% else %}
+            HORS-DN
+          {% endif %}
+        </span>
+      </div>
+    </div>
+  {% endif %}
+</div>

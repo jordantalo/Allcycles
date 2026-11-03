@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-from django.contrib.auth.decorators import login_required
-from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Race, Rider, Staff, RacePresence
-
+from .utils import *
 
 # Create your views here.
 @login_required
@@ -47,6 +46,7 @@ def home_redirect(request):
 
     return redirect("members:staff_dashboard")
 
+@user_passes_test(is_rider, login_url='members:home_redirect')
 @login_required
 def rider_dashboard(request):
 
@@ -65,20 +65,7 @@ def rider_dashboard(request):
             if (current_year != prev_year):
                 res_by_season.append((prev_year, season_res))
 
-                stats_info.append((prev_year, {
-                    'race_days': len(season_res),
-                    'finisher': count_status(season_res, 'finisher'),
-                    'dns': count_status(season_res, 'DNS'),
-                    'dnf': count_status(season_res, 'DNF'),
-                    'podium': count_top(season_res, 3),
-                    'first': count_position(season_res, 1),
-                    'second': count_position(season_res, 2),
-                    'third': count_position(season_res, 3),
-                    'top_5': count_top(season_res, 5),
-                    'top_10': count_top(season_res, 10),
-                    'top_20': count_top(season_res, 20),
-                    }
-                ))
+                stats_info.append((prev_year, get_stats_info(season_res)))
                 season_res = []
                 seasons.append(prev_year)
                 prev_year = current_year
@@ -86,20 +73,7 @@ def rider_dashboard(request):
             season_res.append(presence)
 
         res_by_season.append((current_year, season_res))
-        stats_info.append((current_year, {
-            'race_days': len(season_res),
-            'finisher': count_status(season_res, 'finisher'),
-            'dns': count_status(season_res, 'DNS'),
-            'dnf': count_status(season_res, 'DNF'),
-            'podium': count_top(season_res, 3),
-            'first': count_position(season_res, 1),
-            'second': count_position(season_res, 2),
-            'third': count_position(season_res, 3),
-            'top_5': count_top(season_res, 5),
-            'top_10': count_top(season_res, 10),
-            'top_20': count_top(season_res, 20),
-            }
-        ))
+        stats_info.append((current_year, get_stats_info(season_res)))
         seasons.append(current_year)
         seasons.sort(reverse=True)
 
@@ -125,35 +99,69 @@ def rider_dashboard(request):
 
     return render(request, 'members/rider_dashboard.html', context)
 
-def count_status(season: list[RacePresence], status: str):
-    count_status = 0
-    for presence in season:
-        if (presence.finisher_status == status):
-            count_status += 1
-    return (count_status)
+def get_team_res(season_res) -> list[tuple[Rider, dict[str, int]]]:
 
-def count_top(season: list[RacePresence], top: int):
-    podium = 0
-    for presence in season:
-        if (presence.finisher_status == 'finisher' and presence.position is not None):
-            if (presence.position > 0 and presence.position <= top):
-                podium += 1
-    return (podium)
+    res = []
+    for key, presences in season_res.items():
+        res.append((presences[0].rider, get_stats_info(presences)))
 
-def count_position(season: list[RacePresence], target: int):
-    position = 0
-    for presence in season:
-        if (presence.finisher_status == 'finisher' and presence.position is not None):
-            if (presence.position == target):
-                position += 1
-    return (position)
+    return res
 
+
+@user_passes_test(is_active_staff_or_admin, login_url='members:home_redirect')
 @login_required
 def staff_dashboard(request):
-    return render(request, 'members/staff_dashboard.html')
+    today = timezone.now().date()
 
-@staff_member_required
+    races = Race.objects.all().filter(date__lt=today).order_by('-date')
+    prev_year = races.first().date.year
+    team_res_by_season = []
+    seasons = []
+    season_res = {}
+
+    for race in races:
+        curr_year = race.date.year
+
+        if prev_year != curr_year:
+            team_res_by_season.append((prev_year, get_team_res(season_res)))
+            seasons.append(prev_year)
+            prev_year = curr_year
+            season_res = {}
+
+        for presence in race.presences.all():
+
+            if (presence.rider_id not in season_res):
+                season_res[presence.rider_id] = []
+            season_res[presence.rider_id].append(presence)
+
+    team_res_by_season.append((curr_year, get_team_res(season_res)))
+    seasons.append(curr_year)
+
+    next_race = None
+    last_race = None
+
+
+    next_race = Race.objects.filter(
+        date__gte=today,
+    ).order_by('date').first()
+
+    last_race = Race.objects.filter(
+        date__lt=today,
+    ).order_by('-date').first()
+
+    context = {
+        'next_race': next_race,
+        'last_race': last_race,
+        'team_res_by_season': team_res_by_season,
+        'seasons': seasons,
+    }
+
+    return render(request, 'members/staff_dashboard.html', context)
+
+@user_passes_test(is_active_staff_or_admin, login_url='members:home_redirect')
+@login_required
 def create_race(request):
+
     if request.method == "POST":
         title = request.POST.get("title")
         category_type = request.POST.get("category_type")
@@ -186,7 +194,8 @@ def create_race(request):
     }
     return render(request, "members/create_race.html", context)
 
-@staff_member_required
+@user_passes_test(is_active_staff_or_admin, login_url='members:home_redirect')
+@login_required
 def save_results(request, race_id):
     race = get_object_or_404(Race, id=race_id)
 
@@ -227,7 +236,8 @@ def save_results(request, race_id):
     }
     return (render(request, "members/save_results.html", context))
 
-@staff_member_required
+@user_passes_test(is_active_staff_or_admin, login_url='members:home_redirect')
+@login_required
 def edit_race(request, race_id):
     race = get_object_or_404(Race, id=race_id)
     riders = Rider.objects.filter(is_active=True)
@@ -252,7 +262,8 @@ def edit_race(request, race_id):
     }
     return (render(request, 'members/edit_race.html', context))
 
-@staff_member_required
+@user_passes_test(is_active_staff_or_admin, login_url='members:home_redirect')
+@login_required
 def delete_race(request, race_id):
     race = get_object_or_404(Race, id=race_id)
 
@@ -261,6 +272,7 @@ def delete_race(request, race_id):
 
     return (redirect('members:calendar'))
 
+@user_passes_test(is_rider, login_url='members:home_redirect')
 @login_required
 def update_presence(request, race_id):
 

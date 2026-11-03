@@ -6,9 +6,35 @@
 {% endblock %}
 
 {% block content %}
-<div class="bg-secondary">
-  <div class="container">
-    <h1>Tableau de bord staff</h1>
+<div class="bg-body-secondary d-flex flex-column flex-grow-1 py-4">
+  <div class="container d-flex flex-column gap-4 flex-grow-1">
+
+    <!-- Section next race -->
+    <div class="row g-4">
+
+      <div class="col-12">
+          <h1 class="h3 mb-1 fw-bold">Tableau de bord</h1>
+          <p class="text-muted small mb-0">Retrouvez ici vos résultats et statisque par saison</p>
+      </div>
+
+      {% include "members/components/next_race_card.html" with next_race=next_race %}
+      {% include "members/components/last_race_card.html" with last_race=last_race %}
+    </div>
+
+    <!-- Section résultats et statistique -->
+    <div class="row g-4 flex-grow-1">
+
+      <!-- Section résultats de l'equipe -->
+      <div class="col-12 col-lg-6 d-flex flex-column flex-grow-1">
+        {% include "members/components/team_results_card.html" %}
+      </div>
+
+      <!-- Section statistiques -->
+      <div class="col-12 col-lg-6 d-flex flex-column">
+
+
+    </div>
+
   </div>
 </div>
 {% endblock content %}
