@@ -3,11 +3,11 @@
     <!-- Card including a footer presence for riders (presence footer only for mobile) -->
     <div class="{% if user.is_staff or user.staff %}col-12 col-lg-9 col-xl-10{% else %}col-12{% endif %}">
       <div class="card shadow-sm">
-        {% include "members/partials/race_card_header.html" with race=race%}
-        {% include "members/partials/race_card_body.html" with race=race%}
-        
+        {% include "members/partials/race_card/header.html" with race=race%}
+        {% include "members/partials/race_card/body.html" with race=race%}
+
         {% if user.is_staff or user.staff %}
-          {% include "members/partials/race_card_result_footer.html" with race=race%}
+          {% include "members/partials/race_card/result_footer.html" with race=race%}
 		    {% endif %}
       </div>
     </div>

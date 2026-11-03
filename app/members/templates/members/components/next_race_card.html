@@ -12,7 +12,7 @@
             <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 py-2">
               <!-- Titre de la course -->
               <span class="fw-bold">{{ next_race.title }}</span>
-  
+
               <!-- Groupe de badges -->
               <div class="d-flex flex-wrap gap-1 align-items-center">
                 <span class="badge bg-success-subtle text-success">{{ next_race.date|date:"d M Y" }}</span>
@@ -24,7 +24,7 @@
           </div>
 
           {% if next_race %}
-          {% include "members/partials/race_card_presence_footer.html" with race=next_race%}
+          {% include "members/partials/race_card/presence_footer.html" with race=next_race%}
           {% endif %}
 
         </div>

@@ -20,13 +20,13 @@
         <div class="tab-pane fade rider_stats_tab {% if year == seasons.0 %}show active{% endif %}" id="season_stats_{{ year }}" role="tabpanel" aria-labelledby="res-season-stats-{{ year }}-tab">
           <div class="d-flex flex-column gap-3">
             <!-- 1. Bloc principal : Jours de courses + Détails Finies / DNS / DNF -->
-            {% include 'members/partials/rider_stats_race_days_card.html' with stats=stats %}
+            {% include 'members/partials/dashboard/rider_stats/race_days_card.html' with stats=stats %}
 
             <!-- 2. Bloc Podium de la saison -->
-            {% include 'members/partials/rider_stats_podium_card.html' with stats=stats %}
+            {% include 'members/partials/dashboard/podium_card.html' with stats=stats %}
 
             <!-- Section top performances -->
-            {% include 'members/partials/rider_stats_top_perf_card.html' with stats=stats %}
+            {% include 'members/partials/dashboard/rider_stats/top_perf_card.html' with stats=stats %}
           </div>
         </div>
       {% empty %}
