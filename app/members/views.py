@@ -107,6 +107,30 @@ def get_team_res(season_res) -> list[tuple[Rider, dict[str, int]]]:
 
     return res
 
+def get_team_stats(season_res, race_days):
+
+    stats = {
+        'race_days': race_days,
+        'podium': 0,
+        'first': 0,
+        'second': 0,
+        'third': 0,
+        'top_5': 0,
+        'top_10': 0,
+        'top_20': 0,
+    }
+
+    for key, presences in season_res.items():
+        stats['podium'] += count_top(presences, 3)
+        stats['top_5'] += count_top(presences, 5)
+        stats['top_10'] += count_top(presences, 10)
+        stats['top_20'] += count_top(presences, 20)
+        stats['first'] += count_position(presences, 1)
+        stats['second'] += count_position(presences, 2)
+        stats['third'] += count_position(presences, 3)
+
+    return stats
+
 
 @user_passes_test(is_active_staff_or_admin, login_url='members:home_redirect')
 @login_required
@@ -117,13 +141,16 @@ def staff_dashboard(request):
     prev_year = races.first().date.year
     team_res_by_season = []
     seasons = []
+    stats_info =[]
     season_res = {}
 
     for race in races:
         curr_year = race.date.year
 
         if prev_year != curr_year:
+            count_races = races.filter(date__year=prev_year).count()
             team_res_by_season.append((prev_year, get_team_res(season_res)))
+            stats_info.append((prev_year, get_team_stats(season_res, count_races)))
             seasons.append(prev_year)
             prev_year = curr_year
             season_res = {}
@@ -135,6 +162,9 @@ def staff_dashboard(request):
             season_res[presence.rider_id].append(presence)
 
     team_res_by_season.append((curr_year, get_team_res(season_res)))
+    print ('test pour voir si ca calcul')
+    print (get_team_stats(season_res, count_races))
+    stats_info.append((curr_year, get_team_stats(season_res, count_races)))
     seasons.append(curr_year)
 
     next_race = None
@@ -153,6 +183,7 @@ def staff_dashboard(request):
         'next_race': next_race,
         'last_race': last_race,
         'team_res_by_season': team_res_by_season,
+        'stats_info': stats_info,
         'seasons': seasons,
     }
 

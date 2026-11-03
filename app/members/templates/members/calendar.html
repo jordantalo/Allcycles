@@ -14,7 +14,7 @@
           <h1 class="h3 mb-1 fw-bold">Calendrier des courses</h1>
           <p class="text-muted small mb-0">Retrouvez les épreuves à venir et l'historique de la saison.</p>
         </div>
-        {% if request.user.is_staff %}
+        {% if request.user.is_staff or request.user.staff.is_active %}
           <div class="col-md-6 d-flex justify-content-start justify-content-md-end">
             <a href="{% url 'members:create_race' %}" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Nouvelle course</a>
           </div>

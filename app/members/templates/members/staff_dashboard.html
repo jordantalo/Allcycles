@@ -7,7 +7,7 @@
 
 {% block content %}
 <div class="bg-body-secondary d-flex flex-column flex-grow-1 py-4">
-  <div class="container d-flex flex-column gap-4 flex-grow-1">
+  <div class="container d-flex flex-column gap-4">
 
     <!-- Section next race -->
     <div class="row g-4">
@@ -22,16 +22,16 @@
     </div>
 
     <!-- Section résultats et statistique -->
-    <div class="row g-4 flex-grow-1">
+    <div class="row g-4 align-items-stretch">
 
       <!-- Section résultats de l'equipe -->
-      <div class="col-12 col-lg-6 d-flex flex-column flex-grow-1">
-        {% include "members/components/team_results_card.html" %}
+      <div class="col-12 col-lg-6 d-flex flex-column">
+        {% include "members/components/team_results_card.html" with team_res_by_season=team_res_by_season seasons=seasons %}
       </div>
 
-      <!-- Section statistiques -->
       <div class="col-12 col-lg-6 d-flex flex-column">
-
+        {% include "members/components/team_stats_card.html" with stats_info=stats_info seasons=seasons %}
+      </div>
 
     </div>
 
