@@ -1,5 +1,4 @@
 <div class="card shadow-sm d-flex flex-column">
-
   <div class="card-header d-flex justify-content-between align-items-center">
     <h2 class="h5 m-0">Statistique de l'équipe</h2>
 
@@ -20,7 +19,15 @@
         <div class="tab-pane fade team_stats_tab {% if year == seasons.0 %}show active{% endif %}" id="team_season_stats_{{ year }}" role="tabpanel" aria-labelledby="team-season-stats-{{ year }}-tab">
           <div class="d-flex flex-column gap-3">
             <!-- 1. Bloc principal : Jours de courses + Détails Finies / DNS / DNF -->
-            {% comment %} {% include 'members/partials/dashboard/rider_stats/race_days_card.html' with stats=stats %} {% endcomment %}
+            <div class="card border bg-body-tertiary rounded-3 p-3">
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center fw-bold text-body">
+                  <span class="badge bg-primary-subtle text-primary me-2 p-2 rounded-3 fs-6"><i class="fa-solid fa-flag-checkered"></i></span>
+                  <span>Courses disputées</span>
+                </div>
+                <div class="fs-2 fw-bold text-primary">{{ stats.race_days }}</div>
+              </div>
+            </div>
 
             <!-- 2. Bloc Podium de la saison -->
             {% include 'members/partials/dashboard/podium_card.html' with stats=stats %}

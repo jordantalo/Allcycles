@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 class Staff(models.Model):
@@ -101,3 +103,39 @@ class RacePresence(models.Model):
 
     class Meta:
         unique_together = ('race', 'rider')
+
+class Profile(models.Model):
+  # Liaison 1 pour 1 avec le User de Django
+  user = models.OneToOneField(User, on_delete=models.CASCADE)
+  phone = models.CharField(max_length=20, blank=True)
+  avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+
+  THEME_CHOICES = [
+      ('light', 'Clair'),
+      ('dark', 'Sombre'),
+      ('auto', 'Navigateur'),
+  ]
+
+  theme = models.CharField(
+      max_length=10, choices=THEME_CHOICES, default='auto'
+  )
+
+  def save(self, *args, **kwargs):
+    # Si le profil existe déjà en base de données (ce n'est pas une création)
+    if self.pk:
+      try:
+        old_profile = Profile.objects.get(pk=self.pk)
+        if old_profile.avatar and old_profile.avatar != self.avatar:
+          old_profile.avatar.delete(save=False)
+      except Profile.DoesNotExist:
+        pass
+
+    super().save(*args, **kwargs)
+
+  def __str__(self):
+    return f'Profil de {self.user.username}'
+
+@receiver(post_save, sender=User)
+def creer_profil(sender, instance, created, **kwargs):
+  if created:
+    Profile.objects.create(user=instance)

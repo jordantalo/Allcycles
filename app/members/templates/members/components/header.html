@@ -5,7 +5,7 @@
 <header class="sticky-top border-bottom">
   <nav class="navbar navbar-expand-md bg-body-tertiary">
     <div class="container py-1 py-md-2">
-      
+
       <!-- Logo -->
       <a class="navbar-brand" href="{% url 'members:calendar' %}">
         <img class="logo-light" src="{% static 'img/logos/tam77-light.png' %}" alt="TAM77" />
@@ -19,7 +19,7 @@
 
       <!-- Contenu du menu -->
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        
+
         <!-- Liens principaux (poussés à droite sur desktop grâce à ms-auto) -->
         <ul class="navbar-nav mt-2 my-md-auto mx-auto align-items-md-center gap-md-2 mb-2 mb-md-0">
           <li class="nav-item">
@@ -36,12 +36,16 @@
         <!-- Menu Utilisateur (Dropdown Profil & Déconnexion) -->
         <ul class="navbar-nav ms-md-2 align-items-md-center">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle fs-5 d-flex align-items-center gap-1" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="fa-solid fa-circle-user"></i> 
-              <span class="d-md-inline">{{ request.user.first_name }}</span>
-            </a>
+            <a class="nav-link dropdown-toggle fs-5 d-flex align-items-center gap-2 {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    {% if request.user.profile.avatar %}
+        <img class="rounded-circle shadow flex-shrink-0" src="{{ request.user.profile.avatar.url }}" alt="Avatar" style="width: 30px; height: 30px; object-fit: cover;" />
+    {% else %}
+        <img class="rounded-circle shadow flex-shrink-0" src="{% static 'img/logos/cyclist.jpg' %}" alt="Avatar par défaut" style="width: 30px; height: 30px; object-fit: cover;" />
+    {% endif %}
+    <span class="d-md-inline">{{ request.user.first_name }}</span>
+</a>
             <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-              <li><a class="dropdown-item" href="#"><i class="fa-solid fa-user-pen me-2"></i> Mon profil</a></li>
+              <li><a class="dropdown-item" href="{% url 'members:profile' %}"><i class="fa-solid fa-user-pen me-2"></i> Mon profil</a></li>
               <li><hr class="dropdown-divider"></li>
               <li>
                 <form action="{% url 'logout' %}" method="post">
@@ -57,32 +61,3 @@
     </div>
   </nav>
 </header>
-
-{% comment %} <header class="sticky-top border-bottom">
-  <nav class="navbar navbar-expand-md bg-body-tertiary">
-    <div class="container py-1 py-md-2">
-      <a class="navbar-brand" href="{% url 'members:calendar' %}">
-        <!-- Logo affiché en mode CLAIR -->
-        <img class="logo-light" src="{% static 'img/logos/tam77-light.png' %}" alt="TAM77 — Team AllCycles Meaux" />
-        <!-- Logo affiché en mode SOMBRE -->
-        <img class="logo-dark" src="{% static 'img/logos/tam77-dark.png' %}" alt="TAM77 — Team AllCycles Meaux" />
-      </a>
-      <button class="navbar-toggler border-0 bg-body-secondary rounded-circle p-2 shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"><i class="fa-solid fa-bars fs-5 text-dark"></i></button>
-
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-
-        <div class="navbar-nav ms-auto align-items-md-center gap-md-2">
-          <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'rider_dashboard' or request.resolver_match.url_name == 'staff_dashboard' %}active{% endif %}" href="{% url 'members:home_redirect' %}">Tableau de bord</a>
-          <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'calendar' %}active{% endif %}" href="{% url 'members:calendar' %}">Calendrier</a>
-        </div>
-
-        <div class="navbar-nav ms-auto align-items-md-center">
-          <form action="{% url 'logout' %}" method="post" class="d-inline">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline-danger btn-sm">Déconnexion</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </nav>
-</header> {% endcomment %}

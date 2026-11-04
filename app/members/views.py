@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Race, Rider, Staff, RacePresence
 from .utils import *
+from .forms import AvatarForm
 
 # Create your views here.
 @login_required
@@ -164,6 +165,7 @@ def staff_dashboard(request):
     team_res_by_season.append((curr_year, get_team_res(season_res)))
     print ('test pour voir si ca calcul')
     print (get_team_stats(season_res, count_races))
+    count_races = races.filter(date__year=curr_year).count()
     stats_info.append((curr_year, get_team_stats(season_res, count_races)))
     seasons.append(curr_year)
 
@@ -324,3 +326,34 @@ def update_presence(request, race_id):
         )
 
     return (redirect('members:calendar'))
+
+@login_required
+def profile(request):
+
+    if (request.method == 'POST'):
+
+        if ("first_name" in request.POST):
+            request.user.first_name = request.POST.get("first_name").lower()
+            request.user.last_name = request.POST.get("last_name").lower()
+            request.user.save()
+
+        if ("user_email" in request.POST):
+            request.user.email = request.POST.get("user_email")
+            request.user.profile.phone = request.POST.get("user_phone")
+            request.user.save()
+            request.user.profile.save()
+
+        if ("avatar" in request.FILES):
+            form = AvatarForm(request.POST, request.FILES, instance=request.user.profile)
+
+            if form.is_valid():
+                form.save()
+
+        if ("theme_pref" in request.POST):
+            request.user.profile.theme = request.POST.get("theme_pref")
+            request.user.profile.save()
+
+        return (redirect('members:profile'))
+
+
+    return render(request, "members/profile.html")

@@ -1,3 +1,6 @@
+.upload:hover .upload-display {
+  display: flex !important;
+}
 
 @media (max-width: 991.98px) {
   .results-scroll {
