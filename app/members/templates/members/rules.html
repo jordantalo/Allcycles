@@ -1,0 +1,29 @@
+{% extends 'members/base.html' %}
+{% load static %}
+
+{% block title %}
+  Mon profil - TAM77
+{% endblock %}
+
+{% block content %}
+  <div class="bg-body-secondary d-flex flex-column flex-grow-1 py-4">
+    <div class="container">
+      <h1 class="h3 mb-1 fw-bold">Règlement</h1>
+      <p class="text-muted small">
+        Retrouvez ici le règlement pour{% if request.user.rider %}
+          les coureurs
+        {% else %}
+          le staff
+        {% endif %}de l'équipe DN3.
+      </p>
+
+      {% if request.user.rider %}
+        {% include "members/components/rider_rules.html" %}
+      {% elif request.user.staff %}
+        {% include "members/components/staff_rules.html" %}
+      {% endif %}
+
+
+    </div>
+  </div>
+{% endblock %}

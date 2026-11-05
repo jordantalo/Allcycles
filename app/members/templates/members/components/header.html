@@ -28,6 +28,9 @@
           <li class="nav-item">
             <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'calendar' %}active{% endif %}" href="{% url 'members:calendar' %}">Calendrier</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'rules' %}active{% endif %}" href="{% url 'members:rules' %}">Règlement</a>
+          </li>
         </ul>
 
         <!-- Séparateur visuel discret sur mobile / Espace sur desktop -->

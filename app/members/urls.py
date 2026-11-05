@@ -15,4 +15,5 @@ urlpatterns = [
     path('race/presence/<int:race_id>/update', views.update_presence, name="update_presence"),
     path('race/results/<int:race_id>/save', views.save_results, name="save_results"),
     path('profile/', views.profile, name='profile'),
+    path('rules/', views.rules, name='rules'),
 ]
