@@ -1,0 +1,84 @@
+{% load static %}
+<div class="card shadow-sm p-3">
+  <div class="d-flex align-items-start">
+    <div class="d-flex gap-3 align-items-center flex-grow-1">
+      <div class="position-relative upload">
+        <form method="POST" enctype="multipart/form-data" id="avatar-form">
+          {% csrf_token %}
+          <label for="avatar-input" style="cursor: pointer;">
+            <input class="d-none" accept="image/*" type="file" name="avatar" id="avatar-input" onchange="this.form.submit()" />
+            {% if request.user.profile.avatar %}
+              <!-- Si l'utilisateur a un avatar, on affiche son URL dynamique -->
+              <img class="rounded-circle shadow" src="{{ request.user.profile.avatar.url }}" alt="Avatar" style="height: 100px; width: 100px; object-fit: cover;" />
+            {% else %}
+              <img class="rounded-circle shadow" src="{% static 'img/logos/cyclist.jpg' %}" alt="Avatar par défaut" style="height: 100px; width: 100px; object-fit: cover;" />
+            {% endif %}
+          </label>
+        </form>
+
+        <div class="d-none upload-display position-absolute justify-content-center align-items-center bg-body rounded-circle start-0 end-0 top-0 bottom-0 opacity-50" style="height: 100px; width: 100px; pointer-events: none;">
+          <span><i class="bi bi-camera-fill"></i></span>
+        </div>
+      </div>
+
+      <div class="flex-grow-1 d-flex flex-column gap-2 justify-content-center" id="bio-display">
+        <div class="d-flex gap-2">
+          <span>{{ request.user.first_name|capfirst }}</span>
+          <span class="text-uppercase">{{ request.user.last_name }}</span>
+        </div>
+
+        <span class="badge bg-success-subtle text-success align-self-start">{% if request.user.rider %}Coureur{% elif request.user.staff%}Staff{% endif %}</span>
+        {% if request.user.rider %}
+          <span class="badge bg-primary-subtle text-primary align-self-start">{{ request.user.rider.get_category_ffc_display }}</span>
+        {% elif request.user.staff %}
+          <span class="badge bg-primary-subtle text-primary align-self-start">{{ request.user.staff.get_role_display }}</span>
+        {% endif %}
+      </div>
+
+      <form class="pe-3 d-none" id="bio-form" method="POST">
+        {% csrf_token %}
+        <div class="mb-1">
+          <label for="user-first-name" class="form-label small mb-0">Prénom</label>
+          <input type="text" class="form-control form-control-sm" name="first_name" id="user-first-name" value="{{ request.user.first_name }}" required />
+        </div>
+        <div>
+          <label for="user-last-name" class="form-label small mb-0">Nom</label>
+          <input type="text" class="form-control form-control-sm" id="user-last-name" name="last_name" value="{{ request.user.last_name }}" required />
+        </div>
+      </form>
+    </div>
+    <div class="d-flex flex-column align-items-start gap-2">
+      <button type="button" id="edit-profil-bio" class="btn btn-sm p-0"><i class="bi bi-pencil-square"></i></button>
+      <button type="button" id="valid-profil-bio" class="d-none btn btn-sm btn-success py-0 px-1 m-0 rounded-circle"><i class="bi bi-check"></i></button>
+      <button type="button" id="cancel-profil-bio" class="d-none btn btn-sm btn-danger py-0 px-1 m-0 rounded-circle fw-bold"><i class="bi bi-x"></i></button>
+    </div>
+  </div>
+</div>
+
+{% block extra_js %}
+
+<script>
+  document.getElementById('edit-profil-bio').addEventListener('click', function () {
+      const bio_display = document.getElementById('bio-display')
+      const bio_form = document.getElementById('bio-form')
+
+      bio_display.classList.add('d-none')
+      bio_form.classList.remove('d-none')
+      display_check_btns('cancel-profil-bio', 'edit-profil-bio', 'valid-profil-bio')
+    })
+
+    document.getElementById('cancel-profil-bio').addEventListener('click', function () {
+      const bio_display = document.getElementById('bio-display')
+      const bio_form = document.getElementById('bio-form')
+
+      bio_display.classList.remove('d-none')
+      bio_form.classList.add('d-none')
+      display_edit_btn('cancel-profil-bio', 'edit-profil-bio', 'valid-profil-bio')
+    })
+
+    document.getElementById('valid-profil-bio').addEventListener('click', function () {
+      document.getElementById('bio-form').requestSubmit()
+    })
+</script>
+
+{% endblock extra_js %}

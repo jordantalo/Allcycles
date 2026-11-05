@@ -1,4 +1,4 @@
-from .models import RacePresence
+from .models import RacePresence, Rider
 
 def is_active_staff_or_admin(user):
     """Renvoie True si le user est admin Django ou un staff actif"""
@@ -14,6 +14,37 @@ def is_rider(user):
             return True
     return False
 
+def get_team_res(season_res) -> list[tuple[Rider, dict[str, int]]]:
+
+    res = []
+    for key, presences in season_res.items():
+        res.append((presences[0].rider, get_stats_info(presences)))
+
+    return res
+
+def get_team_stats(season_res, race_days):
+
+    stats = {
+        'race_days': race_days,
+        'podium': 0,
+        'first': 0,
+        'second': 0,
+        'third': 0,
+        'top_5': 0,
+        'top_10': 0,
+        'top_20': 0,
+    }
+
+    for key, presences in season_res.items():
+        stats['podium'] += count_top(presences, 3)
+        stats['top_5'] += count_top(presences, 5)
+        stats['top_10'] += count_top(presences, 10)
+        stats['top_20'] += count_top(presences, 20)
+        stats['first'] += count_position(presences, 1)
+        stats['second'] += count_position(presences, 2)
+        stats['third'] += count_position(presences, 3)
+
+    return stats
 
 def get_stats_info(season_res: list[RacePresence]) -> dict[str, int]:
     stats_info = {

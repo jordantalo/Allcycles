@@ -1,4 +1,3 @@
-<!-- templates/registration/login.html -->
 {% extends 'core/components/root.html' %}
 
 {% block body_content %}
@@ -8,13 +7,13 @@
         <div class="col-md-6 col-lg-5">
           <div class="card shadow border-0">
             <div class="card-body p-4">
-              <h3 class="card-title text-center mb-4">Espace Membre</h3>
+              <h3 class="card-title text-center mb-4">Portail club</h3>
 
               {% if form.errors %}
                 <div class="alert alert-danger small">Identifiant ou mot de passe incorrect.</div>
               {% endif %}
 
-              <form method="post">
+              <form method="post" class="mb-2">
                 {% csrf_token %}
                 <div class="mb-3">
                   <label for="id_username" class="form-label">Login</label>
@@ -26,6 +25,11 @@
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Se connecter</button>
               </form>
+
+              <div>
+                <!-- Utilisation du nom d'URL par défaut de Django -->
+                <a href="{% url 'password_reset' %}" class="small text-decoration-none">Mot de passe oublié ?</a>
+              </div>
             </div>
           </div>
         </div>

@@ -1,0 +1,25 @@
+<div class="card shadow-sm p-3 flex-grow-1">
+  <div class="d-flex justify-content-between align-items-start">
+    <div class="flex-grow-1">
+      <h2 class="h5">Mes préférences</h2>
+      <form id="form-pref" method="POST">
+        {% csrf_token %}
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="theme_pref" id="auto-theme" onchange="this.form.submit()" value="auto"
+            {% if request.user.profile.theme == "auto" %}checked{% endif %} />
+          <label class="form-check-label small" for="auto-theme">Thème navigateur</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="theme_pref" id="dark-theme" onchange="this.form.submit()" value="dark"
+          {% if request.user.profile.theme == "dark" %}checked{% endif %} />
+          <label class="form-check-label small" for="dark-theme">Thème sombre</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="theme_pref" id="light-theme" onchange="this.form.submit()" value="light"
+          {% if request.user.profile.theme == "light" %}checked{% endif %}/>
+          <label class="form-check-label small" for="light-theme">Thème clair</label>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

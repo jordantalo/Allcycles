@@ -133,7 +133,7 @@ STATICFILES_DIRS = [
 ]
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = '/espace-membre/'
+LOGIN_REDIRECT_URL = '/portail/'
 LOGOUT_REDIRECT_URL = '/'
 
 LANGUAGE_CODE = 'fr-fr'

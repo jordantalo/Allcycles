@@ -8,6 +8,20 @@ class Staff(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_active = models.BooleanField("Encadrant actif", default=True)
 
+    ROLE_CHOICES = [
+       ('MANAGER', "Manager"),
+       ('DS', "Directeur sportif"),
+       ('ASSISTANT', "Assistant"),
+       ('MECANO', "Mecano"),
+    ]
+
+    role = models.CharField(
+       "Staff role",
+       max_length=30,
+       choices=ROLE_CHOICES,
+       default='DS'
+    )
+
     def __str__(self):
         return (f'Staff member: {self.user.first_name} {self.user.last_name}')
 

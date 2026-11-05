@@ -8,130 +8,42 @@
 {% block content %}
   <div class="bg-body-secondary d-flex flex-column flex-grow-1 py-4">
     <div class="container">
+
       <!-- En-tête de la page -->
       <div class="row justify-content-start g-4 align-items-stretch">
+
         <div class="col-12">
           <h1 class="h3 mb-1 fw-bold">Mon profil</h1>
           <p class="text-muted small mb-0">Retrouvez ici toutes les infos de votre profil.</p>
         </div>
 
-        <div class="col-12 col-lg-6">
-          <div class="card shadow-sm p-3">
-            <div class="d-flex align-items-start">
-              <div class="d-flex gap-3 align-items-center flex-grow-1">
-                <div class="position-relative upload">
-                  <form method="POST" enctype="multipart/form-data" id="avatar-form">
-                    {% csrf_token %}
-                    <label for="avatar-input" style="cursor: pointer;">
-                      <input class="d-none" accept="image/*" type="file" name="avatar" id="avatar-input" onchange="this.form.submit()" />
-                      {% if request.user.profile.avatar %}
-                        <!-- Si l'utilisateur a un avatar, on affiche son URL dynamique -->
-                        <img class="rounded-circle shadow" src="{{ request.user.profile.avatar.url }}" alt="Avatar" style="height: 100px; width: 100px; object-fit: cover;" />
-                      {% else %}
-                        <img class="rounded-circle shadow" src="{% static 'img/logos/cyclist.jpg' %}" alt="Avatar par défaut" style="height: 100px; width: 100px; object-fit: cover;" />
-                      {% endif %}
-                    </label>
-                  </form>
-
-                  <div class="d-none upload-display position-absolute justify-content-center align-items-center bg-body rounded-circle start-0 end-0 top-0 bottom-0 opacity-50" style="height: 100px; width: 100px; pointer-events: none;">
-                    <span><i class="bi bi-camera-fill"></i></span>
-                  </div>
-                </div>
-
-                <div class="flex-grow-1 d-flex flex-column gap-2 justify-content-center" id="bio-display">
-                  <div class="d-flex gap-2">
-                    <span>{{ request.user.first_name|capfirst }}</span>
-                    <span class="text-uppercase">{{ request.user.last_name }}</span>
-                  </div>
-
-                  <span class="badge bg-success-subtle text-success align-self-start">{% if request.user.rider %}Coureur{% endif %}</span>
-                  {% if request.user.rider %}
-                    <span class="badge bg-primary-subtle text-primary align-self-start">{{ request.user.rider.get_category_ffc_display }}</span>
-                  {% endif %}
-                </div>
-
-                <form class="pe-3 d-none" id="bio-form" method="POST">
-                  {% csrf_token %}
-                  <div class="mb-1">
-                    <label for="user-first-name" class="form-label small mb-0">Prénom</label>
-                    <input type="text" class="form-control form-control-sm" name="first_name" id="user-first-name" value="{{ request.user.first_name }}" required />
-                  </div>
-                  <div>
-                    <label for="user-last-name" class="form-label small mb-0">Nom</label>
-                    <input type="text" class="form-control form-control-sm" id="user-last-name" name="last_name" value="{{ request.user.last_name }}" required />
-                  </div>
-                </form>
-              </div>
-              <div class="d-flex flex-column align-items-start gap-2">
-                <button type="button" id="edit-profil-bio" class="btn btn-sm p-0"><i class="bi bi-pencil-square"></i></button>
-                <button type="button" id="valid-profil-bio" class="d-none btn btn-sm btn-success py-0 px-1 m-0 rounded-circle"><i class="bi bi-check"></i></button>
-                <button type="button" id="cancel-profil-bio" class="d-none btn btn-sm btn-danger py-0 px-1 m-0 rounded-circle fw-bold"><i class="bi bi-x"></i></button>
-              </div>
-            </div>
-          </div>
+        <!-- Section photo de profil -->
+        <div class="col-12">
+          {% include 'members/components/profile_bio_card.html' %}
         </div>
 
+        <!-- Colonne contenant les preferences et les infos personnelles -->
         <div class="col-12 col-lg-6 d-flex flex-column">
-          <div class="card shadow-sm p-3 flex-grow-1">
-            <h2 class="h5">Sécurité</h2>
-            <p class="text-muted small mb-2">Pour changer votre mot de passe, c'est par ici !</p>
-            <a href="" class="btn btn-sm btn-primary align-self-start">Changer le mot de passe</a>
-          </div>
-        </div>
+          <div class="row g-4 flex-grow-1">
 
-        <div class="col-12 col-lg-6">
-          <div class="card shadow-sm p-3">
-            <div class="d-flex justify-content-between align-items-start">
-              <div class="flex-grow-1">
-                <h2 class="h5">Mes informations personnelles</h2>
-                <form id="form-info" method="POST">
-                  {% csrf_token %}
-                  <div class="mb-2">
-                    <label for="user-email" class="form-label small mb-0">Adresse email</label>
-                    <input type="email" class="form-control-plaintext form-control-sm small text-muted" id="user-email" name="user_email" value="{{ request.user.email }}" aria-describedby="emailHelp" readonly required style="max-width: 300px" />
-                  </div>
-                  <div>
-                    <label for="user-phone" class="form-label small mb-0">Numero de téléphone</label>
-                    <input type="tel" class="form-control-plaintext form-control-sm small text-muted" id="user-phone" name="user_phone" value="{{ request.user.profile.phone }}" aria-describedby="emailHelp" style="max-width: 300px" readonly required />
-                  </div>
-                </form>
-              </div>
-              <div class="d-flex flex-column align-items-start gap-2">
-                <button type="button" id="valid-profil-info" class="d-none btn btn-sm btn-success py-0 px-1 m-0 rounded-circle"><i class="bi bi-check"></i></button>
-                <button type="button" id="cancel-profil-info" class="d-none btn btn-sm btn-danger py-0 px-1 m-0 rounded-circle fw-bold"><i class="bi bi-x"></i></button>
-                <button type="button" id="edit-profil-info" class="btn btn-sm p-0"><i class="bi bi-pencil-square"></i></button>
-              </div>
+            <!-- Section mes infos personnelles -->
+            <div class="col-12 d-flex flex-column">
+               {% include 'members/components/profile_info_card.html' %}
             </div>
+
+            <!-- Section mes preferences -->
+            <div class="col-12 d-flex flex-column">
+              {% include 'members/components/profile_pref_card.html' %}
+            </div>
+
           </div>
         </div>
 
+        <!-- Section securite / changement de mot de passe -->
         <div class="col-12 col-lg-6 d-flex flex-column">
-          <div class="card shadow-sm p-3 flex-grow-1">
-            <div class="d-flex justify-content-between align-items-start">
-              <div class="flex-grow-1">
-                <h2 class="h5">Mes préférences</h2>
-                <form id="form-pref" method="POST">
-                  {% csrf_token %}
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="theme_pref" id="auto-theme" onchange="this.form.submit()" value="auto"
-                     {% if request.user.profile.theme == "auto" %}checked{% endif %} />
-                    <label class="form-check-label small" for="auto-theme">Thème navigateur</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="theme_pref" id="dark-theme" onchange="this.form.submit()" value="dark"
-                    {% if request.user.profile.theme == "dark" %}checked{% endif %} />
-                    <label class="form-check-label small" for="dark-theme">Thème sombre</label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" name="theme_pref" id="light-theme" onchange="this.form.submit()" value="light"
-                    {% if request.user.profile.theme == "light" %}checked{% endif %}/>
-                    <label class="form-check-label small" for="light-theme">Thème clair</label>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
+          {% include 'members/components/profile_security_card.html' %}
         </div>
+
       </div>
     </div>
   </div>
@@ -139,54 +51,6 @@
 
 {% block extra_js %}
   <script>
-    document.getElementById('edit-profil-bio').addEventListener('click', function () {
-      const bio_display = document.getElementById('bio-display')
-      const bio_form = document.getElementById('bio-form')
-
-      bio_display.classList.add('d-none')
-      bio_form.classList.remove('d-none')
-      display_check_btns('cancel-profil-bio', 'edit-profil-bio', 'valid-profil-bio')
-    })
-
-    document.getElementById('cancel-profil-bio').addEventListener('click', function () {
-      const bio_display = document.getElementById('bio-display')
-      const bio_form = document.getElementById('bio-form')
-
-      bio_display.classList.remove('d-none')
-      bio_form.classList.add('d-none')
-      display_edit_btn('cancel-profil-bio', 'edit-profil-bio', 'valid-profil-bio')
-    })
-
-    document.getElementById('valid-profil-bio').addEventListener('click', function () {
-      document.getElementById('bio-form').requestSubmit()
-    })
-
-    document.getElementById('edit-profil-info').addEventListener('click', function () {
-      display_check_btns('cancel-profil-info', 'edit-profil-info', 'valid-profil-info')
-
-      const inputs = document.querySelectorAll('#form-info input')
-      inputs.forEach((input) => {
-        input.removeAttribute('readonly')
-        input.classList.remove('form-control-plaintext')
-        input.classList.add('form-control')
-      })
-    })
-
-    document.getElementById('cancel-profil-info').addEventListener('click', function () {
-      display_edit_btn('cancel-profil-info', 'edit-profil-info', 'valid-profil-info')
-
-      const inputs = document.querySelectorAll('#form-info input')
-      inputs.forEach((input) => {
-        input.readOnly = true
-        input.classList.add('form-control-plaintext')
-        input.classList.remove('form-control')
-      })
-    })
-
-    document.getElementById('valid-profil-info').addEventListener('click', function () {
-      document.getElementById('form-info').requestSubmit()
-    })
-
     function display_check_btns(cancel_btn_id, edit_btn_id, check_btn_id) {
       const cancel_btn = document.getElementById(cancel_btn_id)
       const edit_btn = document.getElementById(edit_btn_id)
