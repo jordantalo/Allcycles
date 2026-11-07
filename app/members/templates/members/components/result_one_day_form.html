@@ -1,0 +1,56 @@
+<form method="POST" class="bg-body shadow-lg p-4 p-md-5 rounded-4">
+	{% csrf_token %}
+  {% for rider, presence in race.rider_presences %}
+
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">{{ rider.user.first_name }} {{ rider.user.last_name|capfirst }}</h5>
+      </div>
+
+      <div class="card-body">
+
+        <div class="row g-4">
+          <div class="col-12">
+
+          <div class="row g-1">
+
+            <div class="col-12">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="finisher_status_{{ rider.id }}" id="finisher_{{ rider.id }}" value="finisher"
+                {% if not presence.finisher_status %}checked {% elif presence.finisher_status == "finisher" %}checked{% endif %}>
+                <label class="form-check-label small" for="finisher_{{ rider.id }}">
+                Finisher
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="finisher_status_{{ rider.id }}" id="DNS_{{ rider.id }}" value="DNS"
+                {% if presence.finisher_status == "DNS" %}checked{% endif %}>
+                <label class="form-check-label small" for="DNS_{{ rider.id }}">
+                DNS
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="finisher_status_{{ rider.id }}" id="DNF_{{ rider.id }}" value="DNF"
+                {% if presence.finisher_status == "DNF" %}checked{% endif %}>
+                <label class="form-check-label small" for="DNF_{{ rider.id }}">
+                  DNF
+                </label>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-body-secondary" id="basic-addon3">Position</span>
+                <input type="number" class="form-control" id="position_{{ rider.id }}" name="position_{{ rider.id }}" min="1" max="200" aria-describedby="basic-addon3 basic-addon4"
+                {% if presence %}value="{{ presence.position }}"{% endif %}>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  {% endfor %}
+  <button type="submit" class="btn btn-outline-secondary w-100 py-2 text-uppercase fw-bold shadow-sm" style="letter-spacing: 0.05em;">Sauvegarder</button>
+</form>

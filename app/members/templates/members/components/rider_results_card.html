@@ -26,11 +26,7 @@
 
                 <!-- Position / Statut -->
                 <span class="small fw-bold" style="width:30px">
-                  {% if res.finisher_status == 'finisher' %}
-                    {{ res.position }}
-                  {% else %}
-                    {{ res.finisher_status }}
-                  {% endif %}
+                    {{ res.positions_dict.1 }}
                 </span>
 
                 <!-- Titre de la course (flex-grow-1 permet de lui laisser prendre la place dispo) -->

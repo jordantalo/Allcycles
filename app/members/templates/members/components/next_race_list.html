@@ -14,7 +14,7 @@
 
     <!-- A unique card presence for riders views - only for screen larger than lg -->
     <div class="{% if user.rider in race.riders.all %}d-none d-lg-block col-lg-3 col-xl-2{% else %}d-none{% endif %}">
-      {% include "members/components/presence_card.html" with race=race%}
+      {% include "members/components/presence_card.html" with race=race %}
     </div>
   {% endfor %}
 </div>

@@ -5,6 +5,7 @@
       <div class="position-relative upload">
         <form method="POST" enctype="multipart/form-data" id="avatar-form">
           {% csrf_token %}
+          <input type="hidden" name="form_type" value="avatar_form">
           <label for="avatar-input" style="cursor: pointer;">
             <input class="d-none" accept="image/*" type="file" name="avatar" id="avatar-input" onchange="this.form.submit()" />
             {% if request.user.profile.avatar %}
@@ -37,6 +38,7 @@
 
       <form class="pe-3 d-none" id="bio-form" method="POST">
         {% csrf_token %}
+        <input type="hidden" name="form_type" value="bio_form">
         <div class="mb-1">
           <label for="user-first-name" class="form-label small mb-0">Prénom</label>
           <input type="text" class="form-control form-control-sm" name="first_name" id="user-first-name" value="{{ request.user.first_name }}" required />

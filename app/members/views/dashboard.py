@@ -17,7 +17,7 @@ def home_redirect(request):
 @login_required
 def rider_dashboard(request):
 
-    presences = RacePresence.objects.filter(rider=request.user.rider, finisher_status__isnull=False).order_by('race__date')
+    presences = RacePresence.objects.filter(rider=request.user.rider).exclude(positions_dict={}).order_by('race__date')
     stats_info = []
     res_by_season = []
     seasons = []
@@ -55,6 +55,7 @@ def rider_dashboard(request):
 
     if next_race and next_race.presences:
         presence = next_race.presences.filter(rider=request.user.rider).first()
+        print('presence:', presence)
         next_race.curr_rider_presence = presence
 
     context = {

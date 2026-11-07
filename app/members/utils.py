@@ -1,4 +1,4 @@
-from .models import RacePresence, Rider
+from .models import RacePresence, Rider, Race
 
 def is_active_staff_or_admin(user):
     """Renvoie True si le user est admin Django ou un staff actif"""
@@ -48,7 +48,7 @@ def get_team_stats(season_res, race_days):
 
 def get_stats_info(season_res: list[RacePresence]) -> dict[str, int]:
     stats_info = {
-        'race_days': len(season_res),
+        'race_days': get_race_days(season_res),
         'finisher': count_status(season_res, 'finisher'),
         'dns': count_status(season_res, 'DNS'),
         'dnf': count_status(season_res, 'DNF'),
@@ -62,25 +62,37 @@ def get_stats_info(season_res: list[RacePresence]) -> dict[str, int]:
     }
     return stats_info
 
+def get_race_days(season: list[RacePresence]):
+    race_days = 0
+    for presence in season:
+        for stage, position in presence.positions_dict.items():
+            if (position != "DNS"):
+                race_days += 1
+    return (race_days)
+
 def count_status(season: list[RacePresence], status: str):
     count_status = 0
     for presence in season:
-        if (presence.finisher_status == status):
-            count_status += 1
+        for stage, position in presence.positions_dict.items():
+            if (status == 'finisher' and isinstance(position, int) and stage != 'G'):
+                count_status += 1
+            elif (position == status):
+                count_status += 1
     return (count_status)
 
 def count_top(season: list[RacePresence], top: int):
-    podium = 0
+    top_perf = 0
     for presence in season:
-        if (presence.finisher_status == 'finisher' and presence.position is not None):
-            if (presence.position > 0 and presence.position <= top):
-                podium += 1
-    return (podium)
+        for stage, position in presence.positions_dict.items():
+            if (isinstance(position, int) and position > 0 and position <= top):
+                top_perf += 1
+
+    return (top_perf)
 
 def count_position(season: list[RacePresence], target: int):
-    position = 0
+    count = 0
     for presence in season:
-        if (presence.finisher_status == 'finisher' and presence.position is not None):
-            if (presence.position == target):
-                position += 1
-    return (position)
+        for stage, position in presence.positions_dict.items():
+            if (position == target):
+                count += 1
+    return (count)

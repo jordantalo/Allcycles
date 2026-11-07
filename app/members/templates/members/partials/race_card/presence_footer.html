@@ -1,6 +1,6 @@
 <div class="card-footer d-lg-none d-flex justify-content-between align-items-center gap-3 bg-body text-body-secondary">
   <h3 class="h5 m-0">Présence</h3>
   <div>
-	{% include "members/components/presence_form.html" with status=race.curr_rider_presence race_id=race.id%}
+	{% include "members/components/presence_form.html" with status=race.curr_rider_presence.status race_id=race.id%}
   </div>
 </div>

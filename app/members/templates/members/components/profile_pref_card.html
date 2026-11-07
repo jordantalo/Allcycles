@@ -4,18 +4,19 @@
       <h2 class="h5">Mes préférences</h2>
       <form id="form-pref" method="POST">
         {% csrf_token %}
+        <input type="hidden" name="form_type" value="pref_form">
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="theme_pref" id="auto-theme" onchange="this.form.submit()" value="auto"
+          <input class="form-check-input" type="radio" name="theme" id="auto-theme" onchange="this.form.submit()" value="auto"
             {% if request.user.profile.theme == "auto" %}checked{% endif %} />
           <label class="form-check-label small" for="auto-theme">Thème navigateur</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="theme_pref" id="dark-theme" onchange="this.form.submit()" value="dark"
+          <input class="form-check-input" type="radio" name="theme" id="dark-theme" onchange="this.form.submit()" value="dark"
           {% if request.user.profile.theme == "dark" %}checked{% endif %} />
           <label class="form-check-label small" for="dark-theme">Thème sombre</label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="radio" name="theme_pref" id="light-theme" onchange="this.form.submit()" value="light"
+          <input class="form-check-input" type="radio" name="theme" id="light-theme" onchange="this.form.submit()" value="light"
           {% if request.user.profile.theme == "light" %}checked{% endif %}/>
           <label class="form-check-label small" for="light-theme">Thème clair</label>
         </div>

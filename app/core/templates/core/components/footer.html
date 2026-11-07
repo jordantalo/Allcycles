@@ -13,7 +13,7 @@
         {% for partner in FOOTER_PARTNERS %}
           <div class="col-6 col-md-4 col-lg-3">
             <div class="partner-card p-3">
-              <a class="partner d-inline-block" href="{{ partner.url }}">
+              <a target="_blank" rel="noopener noreferrer" class="partner d-inline-block" href="{{ partner.url }}">
                 <img src="{% static partner.logo %}" alt="{{ partner.name }}" class="img-fluid partner-logo-dark" />
                 <img src="{% static partner.logo %}" alt="{{ partner.name }}" class="img-fluid partner-logo-light" />
               </a>
@@ -78,9 +78,9 @@
             <h3 class="h4">SUIVEZ-NOUS !</h3>
 
             <div class="d-flex gap-2">
-              <a href="https://www.facebook.com/team.allcycles.meaux" class="network border border-secondary rounded-3 d-flex align-items-center justify-content-center footer-link"><i class="fa-brands fa-facebook-f"></i></a>
+              <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/team.allcycles.meaux" class="network border border-secondary rounded-3 d-flex align-items-center justify-content-center footer-link"><i class="fa-brands fa-facebook-f"></i></a>
 
-              <a href="https://www.instagram.com/teamallcyclesmeaux/" class="network border border-secondary rounded-3 d-flex align-items-center justify-content-center footer-link"><i class="fa-brands fa-instagram"></i></a>
+              <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/teamallcyclesmeaux/" class="network border border-secondary rounded-3 d-flex align-items-center justify-content-center footer-link"><i class="fa-brands fa-instagram"></i></a>
 
               <a class="network border border-secondary rounded-3 d-flex align-items-center justify-content-center footer-link"><i class="fa-brands fa-youtube"></i></a>
             </div>

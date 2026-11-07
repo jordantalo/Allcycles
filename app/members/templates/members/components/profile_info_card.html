@@ -4,13 +4,14 @@
       <h2 class="h5">Mes informations personnelles</h2>
       <form id="form-info" method="POST">
         {% csrf_token %}
+        <input type="hidden" name="form_type" value="personal_info_form">
         <div class="mb-2">
           <label for="user-email" class="form-label small mb-0">Adresse email</label>
-          <input type="email" class="form-control-plaintext form-control-sm small text-muted" id="user-email" name="user_email" value="{{ request.user.email }}" aria-describedby="emailHelp" readonly required style="max-width: 300px" />
+          <input type="email" class="form-control-plaintext form-control-sm small text-muted" id="user-email" name="email" value="{{ request.user.email }}" aria-describedby="emailHelp" readonly required style="max-width: 300px" />
         </div>
         <div>
           <label for="user-phone" class="form-label small mb-0">Numero de téléphone</label>
-          <input type="tel" class="form-control-plaintext form-control-sm small text-muted" id="user-phone" name="user_phone" value="{{ request.user.profile.phone }}" aria-describedby="emailHelp" style="max-width: 300px" readonly required />
+          <input type="tel" class="form-control-plaintext form-control-sm small text-muted" id="user-phone" name="phone" value="{{ request.user.profile.phone }}" aria-describedby="emailHelp" style="max-width: 300px" readonly required />
         </div>
       </form>
     </div>

@@ -17,7 +17,7 @@ def calendar(request):
     past_races = list(Race.objects.filter(date__lt=today).order_by("-date"))
 
     if curr_rider:
-        curr_rider_presences = {p.race_id: p.status for p in curr_rider.race_presences.all()}
+        curr_rider_presences = {p.race_id: p for p in curr_rider.race_presences.all()}
 
     for race in next_races + past_races:
         rider_presences = { p.rider_id: p for p in race.presences.all() }
@@ -44,10 +44,10 @@ def update_presence(request, race_id):
 
     if (request.method == 'POST'):
         race = get_object_or_404(Race, id=race_id)
-        rider = request.user.rider
+        rider = getattr(request.user, 'rider', None)
         status = request.POST.get('status')
 
-        if (not rider):
+        if (rider is None):
             return (redirect('members:calendar'))
 
         RacePresence.objects.update_or_create(
@@ -57,5 +57,12 @@ def update_presence(request, race_id):
                 'status': status
             }
         )
+
+        next_url = request.POST.get('next')
+        print ('next_url: ', next_url)
+        if next_url:
+            return redirect(next_url)
+
+        return redirect('members:calendar')
 
     return (redirect('members:calendar'))

@@ -1,22 +1,26 @@
 <div class="card-header">
   <div class="row justify-content-between align-items-center g-1">
 
-    <div class="col-11 col-md-6">
+    <div class="col-11 col-xl-6">
       <h2 class="h5 m-0">{{ race.title }}</h2>
     </div>
 
-    <div class="col-1 d-md-none d-flex justify-content-end align-items-center">
+    <div class="col-1 d-xl-none d-flex justify-content-end align-items-center">
     {% if request.user.is_staff or request.user.staff.is_active %}
       <a href="{% url 'members:edit_race' race.id %}" class="text-muted text-decoration-none" title="Modifier la course"><i class="bi bi-pencil-square"></i></a>
     {% endif %}
     </div>
 
-    <div class="col-11 col-md-5 d-flex justify-content-start justify-content-md-end gap-1">
-      <span class="badge bg-success-subtle text-success d-inline-flex align-items-center">{{ race.date|date:"d M Y" }}</span>
+    <div class="col-12 col-xl-6 d-flex justify-content-start justify-content-xl-end gap-1">
+      <div class="d-flex justify-content-start flex-wrap gap-1">
+        <span class="badge bg-success-subtle text-success d-inline-flex align-items-center"> {% if race.is_stage_race %}Du {{ race.end_date|date:"d M Y" }} au {% endif %}{{ race.date|date:"d M Y" }}</span>
       <span class="badge bg-primary-subtle text-primary d-inline-flex align-items-center">{{ race.get_category_type_display }}</span>
       <span class="badge bg-danger-subtle text-danger d-inline-flex align-items-center">{% if race.is_dn_race %}DN{% else %}HORS-DN{% endif %}</span>
+
+      </div>
+
       {% if request.user.is_staff or request.user.staff.is_active %}
-        <div class="d-none d-md-flex">
+        <div class="d-none d-xl-flex">
           <a href="{% url 'members:edit_race' race.id %}" class="text-muted text-decoration-none ms-3" title="Modifier la course"><i class="bi bi-pencil-square"></i></a>
         </div>
       {% endif %}

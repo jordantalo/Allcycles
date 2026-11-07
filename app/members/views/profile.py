@@ -4,7 +4,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import redirect, render
 from django.contrib import messages
 
-from ..forms import AvatarForm
+from ..forms import AvatarForm, UserBioForm, UserEmailForm, ProfilePhoneForm, ProfilePrefForm
 
 @login_required
 def profile(request):
@@ -13,32 +13,39 @@ def profile(request):
 
     if (request.method == 'POST'):
 
-        if ("first_name" in request.POST):
-            request.user.first_name = request.POST.get("first_name").lower()
-            request.user.last_name = request.POST.get("last_name").lower()
-            request.user.save()
-            return (redirect('members:profile'))
+        form_type = request.POST.get("form_type")
 
-        elif ("user_email" in request.POST):
-            request.user.email = request.POST.get("user_email")
-            request.user.profile.phone = request.POST.get("user_phone")
-            request.user.save()
-            request.user.profile.save()
-            return (redirect('members:profile'))
-
-        elif ("avatar" in request.FILES):
-            form = AvatarForm(request.POST, request.FILES, instance=request.user.profile)
-
+        if (form_type == "bio_form"):
+            form = UserBioForm(request.POST, request.FILES, instance=request.user)
             if form.is_valid():
                 form.save()
+                messages.success(request, "Bio mise a jour avec succès")
                 return (redirect('members:profile'))
 
-        elif ("theme_pref" in request.POST):
-            request.user.profile.theme = request.POST.get("theme_pref")
-            request.user.profile.save()
-            return (redirect('members:profile'))
+        elif (form_type == "personal_info_form"):
+            user_email_form = UserEmailForm(request.POST, request.FILES, instance=request.user)
+            profile_phone_form = ProfilePhoneForm(request.POST, request.FILES, instance=request.user.profile)
+            if (user_email_form.is_valid() and profile_phone_form.is_valid()):
+                user_email_form.save()
+                profile_phone_form.save()
+                messages.success(request, "Vos informations personnelles ont été mises à jour avec succès.")
+                return (redirect('members:profile'))
 
-        elif ("update_password" in request.POST):
+        elif (form_type == "avatar_form"):
+            form = AvatarForm(request.POST, request.FILES, instance=request.user.profile)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Votre avatar a été mise à jour avec succès.")
+                return (redirect('members:profile'))
+
+        elif (form_type == "pref_form"):
+            pref_form = ProfilePrefForm(request.POST, request.FILES, instance=request.user.profile)
+            if (pref_form.is_valid()):
+                pref_form.save()
+                messages.success(request, "Vos préférences personnelles ont été mises à jour avec succès.")
+                return (redirect('members:profile'))
+
+        elif (form_type == "password_change"):
             password_form = PasswordChangeForm(user=request.user, data=request.POST)
             if password_form.is_valid():
                 user = password_form.save()

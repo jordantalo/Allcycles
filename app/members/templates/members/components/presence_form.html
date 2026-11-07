@@ -1,5 +1,6 @@
 <form class="w-100" action="{% url "members:update_presence" race_id %}" method="post">
     {% csrf_token %}
+    <input type="hidden" name="next" value="{{ request.path }}">
     <div class="input-group input-group-sm w-100">
       <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
 		    <option value="" disabled {% if not status or status == 'maybe' %}selected{% endif %}>🟡 En attente</option>

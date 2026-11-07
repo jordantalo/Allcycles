@@ -1,6 +1,6 @@
-<form method="post" class="bg-body shadow-lg p-4 p-md-5 rounded-4">
+<form method="post" class="bg-body shadow p-4 p-md-5 rounded-4 row g-3">
 	{% csrf_token %}
-	<div class="mb-3">
+	<div class="col-12">
 		<label for="race_name" class="form-label fw-semibold">Nom de la course</label>
 		<div class="input-group">
 			<span class="input-group-text bg-body-secondary" id="basic-addon3"><i class="bi bi-bicycle"></i></span>
@@ -9,7 +9,15 @@
 		</div>
 	</div>
 
-	<div class="mb-3">
+  <div class="col-12">
+		<div class="form-check form-switch">
+			<input class="form-check-input" type="checkbox" name="is_stage_race" role="switch" id="is-stage-race"
+				{% if race and race.is_stage_race %}checked{% endif %} />
+			<label class="form-check-label" for="is-stage-race">Course par étape</label>
+		</div>
+	</div>
+
+	<div class="col-12 {% if race.is_stage_race %}col-sm-6{% endif %}" id="category-div">
 		<label for="race_level" class="form-label fw-semibold">Catégorie</label>
 		<select class="form-select" id="race_level" name="category_type" aria-label="Default select example">
 			<option
@@ -21,24 +29,38 @@
 		</select>
 	</div>
 
-	<div class="mb-3">
-		<label for="date" class="form-label">Date</label>
+  <div class="col-12 col-sm-6 {% if not race.is_stage_race %}d-none{% endif %}" id="stage-number-div">
+    <label for="race-stage-number" class="form-label fw-semibold">Nombre d'étapes</label>
+      <input type="number" class="form-control" id="race-stage-number" name="num_stages" min="2" max="21" {% if race.is_stage_race %}value="{{race.num_stages}}"{% endif %} aria-describedby="basic-addon3 basic-addon4">
+  </div>
+
+	<div class="col-12 {% if race.is_stage_race %}col-sm-6{% endif %} " id="start-date-div">
+		<label for="start-date" class="form-label fw-bold" id="start-date-race">Date {% if race.is_stage_race %}de début{% endif %}</label>
 		<div class="input-group">
 			<span class="input-group-text bg-body-secondary"><i class="bi bi-calendar-event"></i></span>
-			<input type="date" name="date" id="date" class="form-control"
+			<input type="date" name="date" id="start-date" class="form-control"
 				value="{{ race.date|date:'Y-m-d'|default:'' }}" required />
 		</div>
 	</div>
 
-	<div class="mb-3">
+  <div class="col-12 col-sm-6 {% if not race.is_stage_race %}d-none{% endif %} " id="end-date-div">
+		<label for="end-date" class="form-label fw-bold">Date de fin</label>
+		<div class="input-group">
+			<span class="input-group-text bg-body-secondary"><i class="bi bi-calendar-event"></i></span>
+			<input type="date" name="end_date" id="end-date" class="form-control"
+				value="{{ race.end_date|date:'Y-m-d'|default:'' }}" />
+		</div>
+	</div>
+
+	<div class="col-12">
 		<div class="form-check form-switch">
-			<input class="form-check-input" type="checkbox" name="dn_race" role="switch" id="id_dn_race"
+			<input class="form-check-input" type="checkbox" name="is_dn_race" role="switch" id="id_dn_race"
 				{% if race and race.is_dn_race %}checked {% elif not race %}checked{% endif %} />
 			<label class="form-check-label" for="id_dn_race">Course DN</label>
 		</div>
 	</div>
 
-	<div class="mb-3">
+	<div class="col-12">
 		<label class="form-label fw-bold">Sélection des coureurs</label>
 
 		<div class="p-3 border rounded bg-body-tertiary">
@@ -48,7 +70,7 @@
 					id="rider_{{ rider.id }}"
 					{% if race and rider in race.riders.all %}checked{% elif not race%}checked{% endif %} />
 				<label class="form-check-label d-flex justify-content-between" for="rider_{{ rider.id }}">
-					<div>{{ rider.user.first_name }} {{ rider.user.last_name }}</div>
+					<div>{{ rider.user.first_name|capfirst }} {{ rider.user.last_name|capfirst }}</div>
 					<div>
 						<span class="badge bg-primary-subtle text-primary">{{ rider.get_category_ffc_display }}</span>
 						<span class="badge bg-danger-subtle text-danger">
@@ -66,17 +88,17 @@
 			{% endfor %}
 		</div>
   </div>
-  <div class="mb-3">
+  <div class="col-12">
     <label class="form-label fw-bold">Sélection du staff</label>
-    
-    <div class="p-3 border rounded bg-body-tertiary">  
+
+    <div class="p-3 border rounded bg-body-tertiary">
 			{% for staff_member in staff %}
 			<div class="form-check">
-				<input class="form-check-input rider-checkbox" type="checkbox" name="staff" value="{{ staff_member.id }}"
+				<input class="form-check-input" type="checkbox" name="staff_members" value="{{ staff_member.id }}"
 					id="staff_{{ staff_member.id }}"
 					{% if race and staff_member in race.staff_members.all %}checked{% endif %} />
 				<label class="form-check-label d-flex justify-content-between" for="staff_{{ staff_member.id }}">
-					<div>{{ staff_member.user.first_name }} {{ staff_member.user.last_name }}</div>
+					<div>{{ staff_member.user.first_name|capfirst }} {{ staff_member.user.last_name|capfirst }}</div>
 				</label>
 			</div>
 			{% empty %}
@@ -85,6 +107,50 @@
 		</div>
 	</div>
 
-	<button type="submit" class="btn btn-light w-100 py-2 text-uppercase fw-bold shadow-sm"
+  <div class="col-12">
+    <button type="submit" class="btn btn-light w-100 py-2 text-uppercase fw-bold shadow-sm"
 		style="letter-spacing: 0.05em;">{% if race %}Modifier la course{% else %}Creer la course{% endif %}</button>
+  </div>
+
 </form>
+
+{% block extra_js %}
+
+<script>
+
+    document.getElementById('is-stage-race').addEventListener('change', function () {
+
+      is_stage_race = document.getElementById('is-stage-race')
+
+      if (is_stage_race.checked) {
+        end_date = document.getElementById('end-date-div')
+        start_date = document.getElementById('start-date-div')
+        stage_num = document.getElementById('stage-number-div')
+        category = document.getElementById('category-div')
+        start_date.getElementsByTagName('label')[0].innerHTML = 'Date de debut'
+        end_date.getElementsByTagName('input')[0].required = true
+        stage_num.getElementsByTagName('input')[0].required = true
+        start_date.classList.add("col-sm-6")
+        stage_num.classList.remove("d-none")
+        category.classList.add("col-sm-6")
+        end_date.classList.remove('d-none')
+      } else {
+        end_date = document.getElementById('end-date-div')
+        start_date = document.getElementById('start-date-div')
+        stage_num = document.getElementById('stage-number-div')
+        category = document.getElementById('category-div')
+        start_date.getElementsByTagName('label')[0].innerHTML = 'Date'
+         end_date.getElementsByTagName('input')[0].required = false
+        stage_num.getElementsByTagName('input')[0].required = false
+        start_date.classList.remove("col-sm-6")
+        category.classList.remove("col-sm-6")
+        stage_num.classList.add("d-none")
+        end_date.classList.add('d-none')
+      }
+
+    })
+
+
+</script>
+
+{% endblock extra_js %}

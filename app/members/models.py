@@ -1,7 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+from django.contrib.postgres.fields import ArrayField
+from django.db.models import JSONField
 from django.dispatch import receiver
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 class Staff(models.Model):
@@ -70,6 +73,7 @@ class Race(models.Model):
 
     title = models.CharField("Nom de la course", max_length=150)
     date = models.DateField("Date de la course")
+    end_date = models.DateField("Date de la fin de course", blank=True, null=True)
     location = models.CharField("Lieu / Ville", max_length=100)
     category_type = models.CharField(
         "Type d'épreuve",
@@ -82,6 +86,8 @@ class Race(models.Model):
     riders = models.ManyToManyField(Rider, blank=True, related_name="races")
     staff_members = models.ManyToManyField(Staff, blank=True, related_name='races')
     results_entered = models.BooleanField(default=False, help_text="Indique si les résultats de la course ont été saisis")
+    is_stage_race = models.BooleanField(default=False, help_text="Indique si la course est une course par etape")
+    num_stages = models.PositiveIntegerField(default=1, blank=True, null=True, help_text="Indique le nombre d'etapes de la course")
 
     class Meta:
         ordering = ["date"]
@@ -111,12 +117,41 @@ class RacePresence(models.Model):
     race = models.ForeignKey('Race', on_delete=models.CASCADE, related_name='presences')
     rider = models.ForeignKey('Rider', on_delete=models.CASCADE, related_name='race_presences')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, blank=True, null=True)
-    position = models.PositiveIntegerField(null=True, blank=True, help_text="Ex: 5 (pour 5ème)")
-    finisher_status = models.CharField(max_length=20, choices=FINISH_CHOICES, blank=True, null=True)
+
+    positions_dict = JSONField(default=dict, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ('race', 'rider')
+
+    def clean(self):
+        super.clean()
+
+        for key, value in self.positions_dict.items():
+
+            if key != 'G':
+                try:
+                    stage_num = int(key)
+                    if (stage_num <= 0):
+                        raise ValueError()
+                except (ValueError, TypeError):
+                    raise ValidationError({
+                        'positions': f"La clé '{key}' doit être 'G' ou un numéro d'étape valide (entier positif)."
+                    })
+
+
+            if value != 'DNS' and value != 'DNF':
+                try:
+                    res = int(value)
+                    if (res <= 0):
+                        raise ValueError()
+                except (ValueError, TypeError):
+                    raise ValidationError({
+                        'positions': f"La value '{value}' doit être 'DNS' ou 'DNF' ou un resultat valide (entier positif)."
+                    })
+
+    def __str__(self):
+       return f"[{self.race.title}][{self.rider.user.first_name} {self.rider.user.last_name}]({self.status})"
 
 class Profile(models.Model):
   # Liaison 1 pour 1 avec le User de Django
