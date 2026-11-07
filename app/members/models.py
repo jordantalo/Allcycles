@@ -71,7 +71,19 @@ class Race(models.Model):
         ("open1", "OPEN 1"),
     ]
 
+    TYPE_CHOICES = [
+            ("one_day", "Course d'un jour"),
+            ("stage", "Course par étape"),
+            ("challenge", "Challenge par étape"),
+        ]
+
     title = models.CharField("Nom de la course", max_length=150)
+    type = models.CharField(
+        "Type de course",
+        max_length=30,
+        choices=TYPE_CHOICES,
+        default="one_day",
+    )
     date = models.DateField("Date de la course")
     end_date = models.DateField("Date de la fin de course", blank=True, null=True)
     location = models.CharField("Lieu / Ville", max_length=100)
@@ -124,7 +136,7 @@ class RacePresence(models.Model):
     class Meta:
         unique_together = ('race', 'rider')
 
-    def clean(self):
+    """  def clean(self):
         super.clean()
 
         for key, value in self.positions_dict.items():
@@ -148,7 +160,7 @@ class RacePresence(models.Model):
                 except (ValueError, TypeError):
                     raise ValidationError({
                         'positions': f"La value '{value}' doit être 'DNS' ou 'DNF' ou un resultat valide (entier positif)."
-                    })
+                    }) """
 
     def __str__(self):
        return f"[{self.race.title}][{self.rider.user.first_name} {self.rider.user.last_name}]({self.status})"

@@ -1,0 +1,36 @@
+<div class="row gy-1 gx-3">
+
+  {% if race.type != "one_day" %}
+  <div class="col-12">
+    <span class="fw-bold">{{ rider.user.first_name|capfirst }} {{ rider.user.last_name|capfirst }}</span>
+  </div>
+  {% endif %}
+
+  <div class="col-12 col-sm-4 col-lg-6">
+    <div class="input-group input-group-sm">
+      <span class="input-group-text bg-body-secondary" id="basic-addon3"><i class="fa-solid fa-flag-checkered"></i></span>
+      <input type="text" class="form-control" id="position-{{ stage }}-{{ rider.id }}" name="position_{{ rider.id }}" aria-describedby="basic-addon3 basic-addon4"
+      {% if result %}value={{ result }}{% endif %}  />
+    </div>
+  </div>
+
+  <div class="col-12 col-sm-8 col-lg-6">
+    <div class="btn-group btn-group-sm d-flex flex-grow-1" role="group" aria-label="Basic outlined example">
+      <button type="button" class="btn btn-outline-primary" onclick="setResultStatus(this, 'DNF')">DNF</button>
+      <button type="button" class="btn btn-outline-primary" onclick="setResultStatus(this, 'OTL')">OTL</button>
+      <button type="button" class="btn btn-outline-primary" onclick="setResultStatus(this, 'DNS')">DNS</button>
+      <button type="button" class="btn btn-outline-primary" onclick="setResultStatus(this, 'DSQ')">DSQ</button>
+    </div>
+  </div>
+
+</div>
+
+{% block extra_js %}
+  <script>
+    function setResultStatus(elt, status) {
+      input_div = elt.parentNode.parentNode.parentNode
+      input = input_div.getElementsByTagName('input')[0]
+      input.value = status
+    }
+  </script>
+{% endblock %}

@@ -9,11 +9,11 @@
     <div class="container">
       <h1 class="text-center mb-5">{% if race.results_entered %}Modifier{% else %}Saisir{% endif %} les résultat de {{ race.title }}</h1>
       <div class="row justify-content-center">
-        <div class="col-12 col-lg-6">
-          {% if race.is_stage_race %}
-            {% include 'members/components/result_stage_form.html' with race=race stages_range=stages_range %}
+        <div class="col-12 col-lg-8 col-xl-6">
+          {% if race.type != "one_day" %}
+            {% include 'members/components/result_stage_form.html' with race=race results=results %}
           {% else %}
-            {% include 'members/components/result_one_day_form.html' with race=race %}
+            {% include 'members/components/result_one_day_form.html' with race=race results=results %}
           {% endif %}
         </div>
       </div>

@@ -13,7 +13,7 @@
 
     <div class="col-12 col-xl-6 d-flex justify-content-start justify-content-xl-end gap-1">
       <div class="d-flex justify-content-start flex-wrap gap-1">
-        <span class="badge bg-success-subtle text-success d-inline-flex align-items-center"> {% if race.is_stage_race %}Du {{ race.end_date|date:"d M Y" }} au {% endif %}{{ race.date|date:"d M Y" }}</span>
+        <span class="badge bg-success-subtle text-success d-inline-flex align-items-center"> {% if race.type != "one_day" %}Du {{ race.end_date|date:"d M Y" }} au {% endif %}{{ race.date|date:"d M Y" }}</span>
       <span class="badge bg-primary-subtle text-primary d-inline-flex align-items-center">{{ race.get_category_type_display }}</span>
       <span class="badge bg-danger-subtle text-danger d-inline-flex align-items-center">{% if race.is_dn_race %}DN{% else %}HORS-DN{% endif %}</span>
 

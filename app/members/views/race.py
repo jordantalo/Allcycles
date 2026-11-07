@@ -3,13 +3,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from ..utils import is_active_staff_or_admin
 from ..models import Race, Rider, Staff, RacePresence
-from ..forms import RaceForm
+from ..forms import RaceForm, ResultForm
+from django.contrib import messages
 
 @user_passes_test(is_active_staff_or_admin, login_url='members:home_redirect')
 @login_required
 def create_race(request):
 
     if request.method == "POST":
+        print ('post: ', request.POST)
         race_form = RaceForm(request.POST, request.FILES)
         if race_form.is_valid():
             race_form.save()
@@ -32,40 +34,63 @@ def save_results(request, race_id):
     race = get_object_or_404(Race, id=race_id)
 
     if request.method == 'POST':
-        race.results_entered = True
-        race.save()
 
         for rider in race.riders.all():
 
-            finisher_status = request.POST.get(f'finisher_status_{ rider.id }')
-            position = request.POST.get(f'position_{ rider.id }')
+            positions_dict = {}
+            positions = request.POST.getlist(f'position_{rider.id}')
 
-            if position != '':
-                defaults = {
-                    'finisher_status': finisher_status,
-                    'position': int(position),
-                }
-            else:
-                defaults = {
-                    'finisher_status': finisher_status,
-                }
+            for index, position in enumerate(positions):
 
-            RacePresence.objects.update_or_create(
-                race=race,
+                if len(positions) == 0:
+                    continue
+
+                elif index == len(positions) - 1 and len(positions) != 1:
+                    positions_dict['G'] = position.upper()
+
+                else:
+                    positions_dict[index + 1] = position.upper()
+
+            if not positions_dict:
+                continue
+
+            presence, created = RacePresence.objects.get_or_create(
                 rider=rider,
-                defaults=defaults
+                race=race
             )
+
+            form = ResultForm(
+                data={'positions_dict': positions_dict},
+                instance=presence,
+                race=race,
+            )
+
+            if form.is_valid():
+                form.save()
+
+        race.results_entered = True
+        race.save()
 
         return (redirect('members:calendar'))
 
     rider_presences = { p.rider_id:p for p in race.presences.all() }
-    race.rider_presences = []
-    for rider in race.riders.all():
-        race.rider_presences.append((rider, rider_presences.get(rider.id)))
+    stages = [str(i) for i in range(1, race.num_stages + 1)]
+    if race.type != "one_day":
+        stages.append('G')
+    global_res = []
+    for stage in stages:
+        riders_res = []
+        for rider in race.riders.all():
+            rider_presence = rider_presences.get(rider.id)
+            res = None
+            if rider_presence:
+                res = rider_presence.positions_dict.get(stage)
+            riders_res.append((rider, res))
+        global_res.append((stage, riders_res))
 
     context = {
         'race':race,
-        'stages_range': range(1, race.num_stages + 1)
+        'results': global_res,
     }
     return (render(request, "members/save_results.html", context))
 

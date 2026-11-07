@@ -9,15 +9,19 @@
 		</div>
 	</div>
 
-  <div class="col-12">
-		<div class="form-check form-switch">
-			<input class="form-check-input" type="checkbox" name="is_stage_race" role="switch" id="is-stage-race"
-				{% if race and race.is_stage_race %}checked{% endif %} />
-			<label class="form-check-label" for="is-stage-race">Course par étape</label>
-		</div>
+  <div class="col-12" id="race-type-div">
+		<label for="race-type" class="form-label fw-semibold">Type de course</label>
+		<select class="form-select" id="race-type" name="type" aria-label="Default select example">
+			<option
+				{% if race and race.type == "one_day" %}selected{% elif not race %}selected{% endif %}
+				value="one_day">Course d'un jour</option>
+			<option {% if race and race.type == "stage" %}selected{% endif %}
+				value="stage">Course par étape</option>
+			<option {% if race and race.type == "challenge" %}selected{% endif %} value="challenge">Challenge par étape</option>
+		</select>
 	</div>
 
-	<div class="col-12 {% if race.is_stage_race %}col-sm-6{% endif %}" id="category-div">
+	<div class="col-12 {% if race and race.type != "one_day" %}col-sm-6{% endif %}" id="category-div">
 		<label for="race_level" class="form-label fw-semibold">Catégorie</label>
 		<select class="form-select" id="race_level" name="category_type" aria-label="Default select example">
 			<option
@@ -29,12 +33,12 @@
 		</select>
 	</div>
 
-  <div class="col-12 col-sm-6 {% if not race.is_stage_race %}d-none{% endif %}" id="stage-number-div">
+  <div class="col-12 col-sm-6 {% if not race or race.type == "one_day" %}d-none{% endif %}" id="stage-number-div">
     <label for="race-stage-number" class="form-label fw-semibold">Nombre d'étapes</label>
-      <input type="number" class="form-control" id="race-stage-number" name="num_stages" min="2" max="21" {% if race.is_stage_race %}value="{{race.num_stages}}"{% endif %} aria-describedby="basic-addon3 basic-addon4">
+      <input type="number" class="form-control" id="race-stage-number" name="num_stages" min="2" max="21" {% if race and race.type != "one_day" %}value="{{race.num_stages}}"{% endif %} aria-describedby="basic-addon3 basic-addon4">
   </div>
 
-	<div class="col-12 {% if race.is_stage_race %}col-sm-6{% endif %} " id="start-date-div">
+	<div class="{% if race and race.type != "one_day" %}col-sm-6{% endif %}" id="start-date-div">
 		<label for="start-date" class="form-label fw-bold" id="start-date-race">Date {% if race.is_stage_race %}de début{% endif %}</label>
 		<div class="input-group">
 			<span class="input-group-text bg-body-secondary"><i class="bi bi-calendar-event"></i></span>
@@ -43,7 +47,7 @@
 		</div>
 	</div>
 
-  <div class="col-12 col-sm-6 {% if not race.is_stage_race %}d-none{% endif %} " id="end-date-div">
+  <div class="col-12 col-sm-6 {% if not race or race.type == "one_day" %}d-none{% endif %}" id="end-date-div">
 		<label for="end-date" class="form-label fw-bold">Date de fin</label>
 		<div class="input-group">
 			<span class="input-group-text bg-body-secondary"><i class="bi bi-calendar-event"></i></span>
@@ -118,11 +122,11 @@
 
 <script>
 
-    document.getElementById('is-stage-race').addEventListener('change', function () {
+    document.getElementById('race-type').addEventListener('change', function () {
 
-      is_stage_race = document.getElementById('is-stage-race')
+      race_type = document.getElementById('race-type').value
 
-      if (is_stage_race.checked) {
+      if (race_type != "one_day") {
         end_date = document.getElementById('end-date-div')
         start_date = document.getElementById('start-date-div')
         stage_num = document.getElementById('stage-number-div')
