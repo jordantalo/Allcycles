@@ -17,9 +17,15 @@
       <span class="d-block small text-muted">DNS</span>
       <span class="fw-bold text-warning">{{ stats.dns|default:'0' }}</span>
     </div>
-    <div class="flex-fill bg-body rounded-2 p-2 border">
+    <div class="flex-fill bg-body rounded-2 p-2 border position-relative">
       <span class="d-block small text-muted">DNF</span>
       <span class="fw-bold text-danger">{{ stats.dnf|default:'0' }}</span>
+      <span class="position-absolute translate-middle badge rounded-pill" style="left:90%">
+        <i class="bi bi-info-circle" data-bs-toggle="tooltip"
+      data-bs-title="DNF (Did Not Finish) : inclut également OTL (Hors-délai) et DSQ (Disqualifié)"
+      style="cursor: help; text-decoration-style: dotted;"></i>
+    <span class="visually-hidden">unread messages</span>
+  </span>
     </div>
   </div>
 </div>

@@ -10,31 +10,10 @@
     <div class="container">
       <h1 class="text-center mb-5">Ajouter une course</h1>
       <div class="row justify-content-center">
-        <div class="col-12 col-lg-7">
+        <div class="col-12 col-md-9 col-xl-7">
             {% include 'members/components/race_form.html' with riders=riders race=race %}
         </div>
       </div>
     </div>
   </div>
-{% endblock %}
-
-{% block extra_js %}
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const dnCheckbox = document.getElementById('id_dn_race')
-      const riderCheckboxes = document.querySelectorAll('.rider-checkbox')
-
-      if (dnCheckbox) {
-        dnCheckbox.addEventListener('change', function () {
-          // On regarde si la case DN est cochée ou non
-          const isChecked = this.checked
-
-          // On applique le même état (true ou false) à toutes les cases des coureurs
-          riderCheckboxes.forEach(function (checkbox) {
-            checkbox.checked = isChecked
-          })
-        })
-      }
-    })
-  </script>
 {% endblock %}

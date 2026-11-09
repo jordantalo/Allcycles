@@ -43,14 +43,14 @@ class RaceForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         race_type = cleaned_data.get('type')
-        start_date = cleaned_data.get('start_date')
+        start_date = cleaned_data.get('date')
         end_date = cleaned_data.get('end_date')
         num_stages = cleaned_data.get('num_stages')
 
         if (race_type != 'one_day'):
 
             if (not end_date):
-                self.add_error('end_date', "Une date de fin est obligatoire pour une course par étape.")
+                self.add_error('end_date', "Ce champ est obligatoire.")
 
             if (start_date and end_date and end_date <= start_date):
                 self.add_error('end_date', "La date de fin ne peut pas être antérieure à la date de début.")
@@ -58,7 +58,30 @@ class RaceForm(forms.ModelForm):
             if (not num_stages):
                 self.add_error('num_stages', "Le nombre d'étape est obligatoire pour une course par étape.")
 
+            if (num_stages < 2 or num_stages > 21):
+                self.add_error('num_stages', "Minimum 2 étapes - maximum 21 étapes.")
+
+
         return cleaned_data
+
+    def clean_title(self):
+        title = self.cleaned_data.get('title')
+        if not title:
+            return title
+
+        minor_words = {'le', 'la', 'les', 'un', 'une', 'des', 'du', 'de', 'et', 'à', 'en', 'au', 'aux', 'pour', 'par', 'sur', 'dans'}
+        words = title.split()
+        formatted_words = []
+
+        for i, word in enumerate(words):
+            lower_word = word.lower()
+
+            if i == 0 or lower_word not in minor_words:
+                formatted_words.append(word.capitalize())
+            else:
+                formatted_words.append(lower_word)
+
+        return " ".join(formatted_words)
 
 class ResultForm(forms.ModelForm):
 

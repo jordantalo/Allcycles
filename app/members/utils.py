@@ -49,9 +49,9 @@ def get_team_stats(season_res, race_days):
 def get_stats_info(season_res: list[RacePresence]) -> dict[str, int]:
     stats_info = {
         'race_days': get_race_days(season_res),
-        'finisher': count_status(season_res, 'finisher'),
+        'finisher': get_finished_races(season_res),
         'dns': count_status(season_res, 'DNS'),
-        'dnf': count_status(season_res, 'DNF'),
+        'dnf': count_status(season_res, ['DNF', 'OTL', 'DSQ']),
         'podium': count_top(season_res, 3),
         'first': count_position(season_res, 1),
         'second': count_position(season_res, 2),
@@ -66,18 +66,32 @@ def get_race_days(season: list[RacePresence]):
     race_days = 0
     for presence in season:
         for stage, position in presence.positions_dict.items():
-            if (position != "DNS"):
+            if (position != "DNS" and stage != "G"):
                 race_days += 1
     return (race_days)
 
-def count_status(season: list[RacePresence], status: str):
-    count_status = 0
+def get_finished_races(season: list[RacePresence]):
+    finished = 0
+
     for presence in season:
         for stage, position in presence.positions_dict.items():
-            if (status == 'finisher' and isinstance(position, int) and stage != 'G'):
-                count_status += 1
-            elif (position == status):
-                count_status += 1
+
+            if stage == 'G':
+                continue
+            elif isinstance(position, int):
+                finished += 1
+            elif isinstance(position, str) and position.isdigit():
+                finished += 1
+
+    return finished
+
+def count_status(season: list[RacePresence], statuses: list[str]):
+    count_status = 0
+    for presence in season:
+        for position in presence.positions_dict.values():
+            for status in statuses:
+                if (position == status):
+                    count_status += 1
     return (count_status)
 
 def count_top(season: list[RacePresence], top: int):

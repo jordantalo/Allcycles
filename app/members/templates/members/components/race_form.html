@@ -1,78 +1,104 @@
-<form method="post" class="bg-body shadow p-4 p-md-5 rounded-4 row g-3">
+<form method="post" class="bg-body shadow p-4 p-md-5 rounded-4 row g-3" novalidate>
 	{% csrf_token %}
 	<div class="col-12">
 		<label for="race_name" class="form-label fw-semibold">Nom de la course</label>
 		<div class="input-group">
-			<span class="input-group-text bg-body-secondary" id="basic-addon3"><i class="bi bi-bicycle"></i></span>
-			<input type="text" class="form-control" id="race_name" name="title" value="{{ race.title|default:'' }}"
+			<span class="input-group-text bg-body-secondary {% if form.errors.title %}is-invalid{% endif %}" id="basic-addon3"><i class="bi bi-bicycle"></i></span>
+			<input type="text" class="form-control" id="race_name" name="title" value="{{ form.title.value|default:'' }}"
 				aria-describedby="basic-addon3 basic-addon4" required />
+      {% if form.errors.title %}
+      <div class="invalid-feedback small">{{ form.errors.title.0 }}</div>
+    {% endif %}
 		</div>
 	</div>
 
   <div class="col-12" id="race-type-div">
 		<label for="race-type" class="form-label fw-semibold">Type de course</label>
-		<select class="form-select" id="race-type" name="type" aria-label="Default select example">
+		<select class="form-select {% if form.errors.type %}is-invalid{% endif %}" id="race-type" name="type" aria-label="Default select example" onload="adapt_race_form()">
 			<option
-				{% if race and race.type == "one_day" %}selected{% elif not race %}selected{% endif %}
+				{% if form.type.value == "one_day" %}selected{% elif not form.type.value %}selected{% endif %}
 				value="one_day">Course d'un jour</option>
-			<option {% if race and race.type == "stage" %}selected{% endif %}
+			<option {% if form.type.value == "stage" %}selected{% endif %}
 				value="stage">Course par étape</option>
-			<option {% if race and race.type == "challenge" %}selected{% endif %} value="challenge">Challenge par étape</option>
+			<option {% if form.type.value == "challenge" %}selected{% endif %} value="challenge">Challenge par étape</option>
 		</select>
+    {% if form.errors.type %}
+      <div class="invalid-feedback small">{{ form.errors.type.0 }}</div>
+    {% endif %}
 	</div>
 
-	<div class="col-12 {% if race and race.type != "one_day" %}col-sm-6{% endif %}" id="category-div">
+	<div class="col-12 {% if form.type.value != "one_day" %}col-sm-6{% endif %}" id="category-div">
 		<label for="race_level" class="form-label fw-semibold">Catégorie</label>
-		<select class="form-select" id="race_level" name="category_type" aria-label="Default select example">
+		<select class="form-select {% if form.errors.category_type %}is-invalid{% endif %}" id="race_level" name="category_type" aria-label="Default select example">
 			<option
-				{% if race and race.category_type == "elite_regionale" %}selected{% elif not race %}selected{% endif %}
+				{% if form.category_type.value == "elite_regionale" %}selected{% elif not form.category_type.value %}selected{% endif %}
 				value="elite_regionale">Elite régionale</option>
-			<option {% if race and race.category_type == "elite_nationale" %}selected{% endif %}
+			<option {% if form.category_type.value == "elite_nationale" %}selected{% endif %}
 				value="elite_nationale">Elite nationale</option>
-			<option {% if race and race.category_type == "open1" %}selected{% endif %} value="open1">Open 1</option>
+			<option {% if form.category_type.value == "open1" %}selected{% endif %} value="open1">Open 1</option>
 		</select>
+    {% if form.errors.category_type %}
+      <div class="invalid-feedback small">{{ form.errors.category_type.0 }}</div>
+    {% endif %}
 	</div>
 
-  <div class="col-12 col-sm-6 {% if not race or race.type == "one_day" %}d-none{% endif %}" id="stage-number-div">
+  <div class="col-12 col-sm-6 {% if form.type.value == "one_day" %}d-none{% endif %}" id="stage-number-div">
     <label for="race-stage-number" class="form-label fw-semibold">Nombre d'étapes</label>
-      <input type="number" class="form-control" id="race-stage-number" name="num_stages" min="2" max="21" {% if race and race.type != "one_day" %}value="{{race.num_stages}}"{% endif %} aria-describedby="basic-addon3 basic-addon4">
+    <input type="number" class="form-control {% if form.errors.num_stages %}is-invalid{% endif %}" id="race-stage-number" name="num_stages" min="2" max="21" value="{{form.num_stages.value}}" aria-describedby="basic-addon3 basic-addon4">
+    {% if form.errors.num_stages %}
+        <div class="invalid-feedback small">{{ form.errors.num_stages.0 }}</div>
+    {% endif %}
   </div>
 
-	<div class="{% if race and race.type != "one_day" %}col-sm-6{% endif %}" id="start-date-div">
-		<label for="start-date" class="form-label fw-bold" id="start-date-race">Date {% if race.is_stage_race %}de début{% endif %}</label>
+	<div class="{% if form.type.value != "one_day" %}col-sm-6{% endif %}" id="start-date-div">
+		<label for="start-date" class="form-label fw-bold" id="start-date-race">Date {% if form.type.value != "one_day" %}de début{% endif %}</label>
 		<div class="input-group">
 			<span class="input-group-text bg-body-secondary"><i class="bi bi-calendar-event"></i></span>
-			<input type="date" name="date" id="start-date" class="form-control"
-				value="{{ race.date|date:'Y-m-d'|default:'' }}" required />
+			<input type="date" name="date" id="start-date" class="form-control {% if form.errors.date %}is-invalid{% endif %}"
+				value="{{ form.date.value|date:'Y-m-d'|default:form.date.value }}" required />
+      {% if form.errors.date %}
+        <div class="invalid-feedback small">{{ form.errors.date.0 }}</div>
+      {% endif %}
 		</div>
+
 	</div>
 
-  <div class="col-12 col-sm-6 {% if not race or race.type == "one_day" %}d-none{% endif %}" id="end-date-div">
+  <div class="col-12 col-sm-6 {% if form.type.value == "one_day" %}d-none{% endif %}" id="end-date-div">
 		<label for="end-date" class="form-label fw-bold">Date de fin</label>
 		<div class="input-group">
 			<span class="input-group-text bg-body-secondary"><i class="bi bi-calendar-event"></i></span>
-			<input type="date" name="end_date" id="end-date" class="form-control"
-				value="{{ race.end_date|date:'Y-m-d'|default:'' }}" />
+			<input type="date" name="end_date" id="end-date" class="form-control {% if form.errors.end_date %}is-invalid{% endif %}"
+				value="{{ form.end_date.value|date:'Y-m-d'|default:form.end_date.value }}" />
+      {% if form.errors.end_date %}
+        <div class="invalid-feedback small">{{ form.errors.end_date.0 }}</div>
+      {% endif %}
 		</div>
 	</div>
 
 	<div class="col-12">
 		<div class="form-check form-switch">
 			<input class="form-check-input" type="checkbox" name="is_dn_race" role="switch" id="id_dn_race"
-				{% if race and race.is_dn_race %}checked {% elif not race %}checked{% endif %} />
+				{% if form.is_dn_race.value %}checked{% endif %} />
 			<label class="form-check-label" for="id_dn_race">Course DN</label>
 		</div>
 	</div>
 
 	<div class="col-12">
 		<label class="form-label fw-bold">Sélection des coureurs</label>
-
 		<div class="p-3 border rounded bg-body-tertiary">
+
+		  <div class="form-check form-switch mb-2 pb-2 border-bottom">
+			  <input class="form-check-input" type="checkbox" role="switch" id="select-all-riders" onchange="select_riders()"/>
+			  <label class="form-check-label small" for="id_dn_race">Tous les coureurs</label>
+		  </div>
+      <div id="checkbox-riders-div">
 			{% for rider in riders %}
 			<div class="form-check">
 				<input class="form-check-input rider-checkbox" type="checkbox" name="riders" value="{{ rider.id }}"
 					id="rider_{{ rider.id }}"
-					{% if race and rider in race.riders.all %}checked{% elif not race%}checked{% endif %} />
+					{% if rider.id|stringformat:"s" in form.riders.value %}checked
+          {% elif rider.id in form.riders.value %}checked
+          {% endif %} />
 				<label class="form-check-label d-flex justify-content-between" for="rider_{{ rider.id }}">
 					<div>{{ rider.user.first_name|capfirst }} {{ rider.user.last_name|capfirst }}</div>
 					<div>
@@ -90,17 +116,25 @@
 			{% empty %}
 			<p class="text-muted mb-0">Aucun coureur enregistré pour le moment.</p>
 			{% endfor %}
+      </div>
 		</div>
   </div>
   <div class="col-12">
     <label class="form-label fw-bold">Sélection du staff</label>
 
     <div class="p-3 border rounded bg-body-tertiary">
+      <div class="form-check form-switch mb-2 pb-2 border-bottom">
+			  <input class="form-check-input" type="checkbox" role="switch" id="select-all-staff" onchange="select_all_staff()"/>
+			  <label class="form-check-label small" for="id_dn_race">Tout le staff</label>
+		  </div>
+      <div id="staff-members-div">
 			{% for staff_member in staff %}
 			<div class="form-check">
 				<input class="form-check-input" type="checkbox" name="staff_members" value="{{ staff_member.id }}"
 					id="staff_{{ staff_member.id }}"
-					{% if race and staff_member in race.staff_members.all %}checked{% endif %} />
+					{% if staff_member.id|stringformat:"s" in form.staff_members.value %}checked
+          {% elif staff_member.id in form.staff_members.value %}checked
+          {% endif %} />
 				<label class="form-check-label d-flex justify-content-between" for="staff_{{ staff_member.id }}">
 					<div>{{ staff_member.user.first_name|capfirst }} {{ staff_member.user.last_name|capfirst }}</div>
 				</label>
@@ -108,6 +142,7 @@
 			{% empty %}
 			<p class="text-muted mb-0">Aucun staff enregistré pour le moment.</p>
 			{% endfor %}
+      </div>
 		</div>
 	</div>
 
@@ -123,10 +158,34 @@
 <script>
 
     document.getElementById('race-type').addEventListener('change', function () {
-
       race_type = document.getElementById('race-type').value
 
       if (race_type != "one_day") {
+        stage_race_display()
+      } else {
+        one_day_race_display()
+      }
+    })
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const race_type = document.getElementById('race-type');
+
+        if (race_type) {
+            // 1. Exécuter la fonction tout de suite au chargement de la page
+            adapt_race_form();
+      }
+  });
+
+    function adapt_race_form() {
+      race_type = document.getElementById('race-type').value
+
+      if (race_type != "one_day") {
+        stage_race_display()
+      }
+
+    }
+
+    function stage_race_display() {
         end_date = document.getElementById('end-date-div')
         start_date = document.getElementById('start-date-div')
         stage_num = document.getElementById('stage-number-div')
@@ -138,7 +197,9 @@
         stage_num.classList.remove("d-none")
         category.classList.add("col-sm-6")
         end_date.classList.remove('d-none')
-      } else {
+    }
+
+    function one_day_race_display() {
         end_date = document.getElementById('end-date-div')
         start_date = document.getElementById('start-date-div')
         stage_num = document.getElementById('stage-number-div')
@@ -150,9 +211,39 @@
         category.classList.remove("col-sm-6")
         stage_num.classList.add("d-none")
         end_date.classList.add('d-none')
-      }
+    }
 
-    })
+    function select_riders() {
+        const rider_checkbox = document.getElementById('select-all-riders')
+
+        if (rider_checkbox) {
+            const select_div = document.getElementById('checkbox-riders-div')
+            const inputs = select_div.getElementsByTagName('input')
+
+            const inputList = Array.prototype.slice.call(inputs);
+
+            inputList.forEach((elt) => {
+              elt.checked = rider_checkbox.checked
+            })
+
+        }
+    }
+
+     function select_all_staff() {
+        const staff_checkbox = document.getElementById('select-all-staff')
+
+        if (staff_checkbox) {
+            const select_div = document.getElementById('staff-members-div')
+            const inputs = select_div.getElementsByTagName('input')
+
+            const inputList = Array.prototype.slice.call(inputs);
+
+            inputList.forEach((elt) => {
+              elt.checked = staff_checkbox.checked
+            })
+
+        }
+    }
 
 
 </script>
