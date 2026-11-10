@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Login - Team AllCyclesMeaux{% endblock title %}
+
+{% block content %}
+  <div class="bg-body-secondary py-5">
+    <div class="container">
+
+      <div class="row justify-content-center">
+
+        <div class="col-md-8 col-lg-7">
+
+          <div class="card shadow rounded-4">
+            <div class="card-header d-flex text-center p-4">
+              <h1 class="mb-0 mx-auto">Connexion boutique adherents</h1>
+            </div>
+            <div class="card-body p-4">
+
+              <form method="POST" class="d-flex flex-column gap-4" >
+                {% csrf_token %}
+                <div>
+                  <label for="password-adherent" class="form-label">Mot de passe boutique</label>
+                  <input type="password" class="form-control {% if error %}is-invalid{% endif %}" id="password-adherent" name="password">
+                  <div class="invalid-feedback">
+                    {{ error }}
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Se connecter</button>
+              </form>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

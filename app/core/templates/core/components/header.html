@@ -1,8 +1,8 @@
 {% load static %}
 
 <header class="sticky-top border-bottom">
-  <nav class="navbar navbar-expand-md bg-body-tertiary">
-    <div class="container py-1 py-md-2">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container py-1 py-lg-2">
       <a class="navbar-brand" href="{% url 'home' %}">
         <!-- Logo affiché en mode CLAIR -->
         <img class="logo-light" src="{% static 'img/logos/tam77-light.png' %}" alt="TAM77 — Team AllCycles Meaux" />
@@ -14,7 +14,7 @@
 
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <!-- 1. Liens de navigation principaux -->
-        <div class="navbar-nav ms-auto align-items-md-center gap-md-2 mt-2">
+        <div class="navbar-nav ms-auto align-items-lg-center gap-lg-1 mt-2">
           <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'dn3' %}active{% endif %}" href="{% url 'dn3' %}">DN3</a>
           <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'young' %}active{% endif %}" href="{% url 'young' %}">JEUNES</a>
           <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'club' %}active{% endif %}" href="{% url 'club' %}">CLUB</a>
@@ -23,10 +23,10 @@
         </div>
 
         <!-- 2. Bloc Réseaux Sociaux (Séparé du navbar-nav) -->
-        <div class="nav-socials d-flex align-items-center gap-2 ms-md-5 mt-3 mt-md-0 pt-3 pt-md-0">
-          <a href="https://www.facebook.com/team.allcycles.meaux" class="social-link" href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f fs-5"></i></a>
-          <a href="https://www.instagram.com/teamallcyclesmeaux/" class="social-link" href="#" aria-label="Instagram"><i class="fa-brands fa-instagram fs-5"></i></a>
-          <a class="social-link" href="#" aria-label="YouTube"><i class="fa-brands fa-youtube fs-5"></i></a>
+        <div class="nav-socials d-flex align-items-center gap-2 ms-lg-5 mt-3 mt-lg-0 pt-3 pt-lg-0">
+            <a href="https://www.facebook.com/team.allcycles.meaux" class="social-link" href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f fs-5"></i></a>
+            <a href="https://www.instagram.com/teamallcyclesmeaux/" class="social-link" href="#" aria-label="Instagram"><i class="fa-brands fa-instagram fs-5"></i></a>
+            <a class="social-link ms-4 text-decoration-none" href="{% url 'shop' %}" aria-label="Boutique club"><i class="fa-solid fa-shirt"></i><span class="d-inline small ms-2">Boutique</span></a>
         </div>
       </div>
     </div>

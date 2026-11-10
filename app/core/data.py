@@ -82,11 +82,6 @@ STAFF_DN3 = [
         'role': 'Directeur sportif',
         'image': 'img/staff/stephane-cruveiller.jpg',
     },
-    {
-        'name': 'Jérémy CORDIER',
-        'role': 'Assistant',
-        'image': 'img/staff/jeremy-cordier.jpg',
-    },
 ]
 
 CLUB_BOARD = [
@@ -119,3 +114,17 @@ CLUB_BOARD = [
         'role': 'Responsable Jeunes',
     },
 ]
+
+
+PASSWORDS = {
+    "!!comm@ndeTenues!!": "STANDARD",
+    "!!comm@ndeTenuesDn3!!": "DN3",
+}
+
+PACKAGE_DN3 = {
+    'cuissard_court': 2,
+    'maillot_court': 2,
+    'manchettes': 1,
+    'combi': 1,
+    'veste_mi_saison': 1,
+}

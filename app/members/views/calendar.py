@@ -14,7 +14,7 @@ def calendar(request):
     next_races = list(Race.objects.filter(date__gte=today).order_by("date"))
 
     # Courses passées (avant aujourd'hui), triées de la plus récente à la plus ancienne
-    past_races = list(Race.objects.filter(date__lt=today).order_by("-date"))
+    past_races = list(Race.objects.filter(date__lt=today, date__year=today.year).order_by("-date"))
 
     if curr_rider:
         curr_rider_presences = {p.race_id: p for p in curr_rider.race_presences.all()}

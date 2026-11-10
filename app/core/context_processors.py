@@ -1,19 +1,20 @@
 def global_partners(request):
     partners_list = [
         {
-            "name": "AllCycles",
-            "url": "https://allcycles.fr/",
-            "description": "Partenaire historique et technique de notre structure, le magasin ALLCYCLES est bien plus qu’un soutien : c’est un véritable repère pour les passionnés de vélo à Meaux. Grâce à une sélection rigoureuse de matériels de pointe, un atelier de précision et des conseils d'experts adaptés à toutes les pratiques – de la route au haut niveau –, ALLCYCLES accompagne au quotidien nos coureurs de la Division Nationale 3 jusqu'à l'école de vélo. Cette collaboration étroite garantit à nos athlètes de disposer du meilleur équipement pour exprimer tout leur potentiel sur les routes de France.",
-            "image": "img/partners/stores/allcycles.jpeg",
-            "logo": "img/partners/logos/allcycles.png",
-        },
-        {
             "name": "Ville de Meaux",
             "url": "https://www.ville-meaux.fr/",
             "description": "Ancrée dans l’histoire sportive locale, la Ville de Meaux apporte un soutien institutionnel et logistique indispensable au développement du club. En accompagnant notre équipe de Division Nationale 3 et l'ensemble de notre école de formation, la municipalité contribue activement au dynamisme du territoire et au rayonnement de nos couleurs bien au-delà de la Seine-et-Marne. Un partenariat fort, fondé sur des valeurs communes d'effort, de cohésion et d'ambition pour tous les sportifs meldois.",
             "image": "img/partners/stores/meaux.jpg",
             "logo": "img/partners/logos/meaux.png",
         },
+        {
+            "name": "AllCycles",
+            "url": "https://allcycles.fr/",
+            "description": "Partenaire historique et technique de notre structure, le magasin ALLCYCLES est bien plus qu’un soutien : c’est un véritable repère pour les passionnés de vélo à Meaux. Grâce à une sélection rigoureuse de matériels de pointe, un atelier de précision et des conseils d'experts adaptés à toutes les pratiques – de la route au haut niveau –, ALLCYCLES accompagne au quotidien nos coureurs de la Division Nationale 3 jusqu'à l'école de vélo. Cette collaboration étroite garantit à nos athlètes de disposer du meilleur équipement pour exprimer tout leur potentiel sur les routes de France.",
+            "image": "img/partners/stores/allcycles.jpeg",
+            "logo": "img/partners/logos/allcycles.png",
+        },
+
         {
             "name": "Leclerc Meaux",
             "url": "https://www.e.leclerc/mag/e-leclerc-meaux?srsltid=AYCX9vLDJWXCjI4PWI6Rp1BTW6BbXHjzHRyoHCA3cdW1fkXQaKvVo9ip",
@@ -40,7 +41,7 @@ def global_partners(request):
             "url": "https://mauroribeirosports.com.br/",
             "description": "Concepteur de nos tenues officielles, Mauro Ribeiro habille avec brio l'ensemble du Team AllCycles Meaux. En nous fournissant des équipements textiles haut de gamme qui associent design soigné, confort absolu et performances aérodynamiques, la marque permet à nos coureurs de porter fièrement nos couleurs sur toutes les routes de France — de l'école de vélo jusqu'au plus haut niveau de la Division Nationale 3. Un partenariat d'exception pour rouler avec style, cohésion et ambition.",
             "image": "img/partners/stores/mauro.png",
-            "logo": "img/partners/logos/allcycles.png",
+            "logo": "img/partners/logos/mauro-ribeiro.png",
         },
         {
             "name": "CCVP",

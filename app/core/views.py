@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.conf import settings
-from .data import RIDERS_DN3, STAFF_DN3, CLUB_BOARD
+from .data import RIDERS_DN3, STAFF_DN3, CLUB_BOARD, PASSWORDS, PACKAGE_DN3
 
 # Create your views here.
 def home(request):
@@ -36,3 +36,26 @@ def legal(request):
 		'club_email': settings.CLUB_CONTACT_EMAIL
 	}
 	return render(request, "core/legal.html", context)
+
+def shop_login(request):
+
+    error = None
+
+    if request.method == 'POST':
+        password = request.POST.get("password")
+
+        if password in PASSWORDS.keys():
+            request.session["has_shop_access"] = True
+            request.session["shop_group"] = PASSWORDS[password]
+            return redirect("shop")
+        else:
+            error = "Le mot de passe d'accès à la boutique est incorrect"
+
+    context = {
+		'error': error,
+    }
+
+    return render(request, "core/shop_login.html", context)
+
+def shop(request):
+	return render(request, "core/shop.html")
