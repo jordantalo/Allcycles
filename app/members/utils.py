@@ -65,7 +65,7 @@ def get_stats_info(season_res: list[RacePresence]) -> dict[str, int]:
 def get_race_days(season: list[RacePresence]):
     race_days = 0
     for presence in season:
-        for stage, position in presence.positions_dict.items():
+        for stage, position in presence.positions.items():
             if (position != "DNS" and stage != "G"):
                 race_days += 1
     return (race_days)
@@ -74,7 +74,7 @@ def get_finished_races(season: list[RacePresence]):
     finished = 0
 
     for presence in season:
-        for stage, position in presence.positions_dict.items():
+        for stage, position in presence.positions.items():
 
             if stage == 'G':
                 continue
@@ -88,7 +88,7 @@ def get_finished_races(season: list[RacePresence]):
 def count_status(season: list[RacePresence], statuses: list[str]):
     count_status = 0
     for presence in season:
-        for position in presence.positions_dict.values():
+        for position in presence.positions.values():
             for status in statuses:
                 if (position == status):
                     count_status += 1
@@ -97,7 +97,7 @@ def count_status(season: list[RacePresence], statuses: list[str]):
 def count_top(season: list[RacePresence], top: int):
     top_perf = 0
     for presence in season:
-        for stage, position in presence.positions_dict.items():
+        for stage, position in presence.positions.items():
             if (isinstance(position, int) and position > 0 and position <= top):
                 top_perf += 1
 
@@ -106,7 +106,7 @@ def count_top(season: list[RacePresence], top: int):
 def count_position(season: list[RacePresence], target: int):
     count = 0
     for presence in season:
-        for stage, position in presence.positions_dict.items():
+        for stage, position in presence.positions.items():
             if (position == target):
                 count += 1
     return (count)

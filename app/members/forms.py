@@ -92,11 +92,11 @@ class ResultForm(forms.ModelForm):
 
     class Meta:
         model = RacePresence
-        fields = ['positions_dict']
+        fields = ['positions']
 
     def clean(self):
         self.cleaned_data = super().clean()
-        positions = self.cleaned_data.get('positions_dict')
+        positions = self.cleaned_data.get('positions')
 
         if self.race and positions:
 
@@ -129,7 +129,7 @@ class ResultForm(forms.ModelForm):
                  count_status += 1
 
         if (count_status > 1):
-           self.add_error('positions_dict', "Sur une course par étape, un statut d'abandon (DNS, DSQ, DNF, OTL) ne peut apparaitre qu'une seule fois par coureur")
+           self.add_error('positions', "Sur une course par étape, un statut d'abandon (DNS, DSQ, DNF, OTL) ne peut apparaitre qu'une seule fois par coureur")
 
 
     def check_one_day(self, positions):
@@ -140,7 +140,7 @@ class ResultForm(forms.ModelForm):
             return
 
         if len(positions) > 1:
-            self.add_error('positions_dict', "Un seul et unique résultat peut être entré pour une course d'un jour")
+            self.add_error('positions', "Un seul et unique résultat peut être entré pour une course d'un jour")
         elif not position.isdigit():
             self.check_status(position)
         else:
@@ -154,10 +154,10 @@ class ResultForm(forms.ModelForm):
            if (position == status):
               return
 
-        self.add_error('positions_dict', "Le status doit être un statut valide (DNS, DNF, OTL ou DSQ)")
+        self.add_error('positions', "Le status doit être un statut valide (DNS, DNF, OTL ou DSQ)")
 
 
     def check_position(self, position):
 
        if (position < 1 or position > 250):
-          self.add_error('positions_dict', "La position du coureur doit être comprise entre 1 et 250")
+          self.add_error('positions', "La position du coureur doit être comprise entre 1 et 250")

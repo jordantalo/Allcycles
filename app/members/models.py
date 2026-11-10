@@ -98,7 +98,6 @@ class Race(models.Model):
     riders = models.ManyToManyField(Rider, blank=True, related_name="races")
     staff_members = models.ManyToManyField(Staff, blank=True, related_name='races')
     results_entered = models.BooleanField(default=False, help_text="Indique si les résultats de la course ont été saisis")
-    is_stage_race = models.BooleanField(default=False, help_text="Indique si la course est une course par etape")
     num_stages = models.PositiveIntegerField(default=1, blank=True, null=True, help_text="Indique le nombre d'etapes de la course")
 
     class Meta:
@@ -130,7 +129,7 @@ class RacePresence(models.Model):
     rider = models.ForeignKey('Rider', on_delete=models.CASCADE, related_name='race_presences')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, blank=True, null=True)
 
-    positions_dict = JSONField(default=dict, blank=True)
+    positions = JSONField(default=dict, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -139,7 +138,7 @@ class RacePresence(models.Model):
     """  def clean(self):
         super.clean()
 
-        for key, value in self.positions_dict.items():
+        for key, value in self.positions.items():
 
             if key != 'G':
                 try:

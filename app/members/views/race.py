@@ -102,7 +102,7 @@ def save_results(request, race_id):
             )
 
             form = ResultForm(
-                data={'positions_dict': positions_dict},
+                data={'positions': positions_dict},
                 instance=presence,
                 race=race,
             )
@@ -131,7 +131,7 @@ def save_results(request, race_id):
             rider_presence = rider_presences.get(rider.id)
             res = None
             if rider_presence:
-                res = rider_presence.positions_dict.get(stage)
+                res = rider_presence.positions.get(stage)
             riders_res.append((rider, res))
         global_res.append((stage, riders_res))
 
