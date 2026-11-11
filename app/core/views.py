@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.conf import settings
-from .data import RIDERS_DN3, STAFF_DN3, CLUB_BOARD, PASSWORDS, PACKAGE_DN3
+from django.utils import timezone
+from .models import Article
+from .data import RIDERS_DN3, STAFF_DN3, CLUB_BOARD, PASSWORDS, PACKAGES
 
 # Create your views here.
 def home(request):
@@ -39,9 +41,18 @@ def legal(request):
 
 def shop_login(request):
 
+    today = timezone.now().date()
     error = None
+    is_shop_open = True
 
-    if request.method == 'POST':
+    today_tuple = (today.month, today.day)
+    opening_date = (11, 1)
+    ending_date = (12, 15)
+
+    if opening_date > today_tuple or ending_date < today_tuple:
+          is_shop_open = False
+
+    elif request.method == 'POST':
         password = request.POST.get("password")
 
         if password in PASSWORDS.keys():
@@ -52,10 +63,30 @@ def shop_login(request):
             error = "Le mot de passe d'accès à la boutique est incorrect"
 
     context = {
-		'error': error,
+        'error': error,
+        'is_shop_open': is_shop_open,
     }
 
     return render(request, "core/shop_login.html", context)
 
 def shop(request):
-	return render(request, "core/shop.html")
+    if not request.session["has_shop_access"]:
+        return redirect("shop_login")
+
+    articles = Article.objects.all()
+    shop_group = request.session["shop_group"]
+    for article in articles:
+        if shop_group in article.package_config and article.package_config[shop_group] != 0:
+            article.is_package_included = True
+            article.quantity = article.package_config[shop_group]
+
+    context = {
+        'articles': articles,
+    }
+
+    return render(request, "core/shop.html", context)
+
+def shop_logout(request):
+
+    request.session["has_shop_access"] = False
+    return redirect("shop_login")

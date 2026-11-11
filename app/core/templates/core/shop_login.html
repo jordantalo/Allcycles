@@ -4,30 +4,66 @@
 {% block title %}Login - Team AllCyclesMeaux{% endblock title %}
 
 {% block content %}
-  <div class="bg-body-secondary py-5">
+  <div class="bg-body-secondary py-5 d-flex align-items-center">
     <div class="container">
 
       <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
 
-        <div class="col-md-8 col-lg-7">
-
-          <div class="card shadow rounded-4">
-            <div class="card-header d-flex text-center p-4">
-              <h1 class="mb-0 mx-auto">Connexion boutique adherents</h1>
+          <div class="card shadow-sm border-0">
+            <div class="card-header bg-body-tertiary border-0 pt-4 pb-0 text-center">
+              <h2 class="fw-bold mb-1">Boutique du Club</h2>
+              <p class="text-muted small">Saisis le code d'accès transmis par le bureau pour accéder aux commandes de textiles.</p>
             </div>
-            <div class="card-body p-4">
 
-              <form method="POST" class="d-flex flex-column gap-4" >
+            <div class="card-body p-4 p-md-5">
+
+              {% if is_shop_open %}
+              <div class="alert alert-info d-flex align-items-center mb-4 rounded-3" role="alert">
+                <i class="bi bi-info-circle-fill flex-shrink-0 me-2"></i>
+                <div class="small">
+                  Tu as égaré le mot de passe ? N'hésite pas à contacter un membre du bureau pour le récupérer.
+                </div>
+              </div>
+
+              <form method="POST" class="d-flex flex-column gap-3">
                 {% csrf_token %}
                 <div>
-                  <label for="password-adherent" class="form-label">Mot de passe boutique</label>
-                  <input type="password" class="form-control {% if error %}is-invalid{% endif %}" id="password-adherent" name="password">
+                  <label for="password-adherent" class="form-label fw-semibold">Code boutique</label>
+                  <input type="password" class="form-control form-control-sm {% if error %}is-invalid{% endif %}" id="password-adherent" name="password" placeholder="Entre le code ici...">
                   <div class="invalid-feedback">
                     {{ error }}
                   </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Se connecter</button>
+
+                <hr class="my-2">
+
+                <!-- Encart Modification (Facultatif) -->
+                <div class="bg-body-tertiary p-3 rounded-3 border">
+                  <span class="badge bg-secondary mb-2">Déjà commandé ?</span>
+                  <p class="small text-muted mb-2">Renseigne ton N° de commande et ton e-mail si tu souhaites modifier ton choix existant.</p>
+
+                  <div class="row g-2">
+                    <div class="col-md-3">
+                      <input type="number" class="form-control form-control-sm" name="order_id" placeholder="N° Com.">
+                    </div>
+                    <div class="col-md-9">
+                      <input type="email" class="form-control form-control-sm" name="email" placeholder="Ton e-mail">
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mt-2">
+                  Accéder à la boutique
+                </button>
               </form>
+              {% else %}
+              <div class="alert alert-danger d-flex align-items-center mb-4 rounded-3" role="alert">
+                <div class="small">
+                  La boutique réservée aux ahérents pour les commandes annuelles de textiles est actuellement fermée. Elle réouvrira ses portes entre le 1er novembre et le 15 décembre.
+                </div>
+              </div>
+              {% endif %}
 
             </div>
           </div>

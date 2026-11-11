@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 # Create your models here.
@@ -10,10 +11,14 @@ class Article(models.Model):
         ('veste_hiver', 'Veste hiver'),
         ('veste_mi_saison', 'Veste mi saison'),
         ('gants', 'Gants'),
+        ('coupe_vent', 'Coupe vent'),
+        ('maillot_court', 'Maillot'),
     }
 
     name = models.CharField("Nom de l'article", max_length=40, choices=ARTICLE_CHOICES)
     price = models.FloatField("Prix de l'article")
+
+    package_config = models.JSONField(default=dict, blank=True, help_text='Ex: {"DN3": 2, "ACCESS": 1}')
 
     def __str__(self):
         return f"[{self.name}](price: {self.price} euros)"

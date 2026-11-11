@@ -10,5 +10,6 @@ urlpatterns = [
 	path("partenaires/", views.partner, name="partner"),
 	path("mentions-legales/", views.legal, name="legal"),
     path("shop/login", views.shop_login, name="shop_login"),
+    path("shop/logout", views.shop_logout, name="shop_logout"),
     path("shop", views.shop, name="shop")
 ]

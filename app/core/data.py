@@ -117,14 +117,10 @@ CLUB_BOARD = [
 
 
 PASSWORDS = {
-    "!!comm@ndeTenues!!": "STANDARD",
+    "!!comm@ndeTenuesOpen!!": "OPEN",
+    "!!comm@ndeTenuesAccess!!": "ACCESS",
     "!!comm@ndeTenuesDn3!!": "DN3",
+    "!!comm@ndeTenues!!": "STANDARD",
 }
 
-PACKAGE_DN3 = {
-    'cuissard_court': 2,
-    'maillot_court': 2,
-    'manchettes': 1,
-    'combi': 1,
-    'veste_mi_saison': 1,
-}
+PACKAGES = ["DN3", "OPEN", "ACCESS"]

@@ -4,11 +4,205 @@
 {% block title %}Login - Team AllCyclesMeaux{% endblock title %}
 
 {% block content %}
-  <div class="bg-body-secondary py-5">
+  <div class="bg-body-secondary py-5 flex-grow-1">
     <div class="container">
 
       <h1>La boutique</h1>
+      <p class="text-muted small">Préparez la saison prochaine ! Complétez le formulaire ci-dessous pour commander vos tenues officielles aux couleurs du club.</p>
 
+      <form method="POST">
+
+        <div class="card shadow-sm border-0 mb-3">
+          <div class="card-body">
+              <div class="mb-3">
+                <h2 class="h5 mb-4">Mes informations personnelles</h2>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label for="order-email" class="form-label">Adresse email</label>
+                    <input type="email" class="form-control form-control-sm" id="order-email" placeholder="Entrez votre mail ici">
+                  </div>
+                  <div class="col-md-3">
+                    <label for="order-last-name" class="form-label">Nom</label>
+                    <input type="text" class="form-control form-control-sm" id="order-last-name">
+                  </div>
+                  <div class="col-md-3">
+                    <label for="order-first-name" class="form-label">Prenom</label>
+                    <input type="text" class="form-control form-control-sm" id="order-first-name">
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+
+        <div class="alert alert-info shadow-sm border-0 mb-3 p-4">
+          <div class="mb-3">
+            <h2 class="h5 fw-bold mb-0">Ton package officiel de saison</h2>
+          </div>
+
+          <p class="text-muted small mb-3">
+            Votre adhésion inclut le package officiel du club. Ces tenues sont fournies par l'association et doivent être portées lors de toutes vos sorties et compétitions sous nos couleurs.
+          </p>
+
+          <hr class="border-info opacity-10 my-3">
+
+          <p class="fw-semibold small text-uppercase tracking-wider mb-2">Composition de ton pack :</p>
+
+          <!-- Grille en 2 colonnes sur grand écran (col-md-6) -->
+          <div class="row g-2">
+            {% for article in articles %}
+              {% if article.is_package_included %}
+              <div class="col-md-6">
+                <div class="d-flex justify-content-between align-items-center bg-white bg-opacity-75 border border-info border-opacity-25 rounded-3 px-3 py-2">
+                  <div>
+                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                    <span class="fw-medium text-dark small">{{ article.get_name_display }}</span>
+                  </div>
+                  <span class="badge bg-info-subtle text-info-emphasis d-inline-flex justify-content-center align-items-center" style="width:20px">{{ article.quantity }}</span>
+                </div>
+              </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="card shadow-sm border-0 mb-3">
+          <div class="card-body">
+              <div class="mb-3">
+                <h2 class="h5 mb-4">Choix des équipements et des tailles</h2>
+
+                <div class="row g-4">
+                  {% for article in articles %}
+                  <div class="col-md-6">
+                    <div class="card article-card"
+                      data-price="{{ article.price }}"
+                      {% if article.is_package_included %}
+                      data-package-quantity={{article.quantity}}
+                      {% else %}
+                      data-package-quantity=0
+                      {% endif %}>
+                      <div class="card-header py-1 small bg-body-tertiary">
+                        <div class="d-flex justify-content-between align-items-center">
+                          <span class="fw-bold">{{ article.get_name_display }}</span>
+                          <span class="badge text-bg-primary">{{ article.price }} €</span>
+                        </div>
+                      </div>
+
+                      <div class="card-body bg-body-tertiary">
+                        <div class="row">
+                          <div class="col-sm-6">
+                            <label for="size-select-{{article.id}}" class="small">Votre taille</label>
+                            <select class="form-select form-select-sm" id="size-select-{{article.id}}" aria-label="Small select example">
+                              <option selected>Choisissez la taille</option>
+                              <option value="xs">XS</option>
+                              <option value="1">S</option>
+                              <option value="2">M</option>
+                              <option value="3">L</option>
+                              <option value="2">XL</option>
+                            </select>
+                          </div>
+                          <div class="col-sm-6">
+                            <label for="quantity-select-{{article.id}}" class="small">Quantité</label>
+                            <input class="form-control form-control-sm qty-input" type="number" min="0" id="quantity-select-{{article.id}}"
+                            {% if article.is_package_included %}value={{ article.quantity }}{% else %}value=0{% endif %} >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+          </div>
+        </div>
+
+        <div class="card shadow-sm border-success bg-success-subtle mb-4">
+          <div class="card-body p-4">
+
+            <!-- En-tête du récapitulatif -->
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-success-subtle">
+              <h2 class="h5 text-success-emphasis mb-0">
+                Récapitulatif
+              </h2>
+              <span class="fs-4 fw-bold text-success" id="total-global">120 €</span>
+            </div>
+
+            <!-- Détail Part Club / Part Coureur (plus sobre et aéré) -->
+            <div class="row g-2 mb-4">
+              <div class="col-sm-6">
+                <div class="bg-body p-3 rounded-3 d-flex justify-content-between align-items-center">
+                  <span class="text-muted small fw-semibold">Pris en charge par le club</span>
+                  <span class="fw-bold text-primary" id="total-club">120 €</span>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="bg-body p-3 rounded-3 d-flex justify-content-between align-items-center">
+                  <span class="text-muted small fw-semibold">Votre participation</span>
+                  <span class="fw-bold" id="total-rider">0 €</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bouton de soumission global sur toute la largeur -->
+            <div class="d-grid">
+              <button type="submit" class="btn btn-success fw-bold py-3 shadow-sm">
+                <i class="bi bi-check2-circle me-2"></i>Valider et soumettre ma pré-commande
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </form>
     </div>
   </div>
 {% endblock %}
+
+
+{% block extra_js %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const articleCards = document.querySelectorAll('.article-card')
+      const totalGlobal = document.getElementById('total-global')
+      const totalClub = document.getElementById('total-club')
+      const totalRider = document.getElementById('total-rider')
+
+      function update_prices () {
+        let total = 0
+        let total_club = 0
+        let total_rider = 0
+
+        articleCards.forEach((card) => {
+
+          const price = parseFloat(card.dataset.price)
+          const packageQty = parseInt(card.dataset.packageQuantity)
+          const qtyInput = card.querySelector('.qty-input')
+          const riderQty = parseInt(qtyInput.value) || 0
+
+          if (riderQty <= packageQty) {
+            total_club = total_club + riderQty * price
+          } else {
+            total_club = total_club + packageQty * price
+            total_rider = total_rider + (riderQty - packageQty) * price
+          }
+
+          total = total + riderQty * price
+        })
+
+        console.log(total)
+        totalGlobal.textContent = total.toFixed(2).replace('.', ',') + ' €'
+        totalClub.textContent = total_club.toFixed(2).replace('.', ',') + ' €'
+        totalRider.textContent = total_rider.toFixed(2).replace('.', ',') + ' €'
+      }
+
+       articleCards.forEach((card) => {
+        qtyInput = card.querySelector(".qty-input")
+        qtyInput.addEventListener('change', function () {
+          update_prices()
+        })
+      })
+
+      update_prices()
+
+    })
+  </script>
+{% endblock extra_js %}
