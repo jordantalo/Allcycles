@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect
+from django.db import transaction
 from django.conf import settings
+import traceback
 from django.utils import timezone
-from .models import Article
+from .models import Article, Order, OrderItem
+from .forms import OrderItemForm, OrderForm
+from django.contrib import messages
 from .data import RIDERS_DN3, STAFF_DN3, CLUB_BOARD, PASSWORDS, PACKAGES
 
 # Create your views here.
@@ -73,20 +77,98 @@ def shop(request):
     if not request.session["has_shop_access"]:
         return redirect("shop_login")
 
+    order_form = OrderForm()
+
     articles = Article.objects.all()
     shop_group = request.session["shop_group"]
+
+    if request.method == "POST":
+
+        print(request.POST)
+
+        order_form = OrderForm(request.POST)
+        is_valid_shop = order_form.is_valid()
+        is_valid_shop = check_shop_validity(request, articles, is_valid_shop)
+
+        if is_valid_shop:
+            order = order_form.save(commit=False)
+
+            try:
+                create_order(request, order, articles, shop_group)
+                messages.success(request, "Votre pre-commande a bien ete enregistree")
+                return redirect("recap")
+            except Exception as e:
+                print(f"erreur: {e}")
+                traceback.print_exc()
+                messages.error(request, "Votre pre-commande n'a pas pu etre enregistree suite a une erreur technique !")
+        else:
+            messages.error(request, "Votre pre-commande n'a pas pu etre enregistree en raison d'une erreur de saisie !")
+
     for article in articles:
         if shop_group in article.package_config and article.package_config[shop_group] != 0:
             article.is_package_included = True
             article.quantity = article.package_config[shop_group]
 
     context = {
-        'articles': articles,
+        "articles": articles,
+        "order_form": order_form,
     }
 
     return render(request, "core/shop.html", context)
+
+def check_shop_validity(request, articles:list[Article], is_valid_shop):
+
+    for article in articles:
+        form = OrderItemForm(request.POST, prefix=f'article_{article.id}')
+        article.form = form
+
+        if (not form.is_valid()):
+            is_valid_shop = False
+
+    return is_valid_shop
+
+def create_order(request, order:Order, articles:list[Article], shop_group):
+
+    with transaction.atomic():
+        order.date = timezone.now()
+        order.club_cost = 0
+        order.rider_cost = 0
+        order.total_cost = 0
+        order.save()
+
+        club_cost = 0
+        rider_cost = 0
+
+        for article in articles:
+            form = OrderItemForm(request.POST, prefix=f'article_{article.id}')
+            order_item:OrderItem = form.save(commit=False)
+            order_item.order = order
+            order_item.article = article
+            order_item.save()
+
+            package_qty = None
+            package_qty = article.package_config.get(shop_group, 0)
+
+            qty = form.cleaned_data['quantity']
+            price = article.price
+            club_cost += min(qty, package_qty) * price
+            rider_cost += max(0, qty - package_qty) * price
+
+        order.rider_cost = rider_cost
+        order.club_cost = club_cost
+        order.total_cost = rider_cost + club_cost
+        order.save()
+
+def recap(request):
+    if not request.session["has_shop_access"]:
+        return redirect("shop_login")
+
+    request.session["has_shop_access"] = False
+    return render(request, "core/recap.html")
 
 def shop_logout(request):
 
     request.session["has_shop_access"] = False
     return redirect("shop_login")
+
+

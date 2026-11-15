@@ -61,7 +61,6 @@ class RaceForm(forms.ModelForm):
             if (num_stages < 2 or num_stages > 21):
                 self.add_error('num_stages', "Minimum 2 étapes - maximum 21 étapes.")
 
-
         return cleaned_data
 
     def clean_title(self):

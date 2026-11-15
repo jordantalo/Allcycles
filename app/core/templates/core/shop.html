@@ -10,8 +10,22 @@
       <h1>La boutique</h1>
       <p class="text-muted small">Préparez la saison prochaine ! Complétez le formulaire ci-dessous pour commander vos tenues officielles aux couleurs du club.</p>
 
-      <form method="POST">
+      {% if messages %}
+        <div class="row">
+          <div class="col-12">
+            {% for message in messages %}
+              <div class="mt-2 alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
 
+      <form method="POST" novalidate>
+
+        {% csrf_token %}
         <div class="card shadow-sm border-0 mb-3">
           <div class="card-body">
               <div class="mb-3">
@@ -19,15 +33,24 @@
                 <div class="row g-3">
                   <div class="col-md-6">
                     <label for="order-email" class="form-label">Adresse email</label>
-                    <input type="email" class="form-control form-control-sm" id="order-email" placeholder="Entrez votre mail ici">
+                    <input type="email" class="form-control form-control-sm {% if order_form.errors.email %}is-invalid{% endif %}" name="email" id="order-email" placeholder="Entrez votre mail ici" value="{{ order_form.email.value|default:'' }}">
+                    {% if order_form.errors.email %}
+                      <div class="invalid-feedback small">{{ order_form.errors.email.0 }}</div>
+                    {% endif %}
                   </div>
                   <div class="col-md-3">
                     <label for="order-last-name" class="form-label">Nom</label>
-                    <input type="text" class="form-control form-control-sm" id="order-last-name">
+                    <input type="text" class="form-control form-control-sm {% if order_form.errors.last_name %}is-invalid{% endif %}" name="last_name" id="order-last-name" value="{{order_form.last_name.value|default:''}}">
+                    {% if order_form.errors.last_name %}
+                      <div class="invalid-feedback small">{{ order_form.errors.last_name.0 }}</div>
+                    {% endif %}
                   </div>
                   <div class="col-md-3">
                     <label for="order-first-name" class="form-label">Prenom</label>
-                    <input type="text" class="form-control form-control-sm" id="order-first-name">
+                    <input type="text" class="form-control form-control-sm {% if order_form.errors.first_name %}is-invalid{% endif %}" name="first_name" id="order-first-name" value="{{order_form.first_name.value|default:''}}">
+                    {% if order_form.errors.first_name %}
+                      <div class="invalid-feedback small">{{ order_form.errors.first_name.0 }}</div>
+                    {% endif %}
                   </div>
                 </div>
               </div>
@@ -70,10 +93,10 @@
               <div class="mb-3">
                 <h2 class="h5 mb-4">Choix des équipements et des tailles</h2>
 
-                <div class="row g-4">
+                <div class="row g-4 align-items-stretch">
                   {% for article in articles %}
-                  <div class="col-md-6">
-                    <div class="card article-card"
+                  <div class="col-md-6 d-flex flex-column">
+                    <div class="card article-card flex-grow-1"
                       data-price="{{ article.price }}"
                       {% if article.is_package_included %}
                       data-package-quantity={{article.quantity}}
@@ -91,19 +114,26 @@
                         <div class="row">
                           <div class="col-sm-6">
                             <label for="size-select-{{article.id}}" class="small">Votre taille</label>
-                            <select class="form-select form-select-sm" id="size-select-{{article.id}}" aria-label="Small select example">
-                              <option selected>Choisissez la taille</option>
-                              <option value="xs">XS</option>
-                              <option value="1">S</option>
-                              <option value="2">M</option>
-                              <option value="3">L</option>
-                              <option value="2">XL</option>
+                            <select class="form-select form-select-sm {% if article.form.errors.size %}is-invalid{% endif %}" id="size-select-{{article.id}}" aria-label="Small select example" name="article_{{article.id}}-size"
+                            {% if article.form.size.value %}value={{article.form.size.value}}{% endif %}>
+                              <option value="" {% if not article.form.size.value %}selected{% endif %}>Choisissez la taille</option>
+                              <option value="xs" {% if article.form.size.value == "xs" %}selected{% endif %} >XS</option>
+                              <option value="s" {% if article.form.size.value == "s" %}selected{% endif %} >S</option>
+                              <option value="m" {% if article.form.size.value == "m" %}selected{% endif %} >M</option>
+                              <option value="l" {% if article.form.size.value == "l" %}selected{% endif %} >L</option>
+                              <option value="xl {% if article.form.size.value == "xl" %}selected{% endif %} ">XL</option>
                             </select>
+                            {% if article.form.errors.size %}
+                              <div class="invalid-feedback small">{{ article.form.errors.size.0 }}</div>
+                            {% endif %}
                           </div>
                           <div class="col-sm-6">
                             <label for="quantity-select-{{article.id}}" class="small">Quantité</label>
-                            <input class="form-control form-control-sm qty-input" type="number" min="0" id="quantity-select-{{article.id}}"
-                            {% if article.is_package_included %}value={{ article.quantity }}{% else %}value=0{% endif %} >
+                            <input class="form-control form-control-sm qty-input {% if article.form.errors.quantity %}is-invalid{% endif %}" type="number" min="0" id="quantity-select-{{article.id}}" name="article_{{article.id}}-quantity"
+                            {% if article.form.quantity.value %}value={{article.form.quantity.value}}{% elif article.is_package_included %}value={{ article.quantity }}{% else %}value=0{% endif %} >
+                            {% if article.form.errors.quantity %}
+                              <div class="invalid-feedback small">{{ article.form.errors.quantity.0 }}</div>
+                            {% endif %}
                           </div>
                         </div>
                       </div>

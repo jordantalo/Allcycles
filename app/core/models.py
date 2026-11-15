@@ -28,8 +28,9 @@ class Order(models.Model):
     last_name = models.CharField("Nom de la personne associee a la commande", max_length=30)
     email = models.EmailField("Email de la personne associee a la commande")
     date = models.DateField("Date de la commande")
-    club_price = models.FloatField("Prix total de la commande pour le club", default=0)
-    rider_price = models.FloatField("Prix tota de la commande pour le coureur", default=0)
+    club_cost = models.FloatField("Cout pour le club", default=0)
+    rider_cost = models.FloatField("Cout pour le coureur", default=0)
+    total_cost = models.FloatField("Prix total de la commande", default=0)
 
 class OrderItem(models.Model):
     SIZE_CHOICES = {
@@ -43,6 +44,5 @@ class OrderItem(models.Model):
 
     article = models.ForeignKey('Article', on_delete=models.CASCADE)
     order = models.ForeignKey('Order', on_delete=models.PROTECT)
-    size = models.CharField("Taille de l'article", max_length=3, choices=SIZE_CHOICES)
+    size = models.CharField("Taille de l'article", max_length=3, choices=SIZE_CHOICES, blank=True, null=True)
     quantity = models.PositiveIntegerField(default=0)
-    is_club_paid = models.BooleanField(default=False)
