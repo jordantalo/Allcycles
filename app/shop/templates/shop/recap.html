@@ -1,0 +1,110 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block title %}Login - Team AllCyclesMeaux{% endblock title %}
+
+{% block content %}
+  <div class="bg-body-secondary py-5 flex-grow-1">
+    <div class="container">
+
+      <div class="row g-2 align-items-start mb-3">
+        <div class="col">
+          <h1>La boutique</h1>
+          <p class="text-muted small mb-0">Retrouvez ici le récapitulatif de votre commande</p>
+        </div>
+      </div>
+
+      {% if messages %}
+        <div class="row g-0">
+          <div class="col-12">
+            {% for message in messages %}
+              <div class="mt-2 alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+      <div class="row g-3">
+
+        <div class="col-12">
+          <div class="card shadow-sm bg-primary-subtle text-primary-emphasis">
+            <div class="card-header d-flex justify-content-between">
+              <h2 class="h5 mb-0">Récapitulatif de votre commande</h2>
+              <a class="text-body" href="{% url 'shop:shop' %}"><i class="bi bi-pencil-square"></i></a>
+            </div>
+            <div class="card-body">
+              <h3 class="h6">Vos articles</h3>
+              <div class="row g-3">
+                {% for item in order.items.all %}
+                  {% if item.quantity > 0 %}
+                  <div class="col-md-6">
+                    <div class="card p-3 h-100 shadow-sm bg-body text-primary-emphasis">
+                      <div class="d-flex justify-content-between align-items-start">
+
+                        <!-- Infos de l'article (Nom, Quantité, Taille) -->
+                        <div>
+                          <h6 class="mb-1">{{ item.article.get_name_display }}</h6>
+                          <div class="text-muted small d-flex gap-2 align-items-center">
+                            <span>Qté : <strong>{{ item.quantity }}</strong></span>
+                            <span>•</span>
+                            <span>Taille : <strong class="text-uppercase">{{ item.get_size_display }}</strong></span>
+                          </div>
+                        </div>
+
+                        <!-- Prix -->
+                        <div class="text-end">
+                          <span class="fw-bold text-body">{{ item.article.price }} €</span>
+                          <span class="d-block text-muted" style="font-size: 0.75rem;">prix unitaire</span>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+
+          <div class="card shadow-sm border-success bg-success-subtle mb-4">
+          <div class="card-body p-4">
+
+            <!-- En-tête du récapitulatif -->
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-success-subtle">
+              <h2 class="h5 text-success-emphasis mb-0">
+                Totaux
+              </h2>
+              <span class="fs-4 fw-bold text-success" id="total-global">{{order.total_cost}} €</span>
+            </div>
+
+            <!-- Détail Part Club / Part Coureur (plus sobre et aéré) -->
+            <div class="row g-2 mb-4">
+              <div class="col-md-6">
+                <div class="bg-body p-3 rounded-3 d-flex justify-content-between align-items-center">
+                  <span class="text-muted small fw-semibold">Pris en charge par le club</span>
+                  <span class="fw-bold text-primary" id="total-club">{{order.club_cost}} €</span>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="bg-body p-3 rounded-3 d-flex justify-content-between align-items-center">
+                  <span class="text-muted small fw-semibold">Votre participation</span>
+                  <span class="fw-bold" id="total-rider">{{order.rider_cost}} €</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}

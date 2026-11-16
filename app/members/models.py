@@ -98,7 +98,7 @@ class Race(models.Model):
     riders = models.ManyToManyField(Rider, blank=True, related_name="races")
     staff_members = models.ManyToManyField(Staff, blank=True, related_name='races')
     results_entered = models.BooleanField(default=False, help_text="Indique si les résultats de la course ont été saisis")
-    num_stages = models.PositiveIntegerField(default=1, blank=True, null=True, help_text="Indique le nombre d'etapes de la course")
+    num_stages = models.PositiveIntegerField(default=1, help_text="Indique le nombre d'etapes de la course")
 
     class Meta:
         ordering = ["date"]

@@ -1,0 +1,39 @@
+{% load static %}
+
+<header class="sticky-top border-bottom">
+  <nav class="navbar navbar-expand-md bg-body-tertiary">
+    <div class="container py-1 py-md-2">
+
+      <!-- Logo -->
+      <a class="navbar-brand" href="{% url 'shop:admin_dashboard' %}">
+        <img class="logo-light" src="{% static 'img/logos/tam77-light.png' %}" alt="TAM77" />
+        <img class="logo-dark" src="{% static 'img/logos/tam77-dark.png' %}" alt="TAM77" />
+      </a>
+
+      <!-- Bouton Burger -->
+       {% if request.user.is_authenticated %}
+      <button class="navbar-toggler border-0 bg-body-secondary rounded-circle p-2 shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars fs-5 text-dark"></i>
+      </button>
+
+      <!-- Contenu du menu -->
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+        <!-- Liens principaux (poussés à droite sur desktop grâce à ms-auto) -->
+        <div class="mt-2 pt-2 d-md-flex align-items-center ms-auto mt-md-0 pt-md-0 gap-3">
+
+          <!-- Bouton pleine largeur sur mobile (w-100), taille normale sur desktop (w-md-auto) -->
+          <form method="post" action="{% url 'shop:admin_logout' %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger btn-sm w-100 w-md-auto">
+              <i class="fa-solid fa-right-from-bracket me-1"></i> Déconnexion
+            </button>
+          </form>
+
+        </div>
+
+      </div>
+      {% endif %}
+    </div>
+  </nav>
+</header>

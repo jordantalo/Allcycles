@@ -1,14 +1,14 @@
-{% extends 'core/base.html' %}
+{% extends 'shop/base.html' %}
 {% load static %}
 
 {% block title %}Login - Team AllCyclesMeaux{% endblock title %}
 
 {% block content %}
-  <div class="bg-body-secondary py-5 d-flex align-items-center">
+  <div class="bg-body-secondary py-5 d-flex flex-grow-1">
     <div class="container">
 
       <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
+        <div class="col-lg-7 col-xl-6">
 
           <div class="card shadow-sm border-0">
             <div class="card-header bg-body-tertiary border-0 pt-4 pb-0 text-center">
@@ -30,9 +30,9 @@
                 {% csrf_token %}
                 <div>
                   <label for="password-adherent" class="form-label fw-semibold">Code boutique</label>
-                  <input type="password" class="form-control form-control-sm {% if error %}is-invalid{% endif %}" id="password-adherent" name="password" placeholder="Entre le code ici...">
+                  <input type="password" class="form-control form-control-sm {% if password_error %}is-invalid{% endif %}" id="password-adherent" name="password" placeholder="Entre le code ici...">
                   <div class="invalid-feedback">
-                    {{ error }}
+                    {{ password_error }}
                   </div>
                 </div>
 
@@ -45,11 +45,16 @@
 
                   <div class="row g-2">
                     <div class="col-md-3">
-                      <input type="number" class="form-control form-control-sm" name="order_id" placeholder="N° Com.">
+                      <input type="number" class="form-control form-control-sm" name="order_id" placeholder="N° Com." {% if order_id %}value="{{order_id}}"{% endif %}>
                     </div>
                     <div class="col-md-9">
-                      <input type="email" class="form-control form-control-sm" name="email" placeholder="Ton e-mail">
+                      <input type="email" class="form-control form-control-sm" name="email" placeholder="Ton e-mail" {% if email %}value="{{email}}"{% endif %}>
                     </div>
+                    {% if identification_error %}
+                    <div class="col">
+                      <span class="small text-danger">{{ identification_error }}</span>
+                    </div>
+                    {% endif %}
                   </div>
                 </div>
 

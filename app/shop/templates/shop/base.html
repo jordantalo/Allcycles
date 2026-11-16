@@ -1,0 +1,16 @@
+{% extends 'core/components/root.html' %}
+{% load static %}
+
+{% block body_content %}
+  <div class="d-flex flex-column min-vh-100">
+    {% if 'admin' in request.path %}
+    {% include 'shop/components/admin_header.html' %}
+    {% else %}
+    {% include 'shop/components/header.html' %}
+    {% endif %}
+    <main class="d-flex flex-column flex-grow-1">
+      {% block content %}{% endblock content %}
+    </main>
+
+  </div>
+{% endblock %}
