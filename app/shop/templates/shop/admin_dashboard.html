@@ -1,19 +1,171 @@
 {% extends 'shop/base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}Login - Team AllCyclesMeaux{% endblock title %}
 
 {% block content %}
-  <div class="bg-body-secondary py-5 flex-grow-1">
+
+  <div class="bg-body-secondary py-4 flex-grow-1">
     <div class="container">
 
-      <div class="row g-2 align-items-start mb-3">
-        <div class="col">
-          <h1>Espace d'administration de la boutique</h1>
-          <p class="text-muted small mb-0">Retrouvez ici toutes les rubriques permettant la gestion des pre-commandes.</p>
+       <!--En-tete de page-->
+      <div class="row g-3 align-items-center mb-5">
+        <div class="col-12 col-md-8">
+          <h1 class="mb-0">Espace de gestion boutique</h1>
+          <p class="text-muted small mb-0">Pilotez vos campagnes de pré-commandes et exportez les données.</p>
+        </div>
+        <div class="col-12 col-md-4 d-flex justify-content-md-end">
+          <a href="" class="btn btn-primary btn-sm"><i class="bi bi-plus-square"></i><span class="ms-2">Nouvelle campagne</span></a>
         </div>
       </div>
 
+      <!-- BARRE D'OUTILS : SÉLECTION ET EXPORTS -->
+       <div class="row g-2 mb-4">
+        <div class="col-12 col-lg-6">
+          <form method="POST">
+            <label for="select-campaign" class="form-label small fw-semibold text-muted mb-1">Selectionner une campagne</label>
+            <select class="form-select form-select-sm" id="select-campaign">
+              {% for campaign in campaigns %}
+              <option value="{{campaign.id}}" {% if campaign.id == selected_campaign.id %}selected{% endif %}>{{campaign.name}}</option>
+              {% empty %}
+              <option value="season-no-data">Pas de données</option>
+              {% endfor %}
+            </select>
+          </form>
+        </div>
+        <div class="col-12 col-lg-6 align-self-end d-flex justify-content-lg-end">
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-filetype-csv me-2"></i> Exporter les données de campagne
+            </button>
+            <ul class="dropdown-menu w-100">
+              <li><a class="dropdown-item" href="#"><i class="bi bi-filetype-csv me-2 text-success"></i>Export par adhérent</a></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-filetype-csv me-2 text-success"></i>Export par article</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!--Detail de la campagne-->
+      {% if selected_campaign %}
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header d-flex align-items-center justify-content-between">
+          <div>
+            <span class="small"><span class="fw-bold">Apercu - </span><i class="text-truncate">{{ selected_campaign.name }}</i></span>
+          </div>
+          {% if selected_campaign.is_active %}
+          <span class="badge text-bg-success rounded-pill">Active</span>
+          {% else %}
+          <span class="badge text-bg-danger rounded-pill">Inactive</span>
+          {% endif %}
+        </div>
+        <div class="card-body">
+
+          <!--Vision globale de la campagne-->
+          <div class="row g-2 justify-content-start">
+
+            <!--Periode de la campagne-->
+            <div class="col-6 col-lg-3">
+              <div class="card border-0 bg-body-tertiary h-100">
+                <div class="card-body p-3">
+                  <div class="small fw-bold mb-2">Période</div>
+                  <div class="d-flex flex-column gap-1">
+                    <span class="small"><i class="bi bi-calendar-check text-primary me-2"></i> {{ selected_campaign.start_date|date:"d M Y" }}</span>
+                    <span class="small"><i class="bi bi-calendar-x text-danger me-2"></i> {{ selected_campaign.end_date|date:"d M Y" }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!--Nombre de participants-->
+            <div class="col-6 col-lg-3">
+              <div class="card border-0 bg-body-tertiary h-100">
+                <div class="card-body p-3">
+                  <div class="small fw-bold mb-2">Commandes validées</div>
+                  <div class="fs-2 fw-bold d-flex align-items-center">
+                    {{ selected_campaign.num_orders|default:"0" }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!--Cout total commande-->
+            <div class="col-6 col-lg-3">
+              <div class="card border-0 bg-body-tertiary h-100">
+                <div class="card-body p-3">
+                  <div class="small fw-bold mb-2">Coût total</div>
+                  <div class="fs-2 fw-bold d-flex align-items-center">
+                    {{ selected_campaign.total_cost|intcomma|default:"0" }} €
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!--Cout total club-->
+            <div class="col-6 col-lg-3">
+              <div class="card border-0 bg-body-tertiary h-100">
+                <div class="card-body p-3">
+                  <div class="small fw-bold mb-2">Coût total club</div>
+                  <div class="fs-2 fw-bold d-flex align-items-center">
+                    {{ selected_campaign.club_cost|intcomma|default:"0" }} €
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="card border-0 shadow-sm">
+        <div class="card-header p-2">
+          <span class="small fw-bold">Détail des commandes - <span class="text-muted fw-normal">{{ selected_campaign.name }}</span></span>
+        </div>
+        <div class="card-body p-0">
+
+        <!-- table-responsive gère proprement le scroll horizontal sur mobile si le tableau est trop large -->
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0 small">
+            <thead class="table-light text-uppercase text-muted" style="font-size: 0.75rem;">
+              <tr>
+                <th class="ps-3">Nom de l'article</th>
+                <th class="text-center">Taille</th>
+                <th class="text-center">Quantité</th>
+                <th class="text-end">Prix unitaire</th>
+                <th class="text-end pe-3">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for article_dict in selected_campaign.articles %}
+              <tr>
+                <td class="ps-3 fw-semibold text-dark">{{ article_dict.article_name }}</td>
+                <td class="text-center">
+                  <span class="badge bg-light text-dark border">{{ article_dict.size }}</span>
+                </td>
+                <td class="text-center">{{ article_dict.total_quantity }}</td>
+                <td class="text-end text-muted">{{ article_dict.unit_price|default:"0.00" }} €</td>
+                <td class="text-end pe-3 fw-bold text-success">{{ article_dict.total_price|default:"0.00" }} €</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" class="text-center py-4 text-muted">
+                  <i class="bi bi-inbox fs-4 d-block mb-1"></i>
+                  Aucun article commandé pour cette campagne.
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+  </div>
+</div>
+
     </div>
   </div>
+
 {% endblock %}
+

@@ -135,32 +135,6 @@ class RacePresence(models.Model):
     class Meta:
         unique_together = ('race', 'rider')
 
-    """  def clean(self):
-        super.clean()
-
-        for key, value in self.positions.items():
-
-            if key != 'G':
-                try:
-                    stage_num = int(key)
-                    if (stage_num <= 0):
-                        raise ValueError()
-                except (ValueError, TypeError):
-                    raise ValidationError({
-                        'positions': f"La clé '{key}' doit être 'G' ou un numéro d'étape valide (entier positif)."
-                    })
-
-
-            if value != 'DNS' and value != 'DNF':
-                try:
-                    res = int(value)
-                    if (res <= 0):
-                        raise ValueError()
-                except (ValueError, TypeError):
-                    raise ValidationError({
-                        'positions': f"La value '{value}' doit être 'DNS' ou 'DNF' ou un resultat valide (entier positif)."
-                    }) """
-
     def __str__(self):
        return f"[{self.race.title}][{self.rider.user.first_name} {self.rider.user.last_name}]({self.status})"
 

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.db import transaction
 from django.utils import timezone
 from django.contrib import messages
+from django.db.models import F, Sum
 
 from .models import Article, Order, OrderItem, Campaign
 from .forms import OrderItemForm, OrderForm
@@ -157,9 +158,13 @@ def create_order(order:Order, articles:list[Article], shop_group):
 
         for article in articles:
             form = article.form
+            if form.cleaned_data.get('quantity') == 0:
+                continue
             order_item:OrderItem = form.save(commit=False)
             order_item.order = order
             order_item.article = article
+            order_item.article_name = article.name
+            order_item.unit_price = article.price
             order_item.save()
 
             package_qty = None
@@ -220,4 +225,39 @@ def admin_login(request):
 
 @shop_manager_required
 def admin_dashboard(request):
-    return render(request, "shop/admin_dashboard.html")
+    campaigns = Campaign.objects.all().order_by('start_date')
+    selected_campaign = campaigns.filter(is_active=True).first()
+
+    total = 0
+    total_club = 0
+    num_orders = 0
+    for order in selected_campaign.orders.all():
+        total += order.total_cost
+        total_club += order.club_cost
+        num_orders += 1
+    selected_campaign.total_cost = total
+    selected_campaign.num_orders = num_orders
+    selected_campaign.club_cost = total_club
+
+    inventory_stats = OrderItem.objects.filter(order__campaign=selected_campaign) \
+    .values('article_name', 'size', 'unit_price') \
+    .annotate(
+        total_quantity=Sum('quantity'),
+        total_price=Sum(F('quantity') * F('unit_price'))
+    )
+
+    ARTICLE_LABELS = dict(Article.ARTICLE_CHOICES)
+
+    for row in inventory_stats:
+        tech_name = row['article_name']
+        pretty_name = ARTICLE_LABELS.get(tech_name, tech_name)
+        row['article_name'] = pretty_name
+        row['size'] = row['size'].upper()
+
+    selected_campaign.articles = inventory_stats
+    context = {
+        'campaigns': campaigns,
+        'selected_campaign': selected_campaign,
+
+    }
+    return render(request, "shop/admin_dashboard.html", context)
