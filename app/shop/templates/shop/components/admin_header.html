@@ -1,31 +1,41 @@
 {% load static %}
 
 <header class="sticky-top border-bottom">
-  <nav class="navbar navbar-expand-md bg-body-tertiary">
-    <div class="container py-1 py-md-2">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <!-- Utilisation de justify-content-between pour répartir les 3 blocs -->
+    <div class="container py-1 py-lg-2 d-flex justify-content-between align-items-center">
 
-      <!-- Logo -->
+      <!-- 1. Logo (prend sa place à gauche) -->
       <a class="navbar-brand" href="{% url 'shop:admin_dashboard' %}">
         <img class="logo-light" src="{% static 'img/logos/tam77-light.png' %}" alt="TAM77" />
         <img class="logo-dark" src="{% static 'img/logos/tam77-dark.png' %}" alt="TAM77" />
       </a>
 
-      <!-- Bouton Burger -->
-       {% if request.user.is_authenticated %}
-      <button class="navbar-toggler border-0 bg-body-secondary rounded-circle p-2 shadow-sm" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <!-- Bouton Burger (mobile) -->
+      {% if request.user.is_authenticated %}
+      <button class="navbar-toggler border-0 bg-body-secondary rounded-circle p-2 shadow-sm d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <i class="fa-solid fa-bars fs-5 text-dark"></i>
       </button>
 
       <!-- Contenu du menu -->
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="collapse navbar-collapse flex-grow-0" id="navbarNavAltMarkup">
 
-        <!-- Liens principaux (poussés à droite sur desktop grâce à ms-auto) -->
-        <div class="mt-2 pt-2 d-md-flex align-items-center ms-auto mt-md-0 pt-md-0 gap-3">
+        <!-- 2. Tes liens au milieu -->
+        <ul class="navbar-nav mt-2 my-lg-auto align-items-lg-center gap-lg-2 mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}" href="{% url 'shop:admin_dashboard' %}">Tableau de bord</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fs-5 {% if request.resolver_match.url_name == 'articles_list' %}active{% endif %}" href="{% url 'shop:articles_list' %}">Gestion boutique</a>
+          </li>
+        </ul>
 
-          <!-- Bouton pleine largeur sur mobile (w-100), taille normale sur desktop (w-md-auto) -->
+        <div class="mt-2 pt-2 d-lg-none align-items-center ms-auto mt-lg-0 pt-lg-0 gap-3">
+
+          <!-- Bouton pleine largeur sur mobile (w-100), taille normale sur desktop (w-lg-auto) -->
           <form method="post" action="{% url 'shop:admin_logout' %}" class="d-inline">
             {% csrf_token %}
-            <button type="submit" class="btn btn-outline-danger btn-sm w-100 w-md-auto">
+            <button type="submit" class="btn btn-outline-danger btn-sm w-100 w-lg-auto">
               <i class="fa-solid fa-right-from-bracket me-1"></i> Déconnexion
             </button>
           </form>
@@ -33,6 +43,19 @@
         </div>
 
       </div>
+
+      <!-- 3. Bloc de droite (Déconnexion) : masqué sur mobile dans le collapse si besoin, ou géré proprement -->
+      <!-- Astuce : pour que le centre soit parfait sur desktop, on peut donner un 'w-150px' ou une largeur fixe au bloc de droite
+           pour qu'il équilibre exactement la largeur du logo à gauche -->
+      <div class="d-none d-lg-flex align-items-center justify-content-end" style="width: 140px;">
+        <form method="post" action="{% url 'shop:admin_logout' %}" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-danger btn-sm">
+            <i class="fa-solid fa-right-from-bracket me-1"></i> Déconnexion
+          </button>
+        </form>
+      </div>
+
       {% endif %}
     </div>
   </nav>

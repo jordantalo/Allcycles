@@ -1,0 +1,63 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block title %}Login - Team AllCyclesMeaux{% endblock title %}
+
+{% block content %}
+
+<div class="bg-body-secondary py-5 flex-grow-1">
+    <div class="container">
+      <h1 class="text-center mb-5">Creer une campagne de commandes</h1>
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-9 col-xl-7">
+
+          <form method="post" class="bg-body shadow p-4 p-md-5 rounded-4 row g-3" novalidate>
+          {% csrf_token %}
+	          <div class="col-12">
+		          <label for="campaign-name" class="form-label fw-semibold">Nom de la campagne</label>
+		          <div class="input-group">
+			          <span class="input-group-text bg-body-secondary" id="basic-addon3"><i class="bi bi-bicycle"></i></span>
+			          <input type="text" class="form-control {% if form.errors.name %}is-invalid{% endif %}" id="campaign-name" name="name" value="{{ form.name.value|default:'' }}"
+				        aria-describedby="basic-addon3 basic-addon4" placeholder="Ex: Pre-commandes saison 2027" required />
+                {% if form.errors.name %}
+                <div class="invalid-feedback small">{{ form.errors.name.0 }}</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="col-12">
+		          <label for="start-campaign-date" class="form-label fw-bold">Date de début</label>
+              <div class="input-group">
+                <span class="input-group-text bg-body-secondary"><i class="bi bi-calendar-event"></i></span>
+			          <input type="date" name="start_date" id="start-campaign-date" class="form-control {% if form.errors.start_date %}is-invalid{% endif %}"
+                value="{{ form.start_date.value|date:'Y-m-d'|default:form.start_date.value }}" required />
+                {% if form.errors.start_date %}
+                <div class="invalid-feedback small">{{ form.errors.start_date.0 }}</div>
+                {% endif %}
+		          </div>
+            </div>
+
+            <div class="col-12">
+              <label for="end-campaign-date" class="form-label fw-bold">Date de fin</label>
+              <div class="input-group">
+                <span class="input-group-text bg-body-secondary"><i class="bi bi-calendar-event"></i></span>
+                <input type="date" name="end_date" id="end-campaign-date" class="form-control {% if form.errors.end_date %}is-invalid{% endif %}"
+                value="{{ form.end_date.value|date:'Y-m-d'|default:form.end_date.value }}" required />
+                {% if form.errors.end_date %}
+                <div class="invalid-feedback small">{{ form.errors.end_date.0 }}</div>
+                {% endif %}
+		          </div>
+	          </div>
+
+            <div class="col-12">
+              <button type="submit" class="btn btn-outline-primary w-100 py-2 text-uppercase fw-bold shadow-sm"
+		          style="letter-spacing: 0.05em;">Creer la campagne</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}

@@ -2,11 +2,25 @@ from django.db import models
 
 # Create your models here.
 
+class PackageGroup(models.Model):
+    name = models.CharField(max_length=10, verbose_name="Nom du groupe")
+    access_code = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
 class Campaign(models.Model):
     name = models.CharField(max_length=100, verbose_name="Nom de la campagne")
     start_date = models.DateField(verbose_name="Date d'ouverture")
     end_date = models.DateField(verbose_name="Date de fermeture")
     is_active = models.BooleanField(default=False, verbose_name="Campagne active")
+
+    def save(self, *args, **kwargs):
+
+        if self.is_active:
+             Campaign.objects.all().filter(is_active=True).exclude(pk=self.pk).update(is_active=False)
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"[{self.name}] - [start: {self.start_date}] - [end: {self.end_date}]"
@@ -31,6 +45,17 @@ class Article(models.Model):
 
     def __str__(self):
         return f"[{self.name}](price: {self.price} euros)"
+
+class GroupeArticleConfig(models.Model):
+    group = models.ForeignKey(PackageGroup, on_delete=models.CASCADE, related_name="package_items")
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="group_dotations")
+    quantity = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        unique_together = ('group', 'article')
+
+    def __str__(self):
+        return f"{self.group.name} - {self.article.name} ({self.quantity})"
 
 class Order(models.Model):
     first_name = models.CharField("Prenom de la personne associee a la commande", max_length=30)

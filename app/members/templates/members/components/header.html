@@ -38,13 +38,13 @@
         <ul class="navbar-nav ms-md-2 align-items-md-center">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle fs-5 d-flex align-items-center gap-2 {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    {% if request.user.profile.avatar %}
-        <img class="rounded-circle shadow flex-shrink-0" src="{{ request.user.profile.avatar.url }}" alt="Avatar" style="width: 30px; height: 30px; object-fit: cover;" />
-    {% else %}
-        <img class="rounded-circle shadow flex-shrink-0" src="{% static 'img/logos/cyclist.jpg' %}" alt="Avatar par défaut" style="width: 30px; height: 30px; object-fit: cover;" />
-    {% endif %}
-    <span class="d-md-inline">{{ request.user.first_name }}</span>
-</a>
+              {% if request.user.profile.avatar %}
+              <img class="rounded-circle shadow flex-shrink-0" src="{{ request.user.profile.avatar.url }}" alt="Avatar" style="width: 30px; height: 30px; object-fit: cover;" />
+              {% else %}
+              <img class="rounded-circle shadow flex-shrink-0" src="{% static 'img/logos/cyclist.jpg' %}" alt="Avatar par défaut" style="width: 30px; height: 30px; object-fit: cover;" />
+              {% endif %}
+              <span class="d-md-inline">{{ request.user.first_name }}</span>
+            </a>
             <ul class="dropdown-menu dropdown-menu-end shadow-sm">
               <li><a class="dropdown-item" href="{% url 'members:profile' %}"><i class="fa-solid fa-user-pen me-2"></i> Mon profil</a></li>
               <li><hr class="dropdown-divider"></li>

@@ -5,12 +5,15 @@ from django.contrib import messages
 from django.db.models import F, Sum
 
 from .models import Article, Order, OrderItem, Campaign
-from .forms import OrderItemForm, OrderForm
+from .forms import OrderItemForm, OrderForm, CampaignForm
 from .data import PASSWORDS
 from .decorators import shop_manager_required
 
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
+
+import csv
+from django.http import HttpResponse
 
 # Create your views here.
 def shop_login(request):
@@ -20,19 +23,22 @@ def shop_login(request):
     identification_error = None
     order_id = None
     email = None
-    is_shop_open = True
+    is_shop_open = False
 
-    today_tuple = (today.month, today.day)
-    opening_date = (11, 1)
-    ending_date = (12, 15)
+    active_campaign = Campaign.objects.filter(is_active=True).first()
+    if (active_campaign):
+        today_tuple = (today.month, today.day)
+        opening_date = (active_campaign.start_date.month, active_campaign.start_date.day)
+        ending_date = (active_campaign.end_date.month, active_campaign.end_date.day)
 
-    if opening_date > today_tuple or ending_date < today_tuple:
-          is_shop_open = False
+        if opening_date <= today_tuple and ending_date >= today_tuple:
+            is_shop_open = True
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         password = request.POST.get("password")
 
         if password in PASSWORDS.keys():
+            print("bien entree")
             request.session["has_shop_access"] = True
             request.session["shop_group"] = PASSWORDS[password]
 
@@ -228,6 +234,28 @@ def admin_dashboard(request):
     campaigns = Campaign.objects.all().order_by('start_date')
     selected_campaign = campaigns.filter(is_active=True).first()
 
+    if request.method == 'POST':
+        campaign_id = request.POST.get("selected_campaign")
+        request.session['selected_campaign_id'] = campaign_id
+        return (redirect('shop:admin_dashboard'))
+
+
+    campaign_id = request.session.get('selected_campaign_id')
+    if campaign_id:
+        selected_campaign = Campaign.objects.filter(pk=campaign_id).first()
+        request.session['selected_campaign_id'] = False
+
+    if selected_campaign:
+        add_campaign_context(selected_campaign)
+
+    context = {
+        'campaigns': campaigns,
+        'selected_campaign': selected_campaign,
+
+    }
+    return render(request, "shop/admin_dashboard.html", context)
+
+def add_campaign_context(selected_campaign):
     total = 0
     total_club = 0
     num_orders = 0
@@ -235,6 +263,7 @@ def admin_dashboard(request):
         total += order.total_cost
         total_club += order.club_cost
         num_orders += 1
+
     selected_campaign.total_cost = total
     selected_campaign.num_orders = num_orders
     selected_campaign.club_cost = total_club
@@ -255,9 +284,119 @@ def admin_dashboard(request):
         row['size'] = row['size'].upper()
 
     selected_campaign.articles = inventory_stats
-    context = {
-        'campaigns': campaigns,
-        'selected_campaign': selected_campaign,
 
+
+@shop_manager_required
+def create_campaign(request):
+    form = CampaignForm()
+
+    if request.method == 'POST':
+        form = CampaignForm(request.POST)
+
+        if form.is_valid():
+            new_campaign = form.save(commit=False)
+            new_campaign.is_active = True
+            new_campaign.save()
+            return redirect("shop:admin_dashboard")
+
+
+    context = {
+        'form': form,
     }
-    return render(request, "shop/admin_dashboard.html", context)
+    return render(request, "shop/create_campaign.html", context)
+
+@shop_manager_required
+def export_adherents(request, campaign_id):
+
+    response = HttpResponse(
+        content_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="export-adherents.csv"'},
+    )
+
+    writer = csv.writer(response)
+
+    orders = Order.objects.filter(campaign=campaign_id) \
+        .values('id', 'email', 'last_name', 'first_name', 'total_cost', 'club_cost', 'rider_cost')
+
+    articles = OrderItem.objects.filter(order__campaign=campaign_id).distinct() \
+        .values('article_name', 'article_id')
+
+    titles = ['Email', 'Nom', 'Prenom', 'Cout_total', 'Cout_club', 'Cout_adherent']
+    articles_titles = []
+
+    for article in articles:
+        articles_titles.append(f"Taille_{article.get('article_name')}")
+        articles_titles.append(f"Quantite_{article.get('article_name')}")
+
+    titles.extend(articles_titles)
+    writer.writerow(titles)
+
+    for order in orders:
+        row = [order.get('email'), order.get('last_name'), order.get('first_name'), order.get('total_cost'), order.get('club_cost'), order.get('rider_cost')]
+
+        order_id = order.get('id')
+        order_items = OrderItem.objects.filter(order=order_id)
+
+        for article in articles:
+            article_id = article.get('article_id')
+            item = order_items.filter(article=article_id).first()
+
+            if item:
+                row.append(item.size)
+                row.append(item.quantity)
+            else:
+                row.extend(['', ''])
+
+        writer.writerow(row)
+        row = []
+
+    return response
+
+@shop_manager_required
+def export_articles(request, campaign_id):
+
+    response = HttpResponse(
+            content_type="text/csv",
+            headers={"Content-Disposition": 'attachment; filename="export-articles.csv"'},
+        )
+
+    writer = csv.writer(response)
+    inventory_stats = get_inventory_stats(campaign_id)
+
+    writer.writerow(["Nom de l'article", "Taille", "Quantite", "Prix unitaire", "Total"])
+
+    total = 0
+    for inventory_row in inventory_stats:
+        row = []
+        row.append(inventory_row.get('article_name'))
+        row.append(inventory_row.get('size'))
+        row.append(inventory_row.get('total_quantity'))
+        row.append(inventory_row.get('unit_price'))
+        total_price = inventory_row.get('total_price')
+        total += total_price
+        row.append(total_price)
+        writer.writerow(row)
+
+    writer.writerow(["Total", '', '', '', total])
+
+    return response
+
+def get_inventory_stats(campaign_id):
+    inventory_stats = OrderItem.objects.filter(order__campaign=campaign_id) \
+        .values('article_name', 'size', 'unit_price') \
+        .annotate(
+            total_quantity=Sum('quantity'),
+            total_price=Sum(F('quantity') * F('unit_price'))
+    )
+
+    return inventory_stats
+
+def articles_list(request):
+
+    articles = Article.objects.all()
+
+    context = {
+        'articles': articles,
+    }
+
+    return render(request, "shop/articles_list.html", context)

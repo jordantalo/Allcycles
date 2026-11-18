@@ -1,5 +1,19 @@
 from django import forms
-from .models import OrderItem, Order
+from .models import OrderItem, Order, Campaign
+
+class CampaignForm(forms.ModelForm):
+
+    class Meta:
+        model = Campaign
+        fields = ['name', "start_date", "end_date"]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+
+        if start_date and end_date and start_date > end_date:
+            self.add_error('start_date', 'La date de début doit être antérieure à la date de fin.')
 
 class OrderForm(forms.ModelForm):
 
