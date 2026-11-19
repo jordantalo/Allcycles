@@ -76,18 +76,16 @@
 
           <!-- Grille en 2 colonnes sur grand écran (col-md-6) -->
           <div class="row g-2">
-            {% for article in articles %}
-              {% if article.is_package_included %}
+            {% for item in items %}
               <div class="col-md-6">
                 <div class="d-flex justify-content-between align-items-center bg-white bg-opacity-75 border border-info border-opacity-25 rounded-3 px-3 py-2">
                   <div>
                     <i class="bi bi-check-circle-fill text-success me-2"></i>
-                    <span class="fw-medium text-dark small">{{ article.get_name_display }}</span>
+                    <span class="fw-medium text-dark small">{{ item.article.name }}</span>
                   </div>
-                  <span class="badge bg-info-subtle text-info-emphasis d-inline-flex justify-content-center align-items-center" style="width:20px">{{ article.quantity }}</span>
+                  <span class="badge bg-info-subtle text-info-emphasis d-inline-flex justify-content-center align-items-center" style="width:20px">{{ item.quantity }}</span>
                 </div>
               </div>
-              {% endif %}
             {% endfor %}
           </div>
         </div>
@@ -102,14 +100,10 @@
                   <div class="col-md-6 d-flex flex-column">
                     <div class="card article-card flex-grow-1"
                       data-price="{{ article.price }}"
-                      {% if article.is_package_included %}
-                      data-package-quantity={{article.quantity}}
-                      {% else %}
-                      data-package-quantity=0
-                      {% endif %}>
+                      data-package-quantity={{article.quantity}}>
                       <div class="card-header py-1 small bg-body-tertiary">
                         <div class="d-flex justify-content-between align-items-center">
-                          <span class="fw-bold">{{ article.get_name_display }}</span>
+                          <span class="fw-bold">{{ article.name }}</span>
                           <span class="badge text-bg-primary">{{ article.price }} €</span>
                         </div>
                       </div>
@@ -134,7 +128,7 @@
                           <div class="col-sm-6">
                             <label for="quantity-select-{{article.id}}" class="small">Quantité</label>
                             <input class="form-control form-control-sm qty-input {% if article.form.errors.quantity %}is-invalid{% endif %}" type="number" min="0" id="quantity-select-{{article.id}}" name="article_{{article.id}}-quantity"
-                            {% if article.form.quantity.value %}value={{article.form.quantity.value}}{% elif article.is_package_included %}value={{ article.quantity }}{% else %}value=0{% endif %} >
+                            {% if article.form.quantity.value %}value={{article.form.quantity.value}}{% elif article.quantity %}value={{ article.quantity }}{% else %}value=0{% endif %} >
                             {% if article.form.errors.quantity %}
                               <div class="invalid-feedback small">{{ article.form.errors.quantity.0 }}</div>
                             {% endif %}
@@ -207,10 +201,13 @@
 
         articleCards.forEach((card) => {
 
-          const price = parseFloat(card.dataset.price)
+          const rawPrice = (card.dataset.price || "").replace(",", ".").trim();
+          const price = parseFloat(rawPrice)
           const packageQty = parseInt(card.dataset.packageQuantity)
           const qtyInput = card.querySelector('.qty-input')
           const riderQty = parseInt(qtyInput.value) || 0
+
+          console.log(price)
 
           if (riderQty <= packageQty) {
             total_club = total_club + riderQty * price

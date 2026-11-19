@@ -5,7 +5,7 @@ from django.db import models
 class PackageGroup(models.Model):
     name = models.CharField(max_length=10, verbose_name="Nom du groupe")
     access_code = models.CharField(max_length=100, unique=True)
-    package_value = models.PositiveBigIntegerField(verbose_name="Valeur du package")
+    package_value = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __str__(self):
         return self.name
@@ -27,22 +27,9 @@ class Campaign(models.Model):
         return f"[{self.name}] - [start: {self.start_date}] - [end: {self.end_date}]"
 
 class Article(models.Model):
-    ARTICLE_CHOICES = {
-        ('cuissard_court', 'Cuissard court'),
-        ('cuissard_long', 'Cuissard long'),
-        ('manchettes', 'Manchettes'),
-        ('combi', 'Combinaison'),
-        ('veste_hiver', 'Veste hiver'),
-        ('veste_mi_saison', 'Veste mi saison'),
-        ('gants', 'Gants'),
-        ('coupe_vent', 'Coupe vent'),
-        ('maillot_court', 'Maillot'),
-    }
 
-    name = models.CharField("Nom de l'article", max_length=40, choices=ARTICLE_CHOICES)
-    price = models.FloatField("Prix de l'article")
-
-    package_config = models.JSONField(default=dict, blank=True, help_text='Ex: {"DN3": 2, "ACCESS": 1}')
+    name = models.CharField("Nom de l'article", max_length=40)
+    price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name="Prix de l'article")
 
     def __str__(self):
         return f"[{self.name}](price: {self.price} euros)"

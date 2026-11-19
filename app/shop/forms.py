@@ -1,5 +1,22 @@
 from django import forms
-from .models import OrderItem, Order, Campaign, PackageGroup, GroupeArticleConfig
+from decimal import Decimal, InvalidOperation
+from .models import OrderItem, Order, Campaign, PackageGroup, GroupeArticleConfig, Article
+
+class ArticleForm(forms.ModelForm):
+
+    class Meta:
+        model = Article
+        fields = ['name', 'price']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        if self.data:
+            data = self.data.copy()
+            field_name = self.add_prefix('price')
+            if field_name in data and isinstance(data[field_name], str):
+                data[field_name] = data[field_name].replace(',', '.').strip()
+            self.data = data
 
 class GroupArticleConfigForm(forms.ModelForm):
 

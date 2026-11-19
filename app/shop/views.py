@@ -4,9 +4,8 @@ from django.utils import timezone
 from django.contrib import messages
 from django.db.models import F, Sum
 
-from .models import Article, Order, OrderItem, Campaign, PackageGroup, GroupeArticleConfig
-from .forms import OrderItemForm, OrderForm, CampaignForm, PackageGroupForm, GroupArticleConfigForm
-from .data import PASSWORDS
+from .models import *
+from .forms import *
 from .decorators import shop_manager_required
 
 from django.contrib.auth import login
@@ -36,11 +35,10 @@ def shop_login(request):
 
     if request.method == 'POST':
         password = request.POST.get("password")
-
-        if password in PASSWORDS.keys():
-            print("bien entree")
+        group = PackageGroup.objects.filter(access_code=password).first()
+        if group:
             request.session["has_shop_access"] = True
-            request.session["shop_group"] = PASSWORDS[password]
+            request.session["shop_group"] = group.name
 
             order_id = request.POST.get("order_id")
             email = request.POST.get("email")
@@ -97,6 +95,15 @@ def shop(request):
     articles = Article.objects.all().order_by('name')
     shop_group = request.session["shop_group"]
 
+    items = GroupeArticleConfig.objects.filter(group__name=shop_group).order_by('article__name')
+
+    for article in articles:
+
+        article.quantity = 0
+        item = items.filter(article_id=article.id).first()
+        if item:
+            article.quantity = item.quantity
+
     if request.method == "POST":
 
         order_form = OrderForm(request.POST, instance=order)
@@ -126,14 +133,11 @@ def shop(request):
             order_item = OrderItem.objects.filter(order=order, article=article).first()
             article.form = OrderItemForm(instance=order_item)
 
-    for article in articles:
-        if shop_group in article.package_config and article.package_config[shop_group] != 0:
-            article.is_package_included = True
-            article.quantity = article.package_config[shop_group]
 
     context = {
         "articles": articles,
         "order_form": order_form,
+        "items": items,
     }
 
     return render(request, "shop/shop.html", context)
@@ -173,8 +177,7 @@ def create_order(order:Order, articles:list[Article], shop_group):
             order_item.unit_price = article.price
             order_item.save()
 
-            package_qty = None
-            package_qty = article.package_config.get(shop_group, 0)
+            package_qty = article.quantity
 
             qty = form.cleaned_data['quantity']
             price = article.price
@@ -255,6 +258,7 @@ def admin_dashboard(request):
     }
     return render(request, "shop/admin_dashboard.html", context)
 
+
 def add_campaign_context(selected_campaign):
     total = 0
     total_club = 0
@@ -275,12 +279,7 @@ def add_campaign_context(selected_campaign):
         total_price=Sum(F('quantity') * F('unit_price'))
     )
 
-    ARTICLE_LABELS = dict(Article.ARTICLE_CHOICES)
-
     for row in inventory_stats:
-        tech_name = row['article_name']
-        pretty_name = ARTICLE_LABELS.get(tech_name, tech_name)
-        row['article_name'] = pretty_name
         row['size'] = row['size'].upper()
 
     selected_campaign.articles = inventory_stats
@@ -391,11 +390,11 @@ def get_inventory_stats(campaign_id):
 
     return inventory_stats
 
+@shop_manager_required
 def manage(request):
 
     articles = Article.objects.all().order_by('name')
     groups = PackageGroup.objects.all().order_by('-package_value')
-
 
     context = {
         'articles': articles,
@@ -404,6 +403,7 @@ def manage(request):
 
     return render(request, "shop/manage.html", context)
 
+@shop_manager_required
 def create_group(request):
     articles = Article.objects.all().order_by('name')
     form_group = PackageGroupForm()
@@ -424,6 +424,7 @@ def create_group(request):
 
     return render(request, "shop/create_group.html", context)
 
+@shop_manager_required
 def update_group(request, group_id):
 
     group = get_object_or_404(PackageGroup, id=group_id)
@@ -450,6 +451,7 @@ def update_group(request, group_id):
 
     return render(request, "shop/update_group.html", context)
 
+@shop_manager_required
 def delete_group(request, group_id):
     group = get_object_or_404(PackageGroup, id=group_id)
 
@@ -497,3 +499,50 @@ def prepare_context(group, articles):
             if item.article.id == article.id:
                 article.form = GroupArticleConfigForm(instance=item)
                 continue
+
+@shop_manager_required
+def update_article(request, article_id):
+
+    article = get_object_or_404(Article, id=article_id)
+    form = ArticleForm(instance=article)
+
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            form.save()
+            return redirect("shop:manage")
+
+    context = {
+        'form': form,
+        'article_id': article.id
+    }
+
+    return render(request, "shop/manage_article.html", context)
+
+@shop_manager_required
+def create_article(request):
+
+    form = ArticleForm()
+    if request.method == 'POST':
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("shop:manage")
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, "shop/manage_article.html", context)
+
+@shop_manager_required
+def delete_article(request, article_id):
+
+    article = get_object_or_404(Article, id=article_id)
+
+    if (request.method == 'POST'):
+        article.delete()
+        messages.success(request, "L'article a été supprimé avec succès.")
+
+        return (redirect('shop:manage'))
+

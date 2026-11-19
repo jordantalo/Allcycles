@@ -1,0 +1,48 @@
+{% if request.resolver_match.url_name == 'update_article' %}
+<h1 class="text-center mb-5">Modifier un article</h1>
+{% else %}
+<h1 class="text-center mb-5">Creer un article</h1>
+{% endif %}
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-9 col-xl-7">
+
+      <form method="post" class="bg-body shadow p-4 p-md-5 rounded-4 row g-3" novalidate>
+        {% csrf_token %}
+	      <div class="col-12">
+		      <label for="article-name" class="form-label fw-semibold">Nom de l'article</label>
+		      <div class="input-group">
+			      <span class="input-group-text bg-body-secondary" id="basic-addon3"><i class="fa-solid fa-shirt"></i></span>
+			      <input type="text" class="form-control {% if form.errors.name %}is-invalid{% endif %}" id="article-name" name="name" value="{{ form.name.value|default:'' }}"
+				      aria-describedby="basic-addon3 basic-addon4" placeholder="Ex: Combinaison" required />
+            {% if form.errors.name %}
+            <div class="invalid-feedback small">{{ form.errors.name.0 }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="col-12">
+		      <label for="article-unit-price" class="form-label fw-semibold">Prix de l'article</label>
+		      <div class="input-group">
+			      <span class="input-group-text bg-body-secondary" id="basic-addon3"><i class="bi bi-currency-euro"></i></span>
+		        <input type="text" class="form-control {% if form.errors.price %}is-invalid{% endif %}" id="article-unit-price" name="price" value="{{ form.price.value|default:'' }}"
+				      aria-describedby="basic-addon3 basic-addon4" placeholder="Ex: 25" required />
+            {% if form.errors.price %}
+            <div class="invalid-feedback small">{{ form.errors.price.0 }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="col-12">
+          <button type="submit" class="btn btn-outline-primary w-100 py-2 text-uppercase fw-bold shadow-sm"
+		        style="letter-spacing: 0.05em;">
+            {% if request.resolver_match.url_name == 'update_article' %}
+            Modifier l'article
+            {% else %}
+            Creer l'article
+            {% endif %}
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
