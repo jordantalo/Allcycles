@@ -4,8 +4,8 @@ from django.utils import timezone
 from django.contrib import messages
 from django.db.models import F, Sum
 
-from .models import Article, Order, OrderItem, Campaign
-from .forms import OrderItemForm, OrderForm, CampaignForm
+from .models import Article, Order, OrderItem, Campaign, PackageGroup, GroupeArticleConfig
+from .forms import OrderItemForm, OrderForm, CampaignForm, PackageGroupForm, GroupArticleConfigForm
 from .data import PASSWORDS
 from .decorators import shop_manager_required
 
@@ -391,12 +391,72 @@ def get_inventory_stats(campaign_id):
 
     return inventory_stats
 
-def articles_list(request):
+def manage(request):
 
     articles = Article.objects.all()
+    groups = PackageGroup.objects.all()
+
 
     context = {
         'articles': articles,
+        'groups': groups,
     }
 
-    return render(request, "shop/articles_list.html", context)
+    return render(request, "shop/manage.html", context)
+
+def update_group(request, group_id):
+
+    group = PackageGroup.objects.filter(pk=group_id).first()
+    articles = Article.objects.all()
+    group_form = PackageGroupForm(instance=group)
+
+    if request.method == 'POST':
+        print(request.POST)
+        group_form = PackageGroupForm(request.POST, instance=group)
+        is_valid_group = group_form.is_valid()
+        is_valid_group = check_package_validity(request, articles, group, is_valid_group)
+
+        if is_valid_group:
+            save_group(articles, group_form)
+            return redirect('shop:manage')
+
+    else:
+        prepare_context(group, articles)
+
+    context = {
+        'form': group_form,
+        'articles': articles,
+    }
+
+    return render(request, "shop/update_group.html", context)
+
+def check_package_validity(request, articles, group, is_valid):
+
+    for article in articles:
+        item = GroupeArticleConfig.objects.filter(article=article, group=group).first()
+        article.form = GroupArticleConfigForm(request.POST, instance=item, prefix=f"{article.id}")
+        if not article.form.is_valid():
+            is_valid = False
+
+    return is_valid
+
+def save_group(articles, form_group):
+
+    group = form_group.save()
+
+    for article in articles:
+        if article.form.cleaned_data.get('quantity') == 0:
+            continue
+        item = article.form.save(commit=False)
+        item.article = article
+        item.group = group
+        item.save()
+
+def prepare_context(group, articles):
+
+    for article in articles:
+        article.form = GroupArticleConfigForm()
+        for item in group.package_items.all():
+            if item.article.id == article.id:
+                article.form = GroupArticleConfigForm(instance=item)
+                continue

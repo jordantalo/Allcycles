@@ -1,5 +1,17 @@
 from django import forms
-from .models import OrderItem, Order, Campaign
+from .models import OrderItem, Order, Campaign, PackageGroup, GroupeArticleConfig
+
+class GroupArticleConfigForm(forms.ModelForm):
+
+    class Meta:
+        model = GroupeArticleConfig
+        fields = ['quantity']
+
+class PackageGroupForm(forms.ModelForm):
+
+    class Meta:
+        model = PackageGroup
+        fields = ['name', 'access_code']
 
 class CampaignForm(forms.ModelForm):
 

@@ -91,7 +91,45 @@
 
             <div class="card-body">
 
+              <div class="row g-2">
 
+                {% for group in groups %}
+                <div class="col-12 col-sm-6 col-lg-3">
+                  <div class="card h-100 shadow-sm">
+                    <div class="card-body d-flex flex-column">
+
+                      <!-- En-tête : Nom et Prix -->
+                      <div class="d-flex align-items-start justify-content-between gap-2 mb-3">
+                        <span class="fw-bold fs-6">{{ group.name }}</span>                      </div>
+
+                      <!-- Section Dotations / Packages -->
+                      <div class="mb-3">
+                        <div class="text-muted text-uppercase fw-semibold mb-2" style="font-size: 0.7rem; letter-spacing: 0.5px;">
+                          Package offert
+                        </div>
+
+                        <div class="d-flex flex-wrap gap-1">
+                          {% comment %} {% for group, quantity in article.package_config.items %}
+                          <span class="badge bg-body-secondary text-body border d-inline-flex align-items-center gap-1 fw-normal py-1 px-2">
+                            <span>{{ group }}</span>
+                            <span class="badge text-bg-secondary rounded-pill">{{ quantity }}</span>
+                          </span>
+                          {% empty %}
+                          <span class="text-muted small fst-italic">Aucune dotation</span>
+                          {% endfor %} {% endcomment %}
+                        </div>
+                      </div>
+
+                      <!-- Bouton collé tout en bas grâce à mt-auto -->
+                      <a class="btn btn-outline-secondary btn-sm w-100 mt-auto" href="{% url 'shop:update_group' group.id %}">
+                        <i class="fa-solid fa-pen-to-square me-1"></i> Modifier
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+
+              </div>
 
             </div>
 
