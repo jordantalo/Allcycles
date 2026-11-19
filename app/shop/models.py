@@ -4,7 +4,8 @@ from django.db import models
 
 class PackageGroup(models.Model):
     name = models.CharField(max_length=10, verbose_name="Nom du groupe")
-    access_code = models.CharField(max_length=100)
+    access_code = models.CharField(max_length=100, unique=True)
+    package_value = models.PositiveBigIntegerField(verbose_name="Valeur du package")
 
     def __str__(self):
         return self.name

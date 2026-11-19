@@ -1,0 +1,89 @@
+{% if request.resolver_match.url_name == 'update_group' %}
+<h1 class="text-center mb-5">Modifier un groupe</h1>
+{% else %}
+<h1 class="text-center mb-5">Ajouter un groupe</h1>
+{% endif %}
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-9 col-xl-7">
+
+      <form method="post" class="bg-body shadow p-4 p-md-5 rounded-4 row g-3" novalidate>
+        {% csrf_token %}
+	      <div class="col-12">
+		      <label for="group-name" class="form-label fw-semibold">Nom du groupe</label>
+		      <div class="input-group">
+			      <span class="input-group-text bg-body-secondary" id="basic-addon3"><i class="bi bi-bicycle"></i></span>
+			      <input type="text" class="form-control {% if form.errors.name %}is-invalid{% endif %}" id="group-name" name="name" value="{{ form.name.value|default:'' }}"
+				      aria-describedby="basic-addon3 basic-addon4" placeholder="Ex: MonGroupe" required />
+            {% if form.errors.name %}
+            <div class="invalid-feedback small">{{ form.errors.name.0 }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="col-12">
+		      <label for="group-access-code" class="form-label fw-semibold">Code d'acces</label>
+		      <div class="input-group">
+			      <span class="input-group-text bg-body-secondary" id="basic-addon3"><i class="fa-solid fa-lock"></i></span>
+		        <input type="text" class="form-control {% if form.errors.access_code %}is-invalid{% endif %}" id="group-access-code" name="access_code" value="{{ form.access_code.value|default:'' }}"
+				      aria-describedby="basic-addon3 basic-addon4" placeholder="Ex: !!TenuesOfficielGroupe!!" required />
+            {% if form.errors.access_code %}
+            <div class="invalid-feedback small">{{ form.errors.access_code.0 }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="col-12">
+
+          <div class="card">
+
+            <div class="card-header fw-bold">
+              Package offert
+            </div>
+
+            <div class="card-body">
+
+              <div class="row g-2">
+                {% for article in articles %}
+                <div class="col-lg-6">
+                  <div class="input-group">
+                    <span class="input-group-text bg-body-secondary text-truncate" style="width:60%" id="addon-{{ article.id }}" title="{{ article.name }}">
+                      <span class="small">{{ article.name }}</span>
+                    </span>
+
+                    <input
+                    type="number"
+                    min="0"
+                    class="form-control text-center {% if article.form.errors.quantity %}is-invalid{% endif %}"
+                    id="package-{{ article.id }}"
+                    name="{{ article.id }}-quantity"
+                    value="{{ article.form.quantity.value|default:0 }}"
+                    aria-describedby="addon-{{ article.id }}"
+                    required />
+                    {% if article.form.errors.quantity %}
+                      <div class="invalid-feedback small">{{ article.form.errors.quantity.0 }}</div>
+                    {% endif %}
+                  </div>
+                </div>
+                {% empty %}
+                  <p class="text-muted">Aucun article dans la boutique</p>
+                {% endfor %}
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="col-12">
+          <button type="submit" class="btn btn-outline-primary w-100 py-2 text-uppercase fw-bold shadow-sm"
+		        style="letter-spacing: 0.05em;">
+            {% if request.resolver_match.url_name == 'update_group' %}
+            Modifier le groupe
+            {% else %}
+            Creer le groupe
+            {% endif %}
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>

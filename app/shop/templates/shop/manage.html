@@ -85,7 +85,7 @@
             <div class="card-header">
               <div class="d-flex justify-content-between align-items-center">
                 <span class="small fw-bold">Gestion des groupes et des codes d'acces</span>
-                <a class="btn btn-sm btn-success" href=""><i class="bi bi-plus-square me-2"></i>Ajouter un groupe</a>
+                <a class="btn btn-sm btn-success" href="{% url 'shop:create_group' %}"><i class="bi bi-plus-square me-2"></i>Ajouter un groupe</a>
               </div>
             </div>
 
@@ -104,19 +104,24 @@
 
                       <!-- Section Dotations / Packages -->
                       <div class="mb-3">
-                        <div class="text-muted text-uppercase fw-semibold mb-2" style="font-size: 0.7rem; letter-spacing: 0.5px;">
-                          Package offert
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                          <span class="text-muted text-uppercase fw-semibold" style="font-size: 0.7rem; letter-spacing: 0.5px;">
+                            Package offert
+                          </span>
+                          <span class="badge rounded-pill text-bg-primary fw-semibold" style="font-size: 0.65rem;">
+                            {{ group.package_value }} €
+                          </span>
                         </div>
 
                         <div class="d-flex flex-wrap gap-1">
-                          {% comment %} {% for group, quantity in article.package_config.items %}
+                          {% for item in group.package_items.all %}
                           <span class="badge bg-body-secondary text-body border d-inline-flex align-items-center gap-1 fw-normal py-1 px-2">
-                            <span>{{ group }}</span>
-                            <span class="badge text-bg-secondary rounded-pill">{{ quantity }}</span>
+                            <span>{{ item.article.name }}</span>
+                            <span class="badge text-bg-secondary rounded-pill">{{ item.quantity }}</span>
                           </span>
                           {% empty %}
                           <span class="text-muted small fst-italic">Aucune dotation</span>
-                          {% endfor %} {% endcomment %}
+                          {% endfor %}
                         </div>
                       </div>
 

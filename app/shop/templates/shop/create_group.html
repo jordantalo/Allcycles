@@ -1,0 +1,14 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block title %}Creer un groupe{% endblock title %}
+
+{% block content %}
+
+<div class="bg-body-secondary py-5 flex-grow-1">
+  <div class="container">
+    {% include "shop/components/package_form.html" %}
+  </div>
+</div>
+
+{% endblock content %}

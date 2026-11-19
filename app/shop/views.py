@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db import transaction
 from django.utils import timezone
 from django.contrib import messages
@@ -393,8 +393,8 @@ def get_inventory_stats(campaign_id):
 
 def manage(request):
 
-    articles = Article.objects.all()
-    groups = PackageGroup.objects.all()
+    articles = Article.objects.all().order_by('name')
+    groups = PackageGroup.objects.all().order_by('-package_value')
 
 
     context = {
@@ -404,14 +404,33 @@ def manage(request):
 
     return render(request, "shop/manage.html", context)
 
+def create_group(request):
+    articles = Article.objects.all().order_by('name')
+    form_group = PackageGroupForm()
+
+    if request.method == 'POST':
+        form_group = PackageGroupForm(request.POST)
+        is_valid_group = form_group.is_valid()
+        is_valid_group = check_package_validity(request, articles, None, is_valid_group)
+
+        if is_valid_group:
+            save_group(articles, form_group)
+            return redirect('shop:manage')
+
+    context = {
+        'articles': articles,
+        'form': form_group,
+    }
+
+    return render(request, "shop/create_group.html", context)
+
 def update_group(request, group_id):
 
-    group = PackageGroup.objects.filter(pk=group_id).first()
-    articles = Article.objects.all()
+    group = get_object_or_404(PackageGroup, id=group_id)
+    articles = Article.objects.all().order_by('name')
     group_form = PackageGroupForm(instance=group)
 
     if request.method == 'POST':
-        print(request.POST)
         group_form = PackageGroupForm(request.POST, instance=group)
         is_valid_group = group_form.is_valid()
         is_valid_group = check_package_validity(request, articles, group, is_valid_group)
@@ -426,9 +445,19 @@ def update_group(request, group_id):
     context = {
         'form': group_form,
         'articles': articles,
+        'group_id': group_id,
     }
 
     return render(request, "shop/update_group.html", context)
+
+def delete_group(request, group_id):
+    group = get_object_or_404(PackageGroup, id=group_id)
+
+    if (request.method == 'POST'):
+        group.delete()
+        messages.success(request, "Le groupe a été supprimé avec succès.")
+
+        return (redirect('shop:manage'))
 
 def check_package_validity(request, articles, group, is_valid):
 
@@ -442,15 +471,23 @@ def check_package_validity(request, articles, group, is_valid):
 
 def save_group(articles, form_group):
 
-    group = form_group.save()
+    group = form_group.save(commit=False)
+    group.package_value = 0
+    group.save()
 
+    package_value = 0
     for article in articles:
-        if article.form.cleaned_data.get('quantity') == 0:
+        quantity = article.form.cleaned_data.get('quantity')
+        if quantity == 0:
             continue
+        package_value += quantity * article.price
         item = article.form.save(commit=False)
         item.article = article
         item.group = group
         item.save()
+
+    group.package_value = package_value
+    group.save()
 
 def prepare_context(group, articles):
 

@@ -17,4 +17,6 @@ urlpatterns = [
     path("admin/<int:campaign_id>/export-articles", views.export_articles, name="export_articles"),
     path("admin/manage", views.manage, name="manage"),
     path("admin/manage/groups/<int:group_id>/update", views.update_group, name="update_group"),
+    path("admin/manage/groups/create", views.create_group, name="create_group"),
+    path("admin/manage/groups/<int:group_id>delete", views.delete_group, name="delete_group"),
 ]
